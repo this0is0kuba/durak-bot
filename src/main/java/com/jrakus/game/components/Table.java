@@ -3,6 +3,7 @@ package com.jrakus.game.components;
 import java.util.*;
 
 public class Table {
+
     private final List<Card> attackingCards = new ArrayList<>();
     private final List<Card> defendingCards = new ArrayList<>();
 
@@ -12,8 +13,7 @@ public class Table {
     }
 
     public void addDefendingCards(List<Card> newDefendingCards, Card.Suit trump) {
-
-        checkNewDefendingCards(attackingCards, newDefendingCards, trump);
+        checkNewDefendingCards(newDefendingCards, trump);
         defendingCards.addAll(newDefendingCards);
     }
 
@@ -39,17 +39,19 @@ public class Table {
         return defendingCards;
     }
 
-    private void checkNewDefendingCards(List<Card> attackingCards, List<Card> defendingCards, Card.Suit trump) {
+    private void checkNewDefendingCards(List<Card> newDefendingCards, Card.Suit trump) {
 
-        // TODO: fix this function, only attacking cards that are not defeated should be analyzed here
+        int numberOfCardsToBeat = attackingCards.size() - defendingCards.size();
 
-        if(attackingCards.size() != defendingCards.size())
-            throw new RuntimeException("The amount of defending cards is different than attacking cards");
+        if(newDefendingCards.size() != numberOfCardsToBeat)
+            throw new RuntimeException("The amount of new defending cards is different than attacking cards to beat");
+
+        List<Card> onlyAttackingCardToBeat = attackingCards.subList(defendingCards.size(), attackingCards.size());
 
         for(int i = 0; i < attackingCards.size(); i++) {
 
-            Card attackingCard = attackingCards.get(i);
-            Card defendingCard = defendingCards.get(i);
+            Card attackingCard = onlyAttackingCardToBeat.get(i);
+            Card defendingCard = newDefendingCards.get(i);
 
             boolean isAttackingCardStronger = (compareCards(attackingCard, defendingCard, trump) > 0);
 
