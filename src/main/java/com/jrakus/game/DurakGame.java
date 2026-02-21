@@ -1,7 +1,6 @@
 package com.jrakus.game;
 
 import com.jrakus.game.components.*;
-import com.jrakus.game.exceptions.DurakGameException;
 import com.jrakus.game.validators.DurakGameValidator;
 
 import java.util.List;
@@ -21,15 +20,8 @@ public class DurakGame {
     private Player currentAttackingPlayer;
     private Player currentDefendingPlayer;
 
-    private GameState state = GameState.ACTIVE_GAME;
+    private GameState state;
     DurakGameValidator durakGameValidator = new DurakGameValidator();
-
-    public enum GameState {
-        ACTIVE_GAME,
-        PLAYER_1_WON,
-        PLAYER_2_WON,
-        DRAW
-    }
 
     public DurakGame() {
         List<Player> bothPlayers = createBothPlayers();
@@ -69,7 +61,7 @@ public class DurakGame {
         table.addAttackingCards(cards);
         attackingPlayer.playCards(cards);
 
-        checkGameStateAfterAttack();
+        state.checkGameStateAfterAttack(currentAttackingPlayer, startingPlayer, player1);
 
         changeActivePlayer();
     }
@@ -82,7 +74,7 @@ public class DurakGame {
         table.addDefendingCards(cards, trump);
         defendingPlayer.playCards(cards);
 
-        checkGameStateAfterDefend();
+        state.checkGameStateAfterDefend(currentDefendingPlayer, currentAttackingPlayer, player1);
 
         changeActivePlayer();
     }
@@ -105,7 +97,7 @@ public class DurakGame {
         List<Card> cardsFromTable = table.clearTable();
         defendingPlayer.addCardToHand(cardsFromTable);
 
-        checkGameStateAfterTakingCards();
+        state.checkGameStateAfterTakingCards(currentAttackingPlayer, player1);
 
         changeActivePlayer();
         switchAttackerWithDefender();
@@ -114,48 +106,6 @@ public class DurakGame {
     private void changeActivePlayer () {
         boolean isPlayer1Active = activePlayer == player1;
         activePlayer = isPlayer1Active ? player2 : player1;
-    }
-
-    private void checkGameStateAfterTakingCards() {
-        boolean isTheEndOfTheGame = currentAttackingPlayer.showCardsOnHand().isEmpty();
-
-        if(isTheEndOfTheGame) {
-            if (currentAttackingPlayer == player1) {
-                state = GameState.PLAYER_1_WON;
-            } else {
-                state = GameState.PLAYER_2_WON;
-            }
-        }
-    }
-
-    private void checkGameStateAfterAttack() {
-        boolean attackerStartedTheGame = (currentAttackingPlayer == startingPlayer);
-        boolean attackingPlayerHasNoCards = currentAttackingPlayer.showCardsOnHand().isEmpty();
-
-        if(attackingPlayerHasNoCards && !attackerStartedTheGame) {
-            if (currentAttackingPlayer == player1) {
-                state = GameState.PLAYER_1_WON;
-            } else {
-                state = GameState.PLAYER_2_WON;
-            }
-        }
-    }
-
-    private void checkGameStateAfterDefend() {
-        boolean attackingPlayerHasNoCards = currentDefendingPlayer.showCardsOnHand().isEmpty();
-        boolean defendingPlayerHasNoCards = currentDefendingPlayer.showCardsOnHand().isEmpty();
-
-        if (attackingPlayerHasNoCards && defendingPlayerHasNoCards) {
-            state = GameState.DRAW;
-        }
-
-        if(attackingPlayerHasNoCards) {
-            if (currentAttackingPlayer == player1) {
-                state = GameState.PLAYER_1_WON;
-            } else {
-                state = GameState.PLAYER_2_WON;
-            }
-        }
     }
 
     private void switchAttackerWithDefender() {
