@@ -16,7 +16,7 @@ public class Table {
         defendingCards.addAll(newDefendingCards);
     }
 
-    public Set<Card> clearTable() {
+    public List<Card> clearTable() {
 
         int numberOfAllCards = attackingCards.size() + defendingCards.size();
         List<Card> allCards = new ArrayList<>(numberOfAllCards);
@@ -27,7 +27,7 @@ public class Table {
         attackingCards.clear();
         defendingCards.clear();
 
-        return new HashSet<>(allCards);
+        return allCards;
     }
 
     public List<Card> showAttackingCards() {
