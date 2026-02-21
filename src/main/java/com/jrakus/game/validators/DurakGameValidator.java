@@ -1,6 +1,7 @@
 package com.jrakus.game.validators;
 
 import com.jrakus.game.components.Card;
+import com.jrakus.game.components.GameState;
 import com.jrakus.game.components.Player;
 import com.jrakus.game.exceptions.DurakGameException;
 
@@ -30,6 +31,12 @@ public class DurakGameValidator {
 
         if(!new HashSet<>(cardsOnHand).containsAll(cards)) {
             throw new DurakGameException(String.format("Player %s does not have cards that he wants to play", player));
+        }
+    }
+
+    public void checkIfGameIsStillActive(GameState.GameStateEnum state) {
+        if(state != GameState.GameStateEnum.ACTIVE_GAME) {
+            throw new DurakGameException("The game has already ended");
         }
     }
 }

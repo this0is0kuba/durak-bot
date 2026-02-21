@@ -55,6 +55,7 @@ public class DurakGame {
 
     public void attack(Player attackingPlayer, List<Card> cards) {
 
+        durakGameValidator.checkIfGameIsStillActive(state.getInternalState());
         durakGameValidator.checkAttacker(attackingPlayer, activePlayer, currentAttackingPlayer);
         durakGameValidator.checkIfPlayerHasCardsThatHePlays(attackingPlayer, cards);
 
@@ -68,6 +69,7 @@ public class DurakGame {
 
     public void defend(Player defendingPlayer, List<Card> cards) {
 
+        durakGameValidator.checkIfGameIsStillActive(state.getInternalState());
         durakGameValidator.checkDefender(defendingPlayer, activePlayer, currentDefendingPlayer);
         durakGameValidator.checkIfPlayerHasCardsThatHePlays(defendingPlayer, cards);
 
@@ -81,6 +83,7 @@ public class DurakGame {
 
     public void stopAttack(Player attackingPlayer) {
 
+        durakGameValidator.checkIfGameIsStillActive(state.getInternalState());
         durakGameValidator.checkAttacker(attackingPlayer, activePlayer, currentAttackingPlayer);
 
         List<Card> discardedCards = table.clearTable();
@@ -92,6 +95,7 @@ public class DurakGame {
 
     public void takeCardsFromTable(Player defendingPlayer) {
 
+        durakGameValidator.checkIfGameIsStillActive(state.getInternalState());
         durakGameValidator.checkDefender(defendingPlayer, activePlayer, currentAttackingPlayer);
 
         List<Card> cardsFromTable = table.clearTable();

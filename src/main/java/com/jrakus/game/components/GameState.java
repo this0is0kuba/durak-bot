@@ -11,6 +11,10 @@ public class GameState {
         DRAW
     }
 
+    public GameStateEnum getInternalState() {
+        return state;
+    }
+
     public void checkGameStateAfterTakingCards(
             Player currentAttackingPlayer,
             Player player1
