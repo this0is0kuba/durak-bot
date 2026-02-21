@@ -1,5 +1,7 @@
 package com.jrakus.game.components;
 
+import com.jrakus.game.exceptions.DurakGameException;
+
 import java.util.*;
 
 public class Table {
@@ -44,7 +46,7 @@ public class Table {
         int numberOfCardsToBeat = attackingCards.size() - defendingCards.size();
 
         if(newDefendingCards.size() != numberOfCardsToBeat)
-            throw new RuntimeException("The amount of new defending cards is different than attacking cards to beat");
+            throw new DurakGameException("The amount of new defending cards is different than attacking cards to beat");
 
         List<Card> onlyAttackingCardToBeat = attackingCards.subList(defendingCards.size(), attackingCards.size());
 
@@ -56,7 +58,7 @@ public class Table {
             boolean isAttackingCardStronger = (compareCards(attackingCard, defendingCard, trump) > 0);
 
             if(isAttackingCardStronger)
-                throw new RuntimeException(String.format(
+                throw new DurakGameException(String.format(
                         "Attacking card %s is stronger than defending card %s",
                         attackingCard,
                         defendingCard
@@ -92,7 +94,7 @@ public class Table {
         int newNumberOfCardsOnTable = attackingCards.size() + newAttackingCards.size();
 
         if (newNumberOfCardsOnTable > 5)
-            throw new RuntimeException("Exceeded limit of attacking cards on table.");
+            throw new DurakGameException("Exceeded limit of attacking cards on table.");
 
         boolean areAnyAttackingCardsOnTable = !attackingCards.isEmpty();
 
@@ -113,7 +115,7 @@ public class Table {
             Card.Rank rank = newAttackingCard.rank();
 
             if(!allAttackingRanks.contains(rank))
-                throw new RuntimeException(
+                throw new DurakGameException(
                         String.format("Rank: %s has not been used before. You can't play it.", rank)
                 );
         }

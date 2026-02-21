@@ -1,6 +1,7 @@
 package com.jrakus.game;
 
 import com.jrakus.game.components.*;
+import com.jrakus.game.exceptions.DurakGameException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -110,25 +111,25 @@ public class DurakGame {
 
     private void checkAttacker(Player attackingPlayer) {
         if(attackingPlayer != activePlayer)
-            throw new RuntimeException(String.format("This is not turn for player: %s", attackingPlayer));
+            throw new DurakGameException(String.format("This is not turn for player: %s", attackingPlayer));
 
         if(attackingPlayer != currentAttackingPlayer)
-            throw new RuntimeException(String.format("Player %s does not attack now", attackingPlayer));
+            throw new DurakGameException(String.format("Player %s does not attack now", attackingPlayer));
     }
 
     private void checkDefender(Player defendingPlayer) {
         if(defendingPlayer != activePlayer)
-            throw new RuntimeException(String.format("This is not turn for player: %s", defendingPlayer));
+            throw new DurakGameException(String.format("This is not turn for player: %s", defendingPlayer));
 
         if(defendingPlayer != currentDefendingPlayer)
-            throw new RuntimeException(String.format("Player %s does not defend now", defendingPlayer));
+            throw new DurakGameException(String.format("Player %s does not defend now", defendingPlayer));
     }
 
     private void checkIfPlayerHasCardsThatHePlays(Player player, List<Card> cards) {
         List<Card> cardsOnHand = player.showCardsOnHand();
 
         if(!new HashSet<>(cardsOnHand).containsAll(cards)) {
-            throw new RuntimeException(String.format("Player %s does not have cards that he wants to play", player));
+            throw new DurakGameException(String.format("Player %s does not have cards that he wants to play", player));
         }
     }
 

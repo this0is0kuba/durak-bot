@@ -2,7 +2,6 @@ package com.jrakus.game.components;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class DiscardPile {
     private final List<Card> discardedCards = new ArrayList<>();
