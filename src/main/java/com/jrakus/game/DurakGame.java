@@ -10,21 +10,19 @@ public class DurakGame {
     private final Deck deck = new Deck();
     private final DiscardPile discardPile = new DiscardPile();
     private final Table table = new Table();
+    private final Card.Suit trump;
 
     private final Player player1;
     private final Player player2;
+    private final Player startingPlayer;
+    private Player activePlayer;
+    private Player currentAttackingPlayer;
+    private Player currentDefendingPlayer;
 
-    private PlayerIdentifier activePlayer;
-    private GameState state;
-
-    private final Card.Suit trump;
-    private final PlayerIdentifier startingPlayer;
-
-    public enum PlayerIdentifier {PLAYER_1, PLAYER_2}
+    private GameState state = GameState.ACTIVE_GAME;
 
     public enum GameState {
-        PLAYER_1_ATTACKS,
-        PLAYER_2_ATTACKS,
+        ACTIVE_GAME,
         PLAYER_1_WON,
         PLAYER_2_WON,
         DRAW
@@ -38,7 +36,6 @@ public class DurakGame {
 
         activePlayer = chooseWhoStartsTheGame();
         startingPlayer = activePlayer;
-        state = activePlayer == PlayerIdentifier.PLAYER_1 ? GameState.PLAYER_1_ATTACKS : GameState.PLAYER_2_ATTACKS;
         trump = deck.drawOneCard().suit();
     }
 
@@ -55,11 +52,10 @@ public class DurakGame {
         return List.of(player1, player2);
     }
 
-    private PlayerIdentifier chooseWhoStartsTheGame() {
+    private Player chooseWhoStartsTheGame() {
         // TODO: choose based on cards instead of choosing randomly
         Random random = new Random();
-
-        return random.nextBoolean() ? PlayerIdentifier.PLAYER_1 : PlayerIdentifier.PLAYER_2;
+        return random.nextBoolean() ? player1 : player2;
     }
 
     public void attack(Player attackingPlayer, List<Card> cards) {
@@ -70,8 +66,9 @@ public class DurakGame {
         table.addAttackingCards(cards);
         attackingPlayer.playCards(cards);
 
+        checkGameStateAfterAttack();
+
         changeActivePlayer();
-        changeGameStateAfterAttack();
     }
 
     public void defend(Player defendingPlayer, List<Card> cards) {
@@ -82,51 +79,48 @@ public class DurakGame {
         table.addDefendingCards(cards, trump);
         defendingPlayer.playCards(cards);
 
+        checkGameStateAfterDefend();
+
         changeActivePlayer();
-        changeGameStateAfterDefend();
     }
 
     public void stopAttack(Player attackingPlayer) {
 
         checkAttacker(attackingPlayer);
-        List<Card> discardedCards = table.clearTable();
 
+        List<Card> discardedCards = table.clearTable();
         discardPile.addCardsToPile(discardedCards);
 
         changeActivePlayer();
-        changeGameStateAfterStopAttack();
+        switchAttackerWithDefender();
     }
 
     public void takeCardsFromTable(Player defendingPlayer) {
 
         checkDefender(defendingPlayer);
-        List<Card> cardsFromTable = table.clearTable();
 
+        List<Card> cardsFromTable = table.clearTable();
         defendingPlayer.addCardToHand(cardsFromTable);
 
+        checkGameStateAfterTakingCards();
+
         changeActivePlayer();
-        changeGameStateAfterTakingCards();
+        switchAttackerWithDefender();
     }
 
     private void checkAttacker(Player attackingPlayer) {
-        PlayerIdentifier playerIdentifier = findPlayerIdentifier(attackingPlayer);
-        PlayerIdentifier activeAttacker = findPlayerWhoAttacks();
-
-        if(playerIdentifier != activePlayer)
+        if(attackingPlayer != activePlayer)
             throw new RuntimeException(String.format("This is not turn for player: %s", attackingPlayer));
 
-        if(playerIdentifier != activeAttacker)
+        if(attackingPlayer != currentAttackingPlayer)
             throw new RuntimeException(String.format("Player %s does not attack now", attackingPlayer));
     }
 
     private void checkDefender(Player defendingPlayer) {
-        PlayerIdentifier playerIdentifier = findPlayerIdentifier(defendingPlayer);
-        PlayerIdentifier activeDefender = findPlayerWhoDefends();
-
-        if(playerIdentifier != activePlayer)
+        if(defendingPlayer != activePlayer)
             throw new RuntimeException(String.format("This is not turn for player: %s", defendingPlayer));
 
-        if(playerIdentifier != activeDefender)
+        if(defendingPlayer != currentDefendingPlayer)
             throw new RuntimeException(String.format("Player %s does not defend now", defendingPlayer));
     }
 
@@ -138,53 +132,16 @@ public class DurakGame {
         }
     }
 
-    private PlayerIdentifier findPlayerIdentifier(Player player) {
-
-        if(player == player1)
-            return PlayerIdentifier.PLAYER_1;
-        else if(player == player2)
-            return PlayerIdentifier.PLAYER_2;
-        else
-            throw new RuntimeException("This player is not active player.");
-    }
-
-    private PlayerIdentifier findPlayerWhoAttacks() {
-        if(this.state == GameState.PLAYER_1_ATTACKS)
-            return PlayerIdentifier.PLAYER_1;
-        else if(this.state == GameState.PLAYER_2_ATTACKS)
-            return PlayerIdentifier.PLAYER_2;
-        else
-            throw new RuntimeException("The game has already finished");
-    }
-
-    private PlayerIdentifier findPlayerWhoDefends() {
-        if(this.state == GameState.PLAYER_1_ATTACKS)
-            return PlayerIdentifier.PLAYER_2;
-        else if(this.state == GameState.PLAYER_2_ATTACKS)
-            return PlayerIdentifier.PLAYER_1;
-        else
-            throw new RuntimeException("The game has already finished");
-    }
-
     private void changeActivePlayer () {
-        boolean isPlayer1Active = activePlayer == PlayerIdentifier.PLAYER_1;
-        activePlayer = isPlayer1Active ? PlayerIdentifier.PLAYER_2 : PlayerIdentifier.PLAYER_1;
+        boolean isPlayer1Active = activePlayer == player1;
+        activePlayer = isPlayer1Active ? player2 : player1;
     }
 
-    private void changeGameStateAfterTakingCards() {
-        Player attackingPlayer;
-
-        boolean isPlayer1Attacker = state == GameState.PLAYER_1_ATTACKS;
-
-        if(isPlayer1Attacker)
-            attackingPlayer = player1;
-        else
-            attackingPlayer = player2;
-
-        boolean isTheEndOfTheGame = attackingPlayer.showCardsOnHand().isEmpty();
+    private void checkGameStateAfterTakingCards() {
+        boolean isTheEndOfTheGame = currentAttackingPlayer.showCardsOnHand().isEmpty();
 
         if(isTheEndOfTheGame) {
-            if (attackingPlayer == player1) {
+            if (currentAttackingPlayer == player1) {
                 state = GameState.PLAYER_1_WON;
             } else {
                 state = GameState.PLAYER_2_WON;
@@ -192,24 +149,12 @@ public class DurakGame {
         }
     }
 
-    private void changeGameStateAfterAttack() {
-        Player attackingPlayer;
-        boolean attackerStartedTheGame;
-
-        boolean isPlayer1Attacker = state == GameState.PLAYER_1_ATTACKS;
-
-        if(isPlayer1Attacker) {
-            attackingPlayer = player1;
-            attackerStartedTheGame = (startingPlayer == PlayerIdentifier.PLAYER_1);
-        } else {
-            attackingPlayer = player2;
-            attackerStartedTheGame = (startingPlayer == PlayerIdentifier.PLAYER_2);
-        }
-
-        boolean attackingPlayerHasNoCards = attackingPlayer.showCardsOnHand().isEmpty();
+    private void checkGameStateAfterAttack() {
+        boolean attackerStartedTheGame = (currentAttackingPlayer == startingPlayer);
+        boolean attackingPlayerHasNoCards = currentAttackingPlayer.showCardsOnHand().isEmpty();
 
         if(attackingPlayerHasNoCards && !attackerStartedTheGame) {
-            if (attackingPlayer == player1) {
+            if (currentAttackingPlayer == player1) {
                 state = GameState.PLAYER_1_WON;
             } else {
                 state = GameState.PLAYER_2_WON;
@@ -217,29 +162,16 @@ public class DurakGame {
         }
     }
 
-    private void changeGameStateAfterDefend() {
-        Player attackingPlayer;
-        Player defendingPlayer;
-
-        boolean isPlayer1Attacker = state == GameState.PLAYER_1_ATTACKS;
-
-        if(isPlayer1Attacker) {
-            attackingPlayer = player1;
-            defendingPlayer = player2;
-        } else {
-            attackingPlayer = player2;
-            defendingPlayer = player1;
-        }
-
-        boolean attackingPlayerHasNoCards = attackingPlayer.showCardsOnHand().isEmpty();
-        boolean defendingPlayerHasNoCards = defendingPlayer.showCardsOnHand().isEmpty();
+    private void checkGameStateAfterDefend() {
+        boolean attackingPlayerHasNoCards = currentDefendingPlayer.showCardsOnHand().isEmpty();
+        boolean defendingPlayerHasNoCards = currentDefendingPlayer.showCardsOnHand().isEmpty();
 
         if (attackingPlayerHasNoCards && defendingPlayerHasNoCards) {
             state = GameState.DRAW;
         }
 
         if(attackingPlayerHasNoCards) {
-            if (attackingPlayer == player1) {
+            if (currentAttackingPlayer == player1) {
                 state = GameState.PLAYER_1_WON;
             } else {
                 state = GameState.PLAYER_2_WON;
@@ -247,8 +179,9 @@ public class DurakGame {
         }
     }
 
-    private void changeGameStateAfterStopAttack() {
-        boolean isPlayer1Attacker = state == GameState.PLAYER_1_ATTACKS;
-        state = isPlayer1Attacker ? GameState.PLAYER_2_ATTACKS : GameState.PLAYER_1_ATTACKS;
+    private void switchAttackerWithDefender() {
+        Player temp = currentAttackingPlayer;
+        currentAttackingPlayer = currentDefendingPlayer;
+        currentDefendingPlayer = temp;
     }
 }
