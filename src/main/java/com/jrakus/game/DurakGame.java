@@ -2,8 +2,8 @@ package com.jrakus.game;
 
 import com.jrakus.game.components.*;
 import com.jrakus.game.exceptions.DurakGameException;
+import com.jrakus.game.validators.DurakGameValidator;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -16,11 +16,13 @@ public class DurakGame {
     private final Player player1;
     private final Player player2;
     private final Player startingPlayer;
+
     private Player activePlayer;
     private Player currentAttackingPlayer;
     private Player currentDefendingPlayer;
 
     private GameState state = GameState.ACTIVE_GAME;
+    DurakGameValidator durakGameValidator = new DurakGameValidator();
 
     public enum GameState {
         ACTIVE_GAME,
@@ -61,8 +63,8 @@ public class DurakGame {
 
     public void attack(Player attackingPlayer, List<Card> cards) {
 
-        checkAttacker(attackingPlayer);
-        checkIfPlayerHasCardsThatHePlays(attackingPlayer, cards);
+        durakGameValidator.checkAttacker(attackingPlayer, activePlayer, currentAttackingPlayer);
+        durakGameValidator.checkIfPlayerHasCardsThatHePlays(attackingPlayer, cards);
 
         table.addAttackingCards(cards);
         attackingPlayer.playCards(cards);
@@ -74,8 +76,8 @@ public class DurakGame {
 
     public void defend(Player defendingPlayer, List<Card> cards) {
 
-        checkDefender(defendingPlayer);
-        checkIfPlayerHasCardsThatHePlays(defendingPlayer, cards);
+        durakGameValidator.checkDefender(defendingPlayer, activePlayer, currentDefendingPlayer);
+        durakGameValidator.checkIfPlayerHasCardsThatHePlays(defendingPlayer, cards);
 
         table.addDefendingCards(cards, trump);
         defendingPlayer.playCards(cards);
@@ -87,7 +89,7 @@ public class DurakGame {
 
     public void stopAttack(Player attackingPlayer) {
 
-        checkAttacker(attackingPlayer);
+        durakGameValidator.checkAttacker(attackingPlayer, activePlayer, currentAttackingPlayer);
 
         List<Card> discardedCards = table.clearTable();
         discardPile.addCardsToPile(discardedCards);
@@ -98,7 +100,7 @@ public class DurakGame {
 
     public void takeCardsFromTable(Player defendingPlayer) {
 
-        checkDefender(defendingPlayer);
+        durakGameValidator.checkDefender(defendingPlayer, activePlayer, currentAttackingPlayer);
 
         List<Card> cardsFromTable = table.clearTable();
         defendingPlayer.addCardToHand(cardsFromTable);
@@ -107,30 +109,6 @@ public class DurakGame {
 
         changeActivePlayer();
         switchAttackerWithDefender();
-    }
-
-    private void checkAttacker(Player attackingPlayer) {
-        if(attackingPlayer != activePlayer)
-            throw new DurakGameException(String.format("This is not turn for player: %s", attackingPlayer));
-
-        if(attackingPlayer != currentAttackingPlayer)
-            throw new DurakGameException(String.format("Player %s does not attack now", attackingPlayer));
-    }
-
-    private void checkDefender(Player defendingPlayer) {
-        if(defendingPlayer != activePlayer)
-            throw new DurakGameException(String.format("This is not turn for player: %s", defendingPlayer));
-
-        if(defendingPlayer != currentDefendingPlayer)
-            throw new DurakGameException(String.format("Player %s does not defend now", defendingPlayer));
-    }
-
-    private void checkIfPlayerHasCardsThatHePlays(Player player, List<Card> cards) {
-        List<Card> cardsOnHand = player.showCardsOnHand();
-
-        if(!new HashSet<>(cardsOnHand).containsAll(cards)) {
-            throw new DurakGameException(String.format("Player %s does not have cards that he wants to play", player));
-        }
     }
 
     private void changeActivePlayer () {
