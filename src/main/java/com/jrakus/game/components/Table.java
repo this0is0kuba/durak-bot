@@ -48,11 +48,11 @@ public class Table {
         if(newDefendingCards.size() != numberOfCardsToBeat)
             throw new DurakGameException("The amount of new defending cards is different than attacking cards to beat");
 
-        List<Card> onlyAttackingCardToBeat = attackingCards.subList(defendingCards.size(), attackingCards.size());
+        List<Card> onlyAttackingCardsToBeat = attackingCards.subList(defendingCards.size(), attackingCards.size());
 
         for(int i = 0; i < attackingCards.size(); i++) {
 
-            Card attackingCard = onlyAttackingCardToBeat.get(i);
+            Card attackingCard = onlyAttackingCardsToBeat.get(i);
             Card defendingCard = newDefendingCards.get(i);
 
             boolean isAttackingCardStronger = (compareCards(attackingCard, defendingCard, trump) > 0);
