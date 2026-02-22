@@ -1,37 +1,36 @@
 package com.jrakus.game.components;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class Player {
-    private final String name;
-    private final Hand hand;
+    private final List<Card> cardsOnHand;
 
-    public Player(String name, Hand hand) {
-        this.name = name;
-        this.hand = hand;
+    public Player(List<Card> hand) {
+        this.cardsOnHand = hand;
     }
 
     public List<Card> showCardsOnHand() {
-        return hand.showCards();
+        return cardsOnHand;
     }
 
-    public void playCards(List<Card> cards) {
-        hand.playCards(cards);
+    public void playCards(List<Card> cardsToPlay) {
+        if(!new HashSet<>(cardsOnHand).containsAll(cardsToPlay))
+            throw new NoSuchElementException("There is no such card on hand");
+
+        cardsOnHand.removeAll(cardsToPlay);
     }
 
-    public void addCardToHand(List<Card> card) {
-        hand.addCards(card);
+    public void addCardToHand(List<Card> cards) {
+        cardsOnHand.addAll(cards);
     }
 
-    public String getName() {
-        return this.name;
-    }
 
     @Override
     public String toString() {
         return "Player{" +
-                "name='" + name + '\'' +
-                ", hand=" + hand +
+                ", cardsOnHand=" + cardsOnHand +
                 '}';
     }
 }

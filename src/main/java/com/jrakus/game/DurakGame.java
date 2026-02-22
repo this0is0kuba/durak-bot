@@ -35,14 +35,11 @@ public class DurakGame {
     }
 
     private List<Player> createBothPlayers() {
-        List<Card> handCards1 = deck.drawCards(6);
-        List<Card> handCards2 = deck.drawCards(6);
+        List<Card> cardsOnHand1 = deck.drawCards(6);
+        List<Card> cardsOnHand2 = deck.drawCards(6);
 
-        Hand hand1 = new Hand(handCards1);
-        Hand hand2 = new Hand(handCards2);
-
-        Player player1 = new Player("player1", hand1);
-        Player player2 = new Player("player2", hand2);
+        Player player1 = new Player(cardsOnHand1);
+        Player player2 = new Player(cardsOnHand2);
 
         return List.of(player1, player2);
     }
