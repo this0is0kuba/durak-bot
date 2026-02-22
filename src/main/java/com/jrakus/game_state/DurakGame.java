@@ -12,8 +12,8 @@ public class DurakGame {
     private final Table table = new Table();
     private final Card.Suit trump;
 
-    private final DurakGamePlayer durakGamePlayer1;
-    private final DurakGamePlayer durakGamePlayer2;
+    private final DurakGamePlayer player1;
+    private final DurakGamePlayer player2;
     private final DurakGamePlayer startingPlayer;
 
     private DurakGamePlayer activePlayer;
@@ -26,8 +26,8 @@ public class DurakGame {
     public DurakGame() {
         List<DurakGamePlayer> bothDurakGamePlayers = createBothPlayers();
 
-        durakGamePlayer1 = bothDurakGamePlayers.getFirst();
-        durakGamePlayer2 = bothDurakGamePlayers.get(1);
+        player1 = bothDurakGamePlayers.getFirst();
+        player2 = bothDurakGamePlayers.get(1);
 
         activePlayer = chooseWhoStartsTheGame();
         startingPlayer = activePlayer;
@@ -47,7 +47,7 @@ public class DurakGame {
     private DurakGamePlayer chooseWhoStartsTheGame() {
         // TODO: choose based on cards instead of choosing randomly
         Random random = new Random();
-        return random.nextBoolean() ? durakGamePlayer1 : durakGamePlayer2;
+        return random.nextBoolean() ? player1 : player2;
     }
 
     public void attack(List<Card> cards) {
@@ -56,7 +56,7 @@ public class DurakGame {
         table.addAttackingCards(cards);
         currentAttackingPlayer.playCards(cards);
 
-        state.checkGameStateAfterAttack(currentAttackingPlayer, startingPlayer, durakGamePlayer1);
+        state.checkGameStateAfterAttack(currentAttackingPlayer, startingPlayer, player1);
 
         changeActivePlayer();
     }
@@ -67,7 +67,7 @@ public class DurakGame {
         table.addDefendingCards(cards, trump);
         currentDefendingPlayer.playCards(cards);
 
-        state.checkGameStateAfterDefend(currentDefendingPlayer, currentAttackingPlayer, durakGamePlayer1);
+        state.checkGameStateAfterDefend(currentDefendingPlayer, currentAttackingPlayer, player1);
 
         changeActivePlayer();
     }
@@ -78,6 +78,8 @@ public class DurakGame {
         List<Card> discardedCards = table.clearTable();
         discardPile.addCardsToPile(discardedCards);
 
+        drawCards();
+
         changeActivePlayer();
         switchAttackerWithDefender();
     }
@@ -86,9 +88,11 @@ public class DurakGame {
         checkPlayerBeforeMove(currentDefendingPlayer, List.of());
 
         List<Card> cardsFromTable = table.clearTable();
-        currentDefendingPlayer.addCardToHand(cardsFromTable);
+        currentDefendingPlayer.addCardsToHand(cardsFromTable);
 
-        state.checkGameStateAfterTakingCards(currentAttackingPlayer, durakGamePlayer1);
+        state.checkGameStateAfterTakingCards(currentAttackingPlayer, player1);
+
+        drawCards();
 
         changeActivePlayer();
         switchAttackerWithDefender();
@@ -116,9 +120,28 @@ public class DurakGame {
         durakGameValidator.checkIfPlayerHasCardsThatHePlays(playerToCheck, cards);
     }
 
+    private void drawCards() {
+
+        final int maxNumberOfCardsOnHand = 6;
+
+        int numberOfCards1 = currentAttackingPlayer.showCardsOnHand().size();
+        int numberOfCards2 = currentDefendingPlayer.showCardsOnHand().size();
+
+        int numberOfCardsForAttacker = Math.max(maxNumberOfCardsOnHand - numberOfCards1, 0);
+        int numberOfCardsForDefender = Math.max(maxNumberOfCardsOnHand - numberOfCards2, 0);
+
+       while (numberOfCardsForAttacker < maxNumberOfCardsOnHand && !deck.isEmpty()) {
+           currentAttackingPlayer.addCardToHand(deck.drawOneCard());
+       }
+
+       while (numberOfCardsForDefender < maxNumberOfCardsOnHand && !deck.isEmpty()) {
+           currentDefendingPlayer.addCardToHand(deck.drawOneCard());
+       }
+    }
+
     private void changeActivePlayer () {
-        boolean isPlayer1Active = activePlayer == durakGamePlayer1;
-        activePlayer = isPlayer1Active ? durakGamePlayer2 : durakGamePlayer1;
+        boolean isPlayer1Active = activePlayer == player1;
+        activePlayer = isPlayer1Active ? player2 : player1;
     }
 
     private void switchAttackerWithDefender() {

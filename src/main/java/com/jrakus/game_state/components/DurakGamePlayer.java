@@ -22,8 +22,12 @@ public class DurakGamePlayer {
         cardsOnHand.removeAll(cardsToPlay);
     }
 
-    public void addCardToHand(List<Card> cards) {
+    public void addCardsToHand(List<Card> cards) {
         cardsOnHand.addAll(cards);
+    }
+
+    public void addCardToHand(Card card) {
+        cardsOnHand.add(card);
     }
 
 
