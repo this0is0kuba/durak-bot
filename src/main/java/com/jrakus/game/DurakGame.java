@@ -12,76 +12,76 @@ public class DurakGame {
     private final Table table = new Table();
     private final Card.Suit trump;
 
-    private final Player player1;
-    private final Player player2;
-    private final Player startingPlayer;
+    private final DurakGamePlayer durakGamePlayer1;
+    private final DurakGamePlayer durakGamePlayer2;
+    private final DurakGamePlayer startingDurakGamePlayer;
 
-    private Player activePlayer;
-    private Player currentAttackingPlayer;
-    private Player currentDefendingPlayer;
+    private DurakGamePlayer activePlayer;
+    private DurakGamePlayer currentAttackingPlayer;
+    private DurakGamePlayer currentDefendingPlayer;
 
     private GameState state;
     DurakGameValidator durakGameValidator = new DurakGameValidator();
 
     public DurakGame() {
-        List<Player> bothPlayers = createBothPlayers();
+        List<DurakGamePlayer> bothDurakGamePlayers = createBothPlayers();
 
-        player1 = bothPlayers.getFirst();
-        player2 = bothPlayers.get(1);
+        durakGamePlayer1 = bothDurakGamePlayers.getFirst();
+        durakGamePlayer2 = bothDurakGamePlayers.get(1);
 
         activePlayer = chooseWhoStartsTheGame();
-        startingPlayer = activePlayer;
+        startingDurakGamePlayer = activePlayer;
         trump = deck.drawOneCard().suit();
     }
 
-    private List<Player> createBothPlayers() {
+    private List<DurakGamePlayer> createBothPlayers() {
         List<Card> cardsOnHand1 = deck.drawCards(6);
         List<Card> cardsOnHand2 = deck.drawCards(6);
 
-        Player player1 = new Player(cardsOnHand1);
-        Player player2 = new Player(cardsOnHand2);
+        DurakGamePlayer durakGamePlayer1 = new DurakGamePlayer(cardsOnHand1);
+        DurakGamePlayer durakGamePlayer2 = new DurakGamePlayer(cardsOnHand2);
 
-        return List.of(player1, player2);
+        return List.of(durakGamePlayer1, durakGamePlayer2);
     }
 
-    private Player chooseWhoStartsTheGame() {
+    private DurakGamePlayer chooseWhoStartsTheGame() {
         // TODO: choose based on cards instead of choosing randomly
         Random random = new Random();
-        return random.nextBoolean() ? player1 : player2;
+        return random.nextBoolean() ? durakGamePlayer1 : durakGamePlayer2;
     }
 
-    public void attack(Player attackingPlayer, List<Card> cards) {
+    public void attack(DurakGamePlayer attackingDurakGamePlayer, List<Card> cards) {
 
         durakGameValidator.checkIfGameIsStillActive(state.getInternalState());
-        durakGameValidator.checkAttacker(attackingPlayer, activePlayer, currentAttackingPlayer);
-        durakGameValidator.checkIfPlayerHasCardsThatHePlays(attackingPlayer, cards);
+        durakGameValidator.checkAttacker(attackingDurakGamePlayer, activePlayer, currentAttackingPlayer);
+        durakGameValidator.checkIfPlayerHasCardsThatHePlays(attackingDurakGamePlayer, cards);
 
         table.addAttackingCards(cards);
-        attackingPlayer.playCards(cards);
+        attackingDurakGamePlayer.playCards(cards);
 
-        state.checkGameStateAfterAttack(currentAttackingPlayer, startingPlayer, player1);
+        state.checkGameStateAfterAttack(currentAttackingPlayer, startingDurakGamePlayer, durakGamePlayer1);
 
         changeActivePlayer();
     }
 
-    public void defend(Player defendingPlayer, List<Card> cards) {
+    public void defend(DurakGamePlayer defendingDurakGamePlayer, List<Card> cards) {
 
         durakGameValidator.checkIfGameIsStillActive(state.getInternalState());
-        durakGameValidator.checkDefender(defendingPlayer, activePlayer, currentDefendingPlayer);
-        durakGameValidator.checkIfPlayerHasCardsThatHePlays(defendingPlayer, cards);
+        durakGameValidator.checkDefender(defendingDurakGamePlayer, activePlayer, currentDefendingPlayer);
+        durakGameValidator.checkIfPlayerHasCardsThatHePlays(defendingDurakGamePlayer, cards);
 
         table.addDefendingCards(cards, trump);
-        defendingPlayer.playCards(cards);
+        defendingDurakGamePlayer.playCards(cards);
 
-        state.checkGameStateAfterDefend(currentDefendingPlayer, currentAttackingPlayer, player1);
+        state.checkGameStateAfterDefend(currentDefendingPlayer, currentAttackingPlayer, durakGamePlayer1);
 
         changeActivePlayer();
     }
 
-    public void stopAttack(Player attackingPlayer) {
+    public void stopAttack(DurakGamePlayer attackingDurakGamePlayer) {
 
         durakGameValidator.checkIfGameIsStillActive(state.getInternalState());
-        durakGameValidator.checkAttacker(attackingPlayer, activePlayer, currentAttackingPlayer);
+        durakGameValidator.checkAttacker(attackingDurakGamePlayer, activePlayer, currentAttackingPlayer);
 
         List<Card> discardedCards = table.clearTable();
         discardPile.addCardsToPile(discardedCards);
@@ -90,27 +90,31 @@ public class DurakGame {
         switchAttackerWithDefender();
     }
 
-    public void takeCardsFromTable(Player defendingPlayer) {
+    public void takeCardsFromTable(DurakGamePlayer defendingDurakGamePlayer) {
 
         durakGameValidator.checkIfGameIsStillActive(state.getInternalState());
-        durakGameValidator.checkDefender(defendingPlayer, activePlayer, currentAttackingPlayer);
+        durakGameValidator.checkDefender(defendingDurakGamePlayer, activePlayer, currentAttackingPlayer);
 
         List<Card> cardsFromTable = table.clearTable();
-        defendingPlayer.addCardToHand(cardsFromTable);
+        defendingDurakGamePlayer.addCardToHand(cardsFromTable);
 
-        state.checkGameStateAfterTakingCards(currentAttackingPlayer, player1);
+        state.checkGameStateAfterTakingCards(currentAttackingPlayer, durakGamePlayer1);
 
         changeActivePlayer();
         switchAttackerWithDefender();
     }
 
+    public GameState.GameStateEnum getGameState() {
+        return state.getInternalState();
+    }
+
     private void changeActivePlayer () {
-        boolean isPlayer1Active = activePlayer == player1;
-        activePlayer = isPlayer1Active ? player2 : player1;
+        boolean isPlayer1Active = activePlayer == durakGamePlayer1;
+        activePlayer = isPlayer1Active ? durakGamePlayer2 : durakGamePlayer1;
     }
 
     private void switchAttackerWithDefender() {
-        Player temp = currentAttackingPlayer;
+        DurakGamePlayer temp = currentAttackingPlayer;
         currentAttackingPlayer = currentDefendingPlayer;
         currentDefendingPlayer = temp;
     }

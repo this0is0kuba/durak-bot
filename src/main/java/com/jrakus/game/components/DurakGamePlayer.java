@@ -4,10 +4,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class Player {
+public class DurakGamePlayer {
     private final List<Card> cardsOnHand;
 
-    public Player(List<Card> hand) {
+    public DurakGamePlayer(List<Card> hand) {
         this.cardsOnHand = hand;
     }
 
@@ -29,7 +29,7 @@ public class Player {
 
     @Override
     public String toString() {
-        return "Player{" +
+        return "DurakGamePlayer{" +
                 ", cardsOnHand=" + cardsOnHand +
                 '}';
     }

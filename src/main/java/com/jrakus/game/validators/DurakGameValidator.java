@@ -2,7 +2,7 @@ package com.jrakus.game.validators;
 
 import com.jrakus.game.components.Card;
 import com.jrakus.game.components.GameState;
-import com.jrakus.game.components.Player;
+import com.jrakus.game.components.DurakGamePlayer;
 import com.jrakus.game.exceptions.DurakGameException;
 
 import java.util.HashSet;
@@ -10,27 +10,27 @@ import java.util.List;
 
 public class DurakGameValidator {
 
-    public void checkAttacker(Player attackingPlayer, Player activePlayer, Player currentAttackingPlayer) {
-        if(attackingPlayer != activePlayer)
-            throw new DurakGameException(String.format("This is not turn for player: %s", attackingPlayer));
+    public void checkAttacker(DurakGamePlayer attackingDurakGamePlayer, DurakGamePlayer activeDurakGamePlayer, DurakGamePlayer currentAttackingDurakGamePlayer) {
+        if(attackingDurakGamePlayer != activeDurakGamePlayer)
+            throw new DurakGameException(String.format("This is not turn for player: %s", attackingDurakGamePlayer));
 
-        if(attackingPlayer != currentAttackingPlayer)
-            throw new DurakGameException(String.format("Player %s does not attack now", attackingPlayer));
+        if(attackingDurakGamePlayer != currentAttackingDurakGamePlayer)
+            throw new DurakGameException(String.format("Player %s does not attack now", attackingDurakGamePlayer));
     }
 
-    public void checkDefender(Player defendingPlayer, Player activePlayer, Player currentDefendingPlayer) {
-        if(defendingPlayer != activePlayer)
-            throw new DurakGameException(String.format("This is not turn for player: %s", defendingPlayer));
+    public void checkDefender(DurakGamePlayer defendingDurakGamePlayer, DurakGamePlayer activeDurakGamePlayer, DurakGamePlayer currentDefendingDurakGamePlayer) {
+        if(defendingDurakGamePlayer != activeDurakGamePlayer)
+            throw new DurakGameException(String.format("This is not turn for player: %s", defendingDurakGamePlayer));
 
-        if(defendingPlayer != currentDefendingPlayer)
-            throw new DurakGameException(String.format("Player %s does not defend now", defendingPlayer));
+        if(defendingDurakGamePlayer != currentDefendingDurakGamePlayer)
+            throw new DurakGameException(String.format("Player %s does not defend now", defendingDurakGamePlayer));
     }
 
-    public void checkIfPlayerHasCardsThatHePlays(Player player, List<Card> cards) {
-        List<Card> cardsOnHand = player.showCardsOnHand();
+    public void checkIfPlayerHasCardsThatHePlays(DurakGamePlayer durakGamePlayer, List<Card> cards) {
+        List<Card> cardsOnHand = durakGamePlayer.showCardsOnHand();
 
         if(!new HashSet<>(cardsOnHand).containsAll(cards)) {
-            throw new DurakGameException(String.format("Player %s does not have cards that he wants to play", player));
+            throw new DurakGameException(String.format("Player %s does not have cards that he wants to play", durakGamePlayer));
         }
     }
 

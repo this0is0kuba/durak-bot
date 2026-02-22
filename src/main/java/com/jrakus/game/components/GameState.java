@@ -16,8 +16,8 @@ public class GameState {
     }
 
     public void checkGameStateAfterTakingCards(
-            Player currentAttackingPlayer,
-            Player player1
+            DurakGamePlayer currentAttackingPlayer,
+            DurakGamePlayer player1
     ) {
         boolean isTheEndOfTheGame = currentAttackingPlayer.showCardsOnHand().isEmpty();
 
@@ -31,9 +31,9 @@ public class GameState {
     }
 
     public void checkGameStateAfterAttack(
-            Player currentAttackingPlayer,
-            Player startingPlayer,
-            Player player1
+            DurakGamePlayer currentAttackingPlayer,
+            DurakGamePlayer startingPlayer,
+            DurakGamePlayer player1
     ) {
         boolean attackerStartedTheGame = (currentAttackingPlayer == startingPlayer);
         boolean attackingPlayerHasNoCards = currentAttackingPlayer.showCardsOnHand().isEmpty();
@@ -48,11 +48,11 @@ public class GameState {
     }
 
     public void checkGameStateAfterDefend(
-            Player currentDefendingPlayer,
-            Player currentAttackingPlayer,
-            Player player1
+            DurakGamePlayer currentDefendingPlayer,
+            DurakGamePlayer currentAttackingPlayer,
+            DurakGamePlayer player1
     ) {
-        boolean attackingPlayerHasNoCards = currentDefendingPlayer.showCardsOnHand().isEmpty();
+        boolean attackingPlayerHasNoCards = currentAttackingPlayer.showCardsOnHand().isEmpty();
         boolean defendingPlayerHasNoCards = currentDefendingPlayer.showCardsOnHand().isEmpty();
 
         if (attackingPlayerHasNoCards && defendingPlayerHasNoCards) {
