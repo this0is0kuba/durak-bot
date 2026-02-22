@@ -1,4 +1,4 @@
-package com.jrakus.game.components;
+package com.jrakus.game_state.components;
 
 import java.util.HashSet;
 import java.util.List;

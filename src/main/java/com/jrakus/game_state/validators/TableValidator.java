@@ -1,7 +1,7 @@
-package com.jrakus.game.validators;
+package com.jrakus.game_state.validators;
 
-import com.jrakus.game.components.Card;
-import com.jrakus.game.exceptions.DurakGameException;
+import com.jrakus.game_state.components.Card;
+import com.jrakus.game_state.exceptions.DurakGameInvalidStateException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -16,7 +16,7 @@ public class TableValidator {
     ) {
 
         if(newDefendingCards.size() != attackingCardsToBeat.size())
-            throw new DurakGameException("The amount of defending cards is different than attacking cards");
+            throw new DurakGameInvalidStateException("The amount of defending cards is different than attacking cards");
 
         for(int i = 0; i < newDefendingCards.size(); i++) {
 
@@ -36,7 +36,7 @@ public class TableValidator {
         int newNumberOfCardsOnTable = oldAttackingCards.size() + newAttackingCards.size();
 
         if (newNumberOfCardsOnTable > 5)
-            throw new DurakGameException("Exceeded limit of attacking cards on table.");
+            throw new DurakGameInvalidStateException("Exceeded limit of attacking cards on table.");
 
         boolean areAnyAttackingCardsOnTable = !oldAttackingCards.isEmpty();
 
@@ -61,7 +61,7 @@ public class TableValidator {
             Card.Rank rank = newAttackingCard.rank();
 
             if(!allAttackingRanks.contains(rank))
-                throw new DurakGameException(
+                throw new DurakGameInvalidStateException(
                         String.format("Rank: %s has not been used before. You can't play it.", rank)
                 );
         }
@@ -71,7 +71,7 @@ public class TableValidator {
         boolean isAttackingCardStronger = (compareCards(attackingCard, defendingCard, trump) > 0);
 
         if(isAttackingCardStronger)
-            throw new DurakGameException(String.format(
+            throw new DurakGameInvalidStateException(String.format(
                     "Attacking card %s is stronger than defending card %s",
                     attackingCard,
                     defendingCard

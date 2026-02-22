@@ -1,6 +1,6 @@
-package com.jrakus.game.components;
+package com.jrakus.game_state.components;
 
-import com.jrakus.game.validators.TableValidator;
+import com.jrakus.game_state.validators.TableValidator;
 
 import java.util.*;
 
