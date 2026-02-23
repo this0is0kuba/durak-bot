@@ -15,6 +15,10 @@ public class DurakGamePlayer {
         return cardsOnHand;
     }
 
+    public int countCardsOnHand() {
+        return cardsOnHand.size();
+    }
+
     public void playCards(List<Card> cardsToPlay) {
         if(!new HashSet<>(cardsOnHand).containsAll(cardsToPlay))
             throw new NoSuchElementException("There is no such card on hand");

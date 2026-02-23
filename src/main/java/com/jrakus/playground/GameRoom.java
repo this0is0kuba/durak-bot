@@ -44,7 +44,7 @@ public class GameRoom {
 
         switch (kind) {
 
-            case ATTACK -> durakGame.attack(cards);
+            case ATTACK -> durakGame.doAttack(cards);
             case STOP_ATTACK -> durakGame.stopAttack();
 
             default -> throw new DurakGameInvalidMoveException(
@@ -61,7 +61,7 @@ public class GameRoom {
 
         switch (kind) {
 
-            case DEFEND -> durakGame.defend(cards);
+            case DEFEND -> durakGame.doDefend(cards);
             case TAKE_CARDS -> durakGame.takeCardsFromTable();
 
             default -> throw new DurakGameInvalidMoveException(
