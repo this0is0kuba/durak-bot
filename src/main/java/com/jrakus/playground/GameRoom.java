@@ -71,17 +71,10 @@ public class GameRoom {
     }
 
     private Player getActivePlayer() {
-
-        if(durakGame.getStartingPlayer() == player1.getDurakGamePlayer())
-            return player1;
-
-        return player2;
+        return durakGame.isPlayer1Active() ? player1 : player2;
     }
 
     private Player getAttackingPlayer() {
-        if(durakGame.getCurrentAttackingPlayer() == player1.getDurakGamePlayer())
-            return player1;
-
-        return player2;
+        return durakGame.isPlayer1Attacking() ? player1 : player2;
     }
 }

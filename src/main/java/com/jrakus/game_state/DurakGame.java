@@ -102,16 +102,12 @@ public class DurakGame {
         return state.getInternalState();
     }
 
-    public DurakGamePlayer getActivePlayer() {
-        return activePlayer;
+    public boolean isPlayer1Active() {
+        return activePlayer == player1;
     }
 
-    public DurakGamePlayer getStartingPlayer() {
-        return startingPlayer;
-    }
-
-    public DurakGamePlayer getCurrentAttackingPlayer() {
-        return currentAttackingPlayer;
+    public boolean isPlayer1Attacking() {
+        return currentAttackingPlayer == player1;
     }
 
     private void checkPlayerBeforeMove(DurakGamePlayer playerToCheck, List<Card> cards) {
