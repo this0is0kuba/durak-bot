@@ -10,6 +10,12 @@ import java.util.List;
 
 public class DurakGameValidator {
 
+    public void checkIfGameIsStillActive(GameState.GameStateEnum state) {
+        if(state != GameState.GameStateEnum.ACTIVE_GAME) {
+            throw new DurakGameInvalidStateException("The game has already ended");
+        }
+    }
+
     public void checkIfPlayerCanPlay(DurakGamePlayer playerToCheck, DurakGamePlayer activePlayer) {
         if(playerToCheck != activePlayer)
             throw new DurakGameInvalidStateException(String.format("This is not turn for player: %s", playerToCheck));
@@ -23,9 +29,11 @@ public class DurakGameValidator {
         }
     }
 
-    public void checkIfGameIsStillActive(GameState.GameStateEnum state) {
-        if(state != GameState.GameStateEnum.ACTIVE_GAME) {
-            throw new DurakGameInvalidStateException("The game has already ended");
+    public void checkIfAttackHasCorrectAmountOfCards(DurakGamePlayer opponent, List<Card> cards) {
+        int amountOfOpponnentsCards = opponent.countCardsOnHand();
+
+        if(cards.size() < 1 || cards.size() > amountOfOpponnentsCards) {
+            throw new DurakGameInvalidStateException(String.format("Count of attacking cards must be between 1 and %d", amountOfOpponnentsCards));
         }
     }
 }

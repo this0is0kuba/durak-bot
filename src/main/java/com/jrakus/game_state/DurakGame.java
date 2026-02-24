@@ -50,8 +50,8 @@ public class DurakGame {
         return random.nextBoolean() ? player1 : player2;
     }
 
-    public void attack(List<Card> cards) {
-        checkPlayerBeforeMove(currentAttackingPlayer, cards);
+    public void doAttack(List<Card> cards) {
+        validateAttackMove(currentAttackingPlayer, cards);
 
         table.addAttackingCards(cards);
         currentAttackingPlayer.playCards(cards);
@@ -61,8 +61,8 @@ public class DurakGame {
         changeActivePlayer();
     }
 
-    public void defend(List<Card> cards) {
-        checkPlayerBeforeMove(currentDefendingPlayer, cards);
+    public void doDefend(List<Card> cards) {
+        validateMove(currentDefendingPlayer, cards);
 
         table.addDefendingCards(cards, trump);
         currentDefendingPlayer.playCards(cards);
@@ -73,7 +73,7 @@ public class DurakGame {
     }
 
     public void stopAttack() {
-        checkPlayerBeforeMove(currentAttackingPlayer, List.of());
+        validateMove(currentAttackingPlayer, List.of());
 
         List<Card> discardedCards = table.clearTable();
         discardPile.addCardsToPile(discardedCards);
@@ -85,7 +85,7 @@ public class DurakGame {
     }
 
     public void takeCardsFromTable() {
-        checkPlayerBeforeMove(currentDefendingPlayer, List.of());
+        validateMove(currentDefendingPlayer, List.of());
 
         List<Card> cardsFromTable = table.clearTable();
         currentDefendingPlayer.addCardsToHand(cardsFromTable);
@@ -110,18 +110,23 @@ public class DurakGame {
         return currentAttackingPlayer == player1;
     }
 
-    private void checkPlayerBeforeMove(DurakGamePlayer playerToCheck, List<Card> cards) {
+    private void validateMove(DurakGamePlayer playerToCheck, List<Card> cards) {
         durakGameValidator.checkIfGameIsStillActive(state.getInternalState());
         durakGameValidator.checkIfPlayerCanPlay(playerToCheck, activePlayer);
         durakGameValidator.checkIfPlayerHasCardsThatHePlays(playerToCheck, cards);
+    }
+
+    private void validateAttackMove(DurakGamePlayer playerToCheck, List<Card> cards) {
+        validateMove(playerToCheck, cards);
+        durakGameValidator.checkIfAttackHasCorrectAmountOfCards(currentDefendingPlayer, cards);
     }
 
     private void drawCards() {
 
         final int maxNumberOfCardsOnHand = 6;
 
-        int numberOfCards1 = currentAttackingPlayer.showCardsOnHand().size();
-        int numberOfCards2 = currentDefendingPlayer.showCardsOnHand().size();
+        int numberOfCards1 = currentAttackingPlayer.countCardsOnHand();
+        int numberOfCards2 = currentDefendingPlayer.countCardsOnHand();
 
         int numberOfCardsForAttacker = Math.max(maxNumberOfCardsOnHand - numberOfCards1, 0);
         int numberOfCardsForDefender = Math.max(maxNumberOfCardsOnHand - numberOfCards2, 0);
