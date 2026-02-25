@@ -12,8 +12,6 @@ public class PublicState {
     private final List<Card> yourHand;
     private final List<Card> discardPile;
     private final List<Card> certainOpponentHand;
-
-    // Nullable – trump may already be taken
     private final Card trumpCard;
 
     private final int numberOfCardsOnOpponentHand;
@@ -37,8 +35,7 @@ public class PublicState {
         private List<Card> yourHand;
         private List<Card> discardPile;
         private List<Card> certainOpponentHand;
-
-        private Card trumpCard; // optional
+        private Card trumpCard;
 
         // Use boxed types to detect "not set"
         private Integer numberOfCardsOnOpponentHand;
@@ -70,7 +67,7 @@ public class PublicState {
         }
 
         public PublicStateBuilder trumpCard(Card trumpCard) {
-            this.trumpCard = trumpCard;
+            this.trumpCard = Objects.requireNonNull(trumpCard, "trumpCard");
             return this;
         }
 
@@ -110,6 +107,9 @@ public class PublicState {
             }
             if (certainOpponentHand == null) {
                 throw new IllegalStateException("certainOpponentHand not initialized");
+            }
+            if (trumpCard == null) {
+                throw new IllegalStateException("trumpCard not initialized");
             }
             if (numberOfCardsOnOpponentHand == null) {
                 throw new IllegalStateException("numberOfCardsOnOpponentHand not initialized");
