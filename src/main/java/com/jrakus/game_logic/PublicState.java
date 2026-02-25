@@ -16,7 +16,7 @@ public class PublicState {
     // Nullable – trump may already be taken
     private final Card trumpCard;
 
-    private final int numberOfCardOnOpponentHand;
+    private final int numberOfCardsOnOpponentHand;
     private final int numberOfCardsOnDeck;
 
     private PublicState(PublicStateBuilder builder) {
@@ -26,7 +26,7 @@ public class PublicState {
         this.discardPile = List.copyOf(builder.discardPile);
         this.certainOpponentHand = List.copyOf(builder.certainOpponentHand);
         this.trumpCard = builder.trumpCard;
-        this.numberOfCardOnOpponentHand = builder.numberOfCardOnOpponentHand;
+        this.numberOfCardsOnOpponentHand = builder.numberOfCardsOnOpponentHand;
         this.numberOfCardsOnDeck = builder.numberOfCardsOnDeck;
     }
 
@@ -41,7 +41,7 @@ public class PublicState {
         private Card trumpCard; // optional
 
         // Use boxed types to detect "not set"
-        private Integer numberOfCardOnOpponentHand;
+        private Integer numberOfCardsOnOpponentHand;
         private Integer numberOfCardsOnDeck;
 
         public PublicStateBuilder attackingCards(List<Card> attackingCards) {
@@ -74,11 +74,11 @@ public class PublicState {
             return this;
         }
 
-        public PublicStateBuilder numberOfCardOnOpponentHand(int numberOfCardOnOpponentHand) {
-            if (numberOfCardOnOpponentHand < 0) {
-                throw new IllegalArgumentException("numberOfCardOnOpponentHand cannot be negative");
+        public PublicStateBuilder numberOfCardsOnOpponentHand(int numberOfCardsOnOpponentHand) {
+            if (numberOfCardsOnOpponentHand < 0) {
+                throw new IllegalArgumentException("numberOfCardsOnOpponentHand cannot be negative");
             }
-            this.numberOfCardOnOpponentHand = numberOfCardOnOpponentHand;
+            this.numberOfCardsOnOpponentHand = numberOfCardsOnOpponentHand;
             return this;
         }
 
@@ -111,8 +111,8 @@ public class PublicState {
             if (certainOpponentHand == null) {
                 throw new IllegalStateException("certainOpponentHand not initialized");
             }
-            if (numberOfCardOnOpponentHand == null) {
-                throw new IllegalStateException("numberOfCardOnOpponentHand not initialized");
+            if (numberOfCardsOnOpponentHand == null) {
+                throw new IllegalStateException("numberOfCardsOnOpponentHand not initialized");
             }
             if (numberOfCardsOnDeck == null) {
                 throw new IllegalStateException("numberOfCardsOnDeck not initialized");
