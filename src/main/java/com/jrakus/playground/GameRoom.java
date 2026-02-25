@@ -28,7 +28,7 @@ public class GameRoom {
             Player activePlayer = getActivePlayer();
             Player attackingPlayer = getAttackingPlayer();
 
-            PublicState publicState = null;
+            PublicState publicState = getPublicState();
 
             if (activePlayer == attackingPlayer) {
               attackMove(activePlayer, publicState);
@@ -79,5 +79,28 @@ public class GameRoom {
 
     private Player getAttackingPlayer() {
         return durakGame.isPlayer1Attacking() ? player1 : player2;
+    }
+
+    private PublicState getPublicState() {
+
+        List<Card> attackingCards = durakGame.showCurrentAttackingCards();
+        List<Card> defendingCards = durakGame.showCurrentDefendingCards();
+        List<Card> activePlayerHand = durakGame.showActivePlayerHand();
+        List<Card> discardPile = durakGame.getDiscardPile();
+        List<Card> visibleCardsForActivePlayer = durakGame.showVisibleCardsForActivePlayer();
+        Card trumpCard = durakGame.showTrumpCard();
+        int numberOfCardsOnOpponentHand = durakGame.getNumberOfCardsOfInactivePlayer();
+        int numberOfCardsOnDeck = durakGame.getNumberOfCardsOnDeck();
+
+        return new PublicState.PublicStateBuilder()
+                .attackingCards(attackingCards)
+                .defendingCards(defendingCards)
+                .yourHand(activePlayerHand)
+                .discardPile(discardPile)
+                .certainOpponentHand(visibleCardsForActivePlayer)
+                .trumpCard(trumpCard)
+                .numberOfCardsOnOpponentHand(numberOfCardsOnOpponentHand)
+                .numberOfCardsOnDeck(numberOfCardsOnDeck)
+                .build();
     }
 }

@@ -3,6 +3,7 @@ package com.jrakus.game_state;
 import com.jrakus.game_state.components.*;
 import com.jrakus.game_state.validators.DurakGameValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -111,6 +112,41 @@ public class DurakGame {
 
     public boolean isPlayer1Attacking() {
         return currentAttackingPlayer == player1;
+    }
+
+    public List<Card> showCurrentAttackingCards() {
+        return table.showAttackingCards();
+    }
+
+    public List<Card> showCurrentDefendingCards() {
+        return table.showDefendingCards();
+    }
+
+    public List<Card> showActivePlayerHand() {
+        return activePlayer.showCardsOnHand();
+    }
+
+    public List<Card> getDiscardPile() {
+        return discardPile.showCardsOnPile();
+    }
+
+    public List<Card> showVisibleCardsForActivePlayer() {
+        return new ArrayList<>(activePlayer.getOpponentCardsVisibleToPlayer());
+    }
+
+    public Card showTrumpCard() {
+        return trumpCard;
+    }
+
+    public int getNumberOfCardsOfInactivePlayer() {
+        if(player1 == activePlayer)
+            return player1.showCardsOnHand().size();
+
+        return player2.showCardsOnHand().size();
+    }
+
+    public int getNumberOfCardsOnDeck() {
+        return deck.getNumberOfCards();
     }
 
     private void changeVisibleCardsAfterAttack(List<Card> cards) {

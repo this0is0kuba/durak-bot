@@ -54,6 +54,10 @@ public class Deck {
         return trumpCard;
     }
 
+    public int getNumberOfCards() {
+        return cards.size() + 1;
+    }
+
     private Card getTrumpCard() {
         if(isDeckEmpty) {
             throw new NoSuchElementException("Deck is empty!");

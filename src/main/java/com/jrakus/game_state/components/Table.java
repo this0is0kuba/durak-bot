@@ -35,6 +35,15 @@ public class Table {
         return allCards;
     }
 
+    public List<Card> showAttackingCards() {
+        return attackingCards;
+    }
+
+    public List<Card> showDefendingCards() {
+        return defendingCards;
+    }
+
+
     private List<Card> getUndefendedCards() {
         int indexOfFirstUndefendedCard = defendingCards.size();
         int indexOfLastUndefendedCard = attackingCards.size();
