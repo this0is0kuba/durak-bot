@@ -10,7 +10,7 @@ public class DurakGame {
     private final Deck deck = new Deck();
     private final DiscardPile discardPile = new DiscardPile();
     private final Table table = new Table();
-    private final Card.Suit trump;
+    private final Card trumpCard;
 
     private final DurakGamePlayer player1;
     private final DurakGamePlayer player2;
@@ -31,7 +31,7 @@ public class DurakGame {
 
         activePlayer = chooseWhoStartsTheGame();
         startingPlayer = activePlayer;
-        trump = deck.drawOneCard().suit();
+        trumpCard = deck.showTrumpCard();
     }
 
     private List<DurakGamePlayer> createBothPlayers() {
@@ -64,7 +64,7 @@ public class DurakGame {
     public void doDefend(List<Card> cards) {
         validateMove(currentDefendingPlayer, cards);
 
-        table.addDefendingCards(cards, trump);
+        table.addDefendingCards(cards, trumpCard.suit());
         currentDefendingPlayer.playCards(cards);
 
         state.checkGameStateAfterDefend(currentDefendingPlayer, currentAttackingPlayer, player1);

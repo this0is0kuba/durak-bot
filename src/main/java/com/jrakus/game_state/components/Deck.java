@@ -6,6 +6,9 @@ public class Deck {
     private final List<Card> cards = new ArrayList<>();
     private final Random random = new Random();
 
+    private final Card trumpCard;
+    private boolean isDeckEmpty = false;
+
     public Deck() {
         for (Card.Suit suit : Card.Suit.values()) {
             for (Card.Rank rank : Card.Rank.values()) {
@@ -14,6 +17,8 @@ public class Deck {
         }
 
         shuffle();
+
+        trumpCard = cards.getLast();
     }
 
     public void shuffle() {
@@ -22,8 +27,9 @@ public class Deck {
 
     public Card drawOneCard() {
         if (cards.isEmpty()) {
-            throw new NoSuchElementException("Deck is empty!");
+            return getTrumpCard();
         }
+
         return cards.removeLast();
     }
 
@@ -42,6 +48,18 @@ public class Deck {
 
     public int size() {
         return cards.size();
+    }
+
+    public Card showTrumpCard() {
+        return trumpCard;
+    }
+
+    private Card getTrumpCard() {
+        if(isDeckEmpty) {
+            throw new NoSuchElementException("Deck is empty!");
+        }
+        isDeckEmpty = true;
+        return trumpCard;
     }
 
     @Override
