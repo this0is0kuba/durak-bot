@@ -3,6 +3,7 @@ package com.jrakus.game_state;
 import com.jrakus.game_state.components.*;
 import com.jrakus.game_state.validators.DurakGameValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -10,7 +11,7 @@ public class DurakGame {
     private final Deck deck = new Deck();
     private final DiscardPile discardPile = new DiscardPile();
     private final Table table = new Table();
-    private final Card.Suit trump;
+    private final Card trumpCard;
 
     private final DurakGamePlayer player1;
     private final DurakGamePlayer player2;
@@ -20,7 +21,7 @@ public class DurakGame {
     private DurakGamePlayer currentAttackingPlayer;
     private DurakGamePlayer currentDefendingPlayer;
 
-    private GameState state;
+    private final GameState state = new GameState();
     DurakGameValidator durakGameValidator = new DurakGameValidator();
 
     public DurakGame() {
@@ -31,7 +32,7 @@ public class DurakGame {
 
         activePlayer = chooseWhoStartsTheGame();
         startingPlayer = activePlayer;
-        trump = deck.drawOneCard().suit();
+        trumpCard = deck.showTrumpCard();
     }
 
     private List<DurakGamePlayer> createBothPlayers() {
@@ -56,6 +57,7 @@ public class DurakGame {
         table.addAttackingCards(cards);
         currentAttackingPlayer.playCards(cards);
 
+        changeVisibleCardsAfterAttack(cards);
         state.checkGameStateAfterAttack(currentAttackingPlayer, startingPlayer, player1);
 
         changeActivePlayer();
@@ -64,9 +66,10 @@ public class DurakGame {
     public void doDefend(List<Card> cards) {
         validateMove(currentDefendingPlayer, cards);
 
-        table.addDefendingCards(cards, trump);
+        table.addDefendingCards(cards, trumpCard.suit());
         currentDefendingPlayer.playCards(cards);
 
+        changeVisibleCardsAfterDefend(cards);
         state.checkGameStateAfterDefend(currentDefendingPlayer, currentAttackingPlayer, player1);
 
         changeActivePlayer();
@@ -90,6 +93,7 @@ public class DurakGame {
         List<Card> cardsFromTable = table.clearTable();
         currentDefendingPlayer.addCardsToHand(cardsFromTable);
 
+        changeVisibleCardsAfterTakingCards(cardsFromTable);
         state.checkGameStateAfterTakingCards(currentAttackingPlayer, player1);
 
         drawCards();
@@ -108,6 +112,53 @@ public class DurakGame {
 
     public boolean isPlayer1Attacking() {
         return currentAttackingPlayer == player1;
+    }
+
+    public List<Card> showCurrentAttackingCards() {
+        return table.showAttackingCards();
+    }
+
+    public List<Card> showCurrentDefendingCards() {
+        return table.showDefendingCards();
+    }
+
+    public List<Card> showActivePlayerHand() {
+        return activePlayer.showCardsOnHand();
+    }
+
+    public List<Card> getDiscardPile() {
+        return discardPile.showCardsOnPile();
+    }
+
+    public List<Card> showVisibleCardsForActivePlayer() {
+        return new ArrayList<>(activePlayer.getOpponentCardsVisibleToPlayer());
+    }
+
+    public Card showTrumpCard() {
+        return trumpCard;
+    }
+
+    public int getNumberOfCardsOfInactivePlayer() {
+        if(player1 == activePlayer)
+            return player1.showCardsOnHand().size();
+
+        return player2.showCardsOnHand().size();
+    }
+
+    public int getNumberOfCardsOnDeck() {
+        return deck.getNumberOfCards();
+    }
+
+    private void changeVisibleCardsAfterAttack(List<Card> cards) {
+        currentDefendingPlayer.removeOpponentVisibleCards(cards);
+    }
+
+    private void changeVisibleCardsAfterDefend(List<Card> cards) {
+        currentAttackingPlayer.removeOpponentVisibleCards(cards);
+    }
+
+    private void changeVisibleCardsAfterTakingCards(List<Card> cards) {
+        currentDefendingPlayer.addOpponentVisibleCards(cards);
     }
 
     private void validateMove(DurakGamePlayer playerToCheck, List<Card> cards) {
