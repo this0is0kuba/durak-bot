@@ -43,6 +43,11 @@ class DeckTest {
     }
 
     @Test
+    void drawNegativeNumberOfCardsShouldThrowException() {
+        assertThrows(IllegalArgumentException.class, () -> deck.drawCards(-1));
+    }
+
+    @Test
     void drawingAllCardsShouldEventuallyReturnTrumpCard() {
 
         for (int i = 0; i < totalStandardCards - 1; i++)
