@@ -1,5 +1,7 @@
 package com.jrakus.game_state.components;
 
+import org.jetbrains.annotations.NotNull;
+
 public record Card(Suit suit, Rank rank) {
 
     public enum Suit {HEARTS, DIAMONDS, CLUBS, SPADES}
@@ -19,7 +21,11 @@ public record Card(Suit suit, Rank rank) {
     }
 
     @Override
+    @NotNull
     public String toString() {
-        return rank + " of " + suit;
+        return "Card{" +
+                "suit=" + suit +
+                ", rank=" + rank +
+                '}';
     }
 }

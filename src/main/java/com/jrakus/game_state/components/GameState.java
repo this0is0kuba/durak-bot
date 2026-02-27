@@ -62,4 +62,11 @@ public class GameState {
             state = GameStateEnum.PLAYER_2_WON;
         }
     }
+
+    @Override
+    public String toString() {
+        return "GameState{" +
+                "state=" + state +
+                '}';
+    }
 }

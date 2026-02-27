@@ -15,4 +15,11 @@ public class DiscardPile {
     public List<Card> showCardsOnPile() {
         return discardedCards;
     }
+
+    @Override
+    public String toString() {
+        return "DiscardPile{" +
+                "discardedCards=" + discardedCards +
+                '}';
+    }
 }

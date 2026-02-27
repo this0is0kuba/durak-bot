@@ -11,7 +11,6 @@ public class DurakGame {
     private final Deck deck = new Deck();
     private final DiscardPile discardPile = new DiscardPile();
     private final Table table = new Table();
-    private final Card trumpCard;
 
     private final DurakGamePlayer player1;
     private final DurakGamePlayer player2;
@@ -32,7 +31,6 @@ public class DurakGame {
 
         activePlayer = chooseWhoStartsTheGame();
         startingPlayer = activePlayer;
-        trumpCard = deck.showTrumpCard();
     }
 
     private List<DurakGamePlayer> createBothPlayers() {
@@ -66,7 +64,7 @@ public class DurakGame {
     public void doDefend(List<Card> cards) {
         validateMove(currentDefendingPlayer, cards);
 
-        table.addDefendingCards(cards, trumpCard.suit());
+        table.addDefendingCards(cards, deck.showTrumpCard().suit());
         currentDefendingPlayer.playCards(cards);
 
         changeVisibleCardsAfterDefend(cards);
@@ -135,7 +133,7 @@ public class DurakGame {
     }
 
     public Card showTrumpCard() {
-        return trumpCard;
+        return deck.showTrumpCard();
     }
 
     public int getNumberOfCardsOfInactivePlayer() {
