@@ -146,7 +146,7 @@ public class DurakGame {
     }
 
     public int getNumberOfCardsOnDeck() {
-        return deck.getNumberOfCards();
+        return deck.size();
     }
 
     private void changeVisibleCardsAfterAttack(List<Card> cards) {

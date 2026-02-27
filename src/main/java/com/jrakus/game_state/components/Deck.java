@@ -1,15 +1,22 @@
 package com.jrakus.game_state.components;
 
+import com.jrakus.playground.exceptions.DurakGameInvalidMoveException;
+
 import java.util.*;
 
 public class Deck {
     private final List<Card> cards = new ArrayList<>();
-    private final Random random = new Random();
+    private final Random random;
 
     private final Card trumpCard;
-    private boolean isDeckEmpty = false;
 
     public Deck() {
+       this(new Random());
+    }
+
+    public Deck(Random random) {
+        this.random = random;
+
         for (Card.Suit suit : Card.Suit.values()) {
             for (Card.Rank rank : Card.Rank.values()) {
                 cards.add(new Card(suit, rank));
@@ -17,8 +24,7 @@ public class Deck {
         }
 
         shuffle();
-
-        trumpCard = cards.getLast();
+        trumpCard = cards.getFirst();
     }
 
     public void shuffle() {
@@ -26,9 +32,8 @@ public class Deck {
     }
 
     public Card drawOneCard() {
-        if (cards.isEmpty()) {
-            return getTrumpCard();
-        }
+        if (cards.isEmpty())
+            throw new DurakGameInvalidMoveException("Deck is empty!");
 
         return cards.removeLast();
     }
@@ -43,7 +48,7 @@ public class Deck {
     }
 
     public boolean isEmpty() {
-        return isDeckEmpty;
+        return cards.isEmpty();
     }
 
     public int size() {
@@ -51,18 +56,6 @@ public class Deck {
     }
 
     public Card showTrumpCard() {
-        return trumpCard;
-    }
-
-    public int getNumberOfCards() {
-        return cards.size() + 1;
-    }
-
-    private Card getTrumpCard() {
-        if(isDeckEmpty) {
-            throw new NoSuchElementException("Deck is empty!");
-        }
-        isDeckEmpty = true;
         return trumpCard;
     }
 
