@@ -1,12 +1,18 @@
-package com.jrakus.game_state.components;
+package unit_tests.com.jrakus.game_state.components;
 
-import org.junit.jupiter.api.*;
+import com.jrakus.game_state.components.Card;
+import com.jrakus.game_state.components.DiscardPile;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.jrakus.game_state.components.Card.Rank.*;
-import static com.jrakus.game_state.components.Card.Suit.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.jrakus.game_state.components.Card.Rank.JACK;
+import static com.jrakus.game_state.components.Card.Rank.NINE;
+import static com.jrakus.game_state.components.Card.Suit.HEARTS;
+import static com.jrakus.game_state.components.Card.Suit.SPADES;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DiscardPileTest {
 

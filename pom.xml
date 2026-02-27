@@ -53,6 +53,39 @@
                     <target>25</target>
                 </configuration>
             </plugin>
+
+
+            <!--
+            Required for Mockito inline mock maker.
+
+            Mockito needs to be attached as a Java agent to enable mocking of final
+            classes/methods. Newer JDK versions are deprecating dynamic self-attachment
+            of agents, so we explicitly pass mockito-core as -javaagent to the test JVM.
+
+            The maven-dependency-plugin exposes the full path to the Mockito JAR
+            (${org.mockito:mockito-core:jar}), and Surefire uses it in argLine.
+
+            If removed, Mockito may fail in future JDK versions with
+            dynamic agent loading errors.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>properties</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>@{argLine} -javaagent:${org.mockito:mockito-core:jar}</argLine>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>

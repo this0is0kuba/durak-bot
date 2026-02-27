@@ -2,6 +2,7 @@ package com.jrakus.game_state;
 
 import com.jrakus.game_state.components.*;
 import com.jrakus.game_state.validators.DurakGameValidator;
+import com.jrakus.game_state.validators.TableValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.Random;
 public class DurakGame {
     private final Deck deck = new Deck();
     private final DiscardPile discardPile = new DiscardPile();
-    private final Table table = new Table();
+    private final Table table = new Table(new TableValidator());
 
     private final DurakGamePlayer player1;
     private final DurakGamePlayer player2;

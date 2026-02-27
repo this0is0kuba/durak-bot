@@ -1,10 +1,16 @@
-package com.jrakus.game_state.components;
+package unit_tests.com.jrakus.game_state.components;
 
+import com.jrakus.game_state.components.Card;
+import com.jrakus.game_state.components.Deck;
 import com.jrakus.playground.exceptions.DurakGameInvalidMoveException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class DeckTest {

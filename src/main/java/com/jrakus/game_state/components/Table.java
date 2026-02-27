@@ -8,8 +8,15 @@ public class Table {
 
     private final List<Card> attackingCards = new ArrayList<>();
     private final List<Card> defendingCards = new ArrayList<>();
+    private final TableValidator tableValidator;
 
-    private final TableValidator tableValidator = new TableValidator();
+    public Table(TableValidator tableValidator) {
+        this.tableValidator = tableValidator;
+    }
+
+    public Table() {
+        this(new TableValidator());
+    }
 
     public void addAttackingCards(List<Card> newAttackingCards) {
         tableValidator.checkNewAttackingCards(newAttackingCards, attackingCards, defendingCards);

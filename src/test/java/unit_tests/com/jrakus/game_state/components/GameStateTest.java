@@ -1,12 +1,15 @@
-package com.jrakus.game_state.components;
+package unit_tests.com.jrakus.game_state.components;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import com.jrakus.game_state.components.Card;
+import com.jrakus.game_state.components.DurakGamePlayer;
+import com.jrakus.game_state.components.GameState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GameStateTest {
 
