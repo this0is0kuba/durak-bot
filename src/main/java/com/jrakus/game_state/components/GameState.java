@@ -22,11 +22,7 @@ public class GameState {
         boolean isTheEndOfTheGame = currentAttackingPlayer.showCardsOnHand().isEmpty();
 
         if(isTheEndOfTheGame) {
-            if (currentAttackingPlayer == player1) {
-                state = GameStateEnum.PLAYER_1_WON;
-            } else {
-                state = GameStateEnum.PLAYER_2_WON;
-            }
+            chooseWinner(currentAttackingPlayer, player1);
         }
     }
 
@@ -39,11 +35,7 @@ public class GameState {
         boolean attackingPlayerHasNoCards = currentAttackingPlayer.showCardsOnHand().isEmpty();
 
         if(attackingPlayerHasNoCards && !attackerStartedTheGame) {
-            if (currentAttackingPlayer == player1) {
-                state = GameStateEnum.PLAYER_1_WON;
-            } else {
-                state = GameStateEnum.PLAYER_2_WON;
-            }
+            chooseWinner(currentAttackingPlayer, player1);
         }
     }
 
@@ -58,13 +50,16 @@ public class GameState {
         if (attackingPlayerHasNoCards && defendingPlayerHasNoCards) {
             state = GameStateEnum.DRAW;
         }
+        else if(attackingPlayerHasNoCards) {
+            chooseWinner(currentAttackingPlayer, player1);
+        }
+    }
 
-        if(attackingPlayerHasNoCards) {
-            if (currentAttackingPlayer == player1) {
-                state = GameStateEnum.PLAYER_1_WON;
-            } else {
-                state = GameStateEnum.PLAYER_2_WON;
-            }
+    private void chooseWinner(DurakGamePlayer currentAttackingPlayer, DurakGamePlayer player1) {
+        if (currentAttackingPlayer == player1) {
+            state = GameStateEnum.PLAYER_1_WON;
+        } else {
+            state = GameStateEnum.PLAYER_2_WON;
         }
     }
 }
