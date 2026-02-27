@@ -19,12 +19,6 @@ public record Card(Suit suit, Rank rank) {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Card(Suit suit1, Rank rank1))) return false;
-        return suit == suit1 && rank == rank1;
-    }
-
-    @Override
     public String toString() {
         return rank + " of " + suit;
     }
