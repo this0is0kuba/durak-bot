@@ -1,8 +1,5 @@
-package unit_tests.com.jrakus.game_state.components;
+package com.jrakus.game_state.components;
 
-import com.jrakus.game_state.components.Card;
-import com.jrakus.game_state.components.DurakGamePlayer;
-import com.jrakus.game_state.components.GameState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

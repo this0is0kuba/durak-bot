@@ -1,9 +1,8 @@
-package unit_tests.com.jrakus.game_state.validators;
+package com.jrakus.game_state.validators;
 
 import com.jrakus.game_state.components.Card;
 import com.jrakus.game_state.components.DurakGamePlayer;
 import com.jrakus.game_state.exceptions.DurakGameInvalidStateException;
-import com.jrakus.game_state.validators.DurakGameValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
