@@ -107,9 +107,8 @@ public class TableValidator {
     }
 
     private void checkIfDefendingCardIsStronger(Card defendingCard, Card attackingCard, Suit trump) {
-        boolean isAttackingCardStronger = (compareCards(attackingCard, defendingCard, trump) > 0);
 
-        if(isAttackingCardStronger)
+        if(!isDefendingCardStronger(defendingCard, attackingCard, trump))
             throw new DurakGameInvalidStateException(String.format(
                     "Attacking card %s is stronger than defending card %s",
                     attackingCard,
@@ -117,26 +116,33 @@ public class TableValidator {
             ));
     }
 
-    private int compareCards(Card card1, Card card2, Suit trump) {
+    private boolean isDefendingCardStronger(Card defendingCard, Card attackingCard, Suit trump) {
 
-        int rankValue1 = card1.rank().getRankValue();
-        int rankValue2 = card2.rank().getRankValue();
+        int rankValueDefending = defendingCard.rank().getRankValue();
+        int rankValueAttacking = attackingCard.rank().getRankValue();
 
-        boolean isCard1Trump = (card1.suit() == trump);
-        boolean isCard2Trump = (card2.suit() == trump);
+        boolean isCardDefendingTrump = (defendingCard.suit() == trump);
+        boolean isCardAttackingTrump = (attackingCard.suit() == trump);
 
-        if (isCard1Trump && isCard2Trump) {
-            return rankValue1 - rankValue2;
+        if (isCardAttackingTrump && isCardDefendingTrump) {
+            return rankValueDefending - rankValueAttacking > 0;
         }
 
-        if (isCard1Trump) {
-            return 1;
+        if (isCardDefendingTrump) {
+            return true;
         }
 
-        if (isCard2Trump) {
-            return -1;
+        if (isCardAttackingTrump) {
+            return false;
         }
 
-        return rankValue1 - rankValue2;
+        Suit suitAttacking = attackingCard.suit();
+        Suit suitDefending = defendingCard.suit();
+
+        if (suitAttacking != suitDefending) {
+            return false;
+        }
+
+        return rankValueDefending - rankValueAttacking > 0;
     }
 }

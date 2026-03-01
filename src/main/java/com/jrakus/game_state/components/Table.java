@@ -46,6 +46,8 @@ public class Table {
         attackingCards.clear();
         defendingCards.clear();
 
+        isAttackMove = true;
+
         return allCards;
     }
 
