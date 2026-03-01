@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Random;
 
 public class DurakGame {
-    private final Deck deck = new Deck();
-    private final DiscardPile discardPile = new DiscardPile();
-    private final Table table = new Table(new TableValidator());
+    private final Deck deck;
+    private final DiscardPile discardPile;
+    private final Table table;
 
     private final DurakGamePlayer player1;
     private final DurakGamePlayer player2;
@@ -21,10 +21,32 @@ public class DurakGame {
     private DurakGamePlayer currentAttackingPlayer;
     private DurakGamePlayer currentDefendingPlayer;
 
-    private final GameState state = new GameState();
-    DurakGameValidator durakGameValidator = new DurakGameValidator();
+    private final GameState state;
+    DurakGameValidator durakGameValidator;
 
     public DurakGame() {
+        this(
+                new Deck(),
+                new DiscardPile(),
+                new Table(new TableValidator()),
+                new GameState(),
+                new DurakGameValidator()
+        );
+    }
+
+    public DurakGame(
+            Deck deck,
+            DiscardPile discardPile,
+            Table table,
+            GameState gameState,
+            DurakGameValidator durakGameValidator
+    ) {
+        this.deck = deck;
+        this.discardPile = discardPile;
+        this.table = table;
+        this.state = gameState;
+        this.durakGameValidator = durakGameValidator;
+
         List<DurakGamePlayer> bothDurakGamePlayers = createBothPlayers();
 
         player1 = bothDurakGamePlayers.getFirst();
