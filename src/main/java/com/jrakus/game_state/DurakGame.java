@@ -168,7 +168,7 @@ public class DurakGame {
 
     private void validateAttackMove(DurakGamePlayer playerToCheck, List<Card> cards) {
         validateMove(playerToCheck, cards);
-        durakGameValidator.checkIfAttackHasCorrectAmountOfCards(currentDefendingPlayer, cards);
+        durakGameValidator.checkIfAttackHasLessCardsThanOpponentHand(currentDefendingPlayer, cards);
     }
 
     private void drawCards() {

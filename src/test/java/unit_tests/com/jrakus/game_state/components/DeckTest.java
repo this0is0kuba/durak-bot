@@ -24,7 +24,7 @@ class DeckTest {
     }
 
     @Test
-    void shouldInitializeDeckWithAllCardsPlusTrump() {
+    void shouldInitializeDeckWithAllCards() {
         assertEquals(totalStandardCards, deck.size());
         assertFalse(deck.isEmpty());
         assertNotNull(deck.showTrumpCard());
@@ -54,7 +54,7 @@ class DeckTest {
     }
 
     @Test
-    void drawingAllCardsShouldEventuallyReturnTrumpCard() {
+    void trumpCardShouldBeTheLastDrawingCard() {
 
         for (int i = 0; i < totalStandardCards - 1; i++)
             deck.drawOneCard();

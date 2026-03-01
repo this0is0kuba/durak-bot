@@ -8,6 +8,9 @@ public class Table {
 
     private final List<Card> attackingCards = new ArrayList<>();
     private final List<Card> defendingCards = new ArrayList<>();
+
+    private boolean isAttackMove = true;
+
     private final TableValidator tableValidator;
 
     public Table(TableValidator tableValidator) {
@@ -19,13 +22,17 @@ public class Table {
     }
 
     public void addAttackingCards(List<Card> newAttackingCards) {
-        tableValidator.checkNewAttackingCards(newAttackingCards, attackingCards, defendingCards);
+        tableValidator.checkNewAttackingCards(isAttackMove, newAttackingCards, attackingCards, defendingCards);
         attackingCards.addAll(newAttackingCards);
+
+        isAttackMove = false;
     }
 
     public void addDefendingCards(List<Card> newDefendingCards, Card.Suit trump) {
-        tableValidator.checkNewDefendingCards(newDefendingCards, getUndefendedCards(), trump);
+        tableValidator.checkNewDefendingCards(isAttackMove, newDefendingCards, getUndefendedCards(), trump);
         defendingCards.addAll(newDefendingCards);
+
+        isAttackMove = true;
     }
 
     public List<Card> clearTable() {

@@ -4,13 +4,15 @@ import com.jrakus.game_state.components.Card;
 import com.jrakus.game_state.components.DiscardPile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
+import java.util.stream.Stream;
 
-import static com.jrakus.game_state.components.Card.Rank.JACK;
-import static com.jrakus.game_state.components.Card.Rank.NINE;
-import static com.jrakus.game_state.components.Card.Suit.HEARTS;
-import static com.jrakus.game_state.components.Card.Suit.SPADES;
+import static com.jrakus.game_state.components.Card.Rank.*;
+import static com.jrakus.game_state.components.Card.Suit.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -28,21 +30,44 @@ class DiscardPileTest {
         assertTrue(discardPile.showCardsOnPile().isEmpty());
     }
 
-    @Test
-    void addCardsToPileShouldAddAllCards() {
-        Card c1 = new Card(HEARTS, NINE);
-        Card c2 = new Card(SPADES, JACK);
+    static Stream<Arguments> cardProvider() {
+        return Stream.of(
+                Arguments.of(
+                        List.of()
+                ),
+                Arguments.of(
+                        List.of(
+                                new Card(SPADES, TEN)
+                        )
+                ),
+                Arguments.of(
+                        List.of(
+                                new Card(DIAMONDS, ACE),
+                                new Card(CLUBS, ACE)
+                        )
+                ),
+                Arguments.of(
+                        List.of(
+                                new Card(DIAMONDS, ACE),
+                                new Card(CLUBS, ACE),
+                                new Card(SPADES, TEN)
+                        )
+                )
+        );
+    }
 
-        List<Card> newCards = List.of(c1, c2);
-
+    @ParameterizedTest
+    @MethodSource("cardProvider")
+    void addCardsToPileShouldAddAllCards(List<Card> newCards) {
         discardPile.addCardsToPile(newCards);
 
         List<Card> cardsOnPile = discardPile.showCardsOnPile();
 
-        assertEquals(2, cardsOnPile.size());
+        assertEquals(newCards.size(), cardsOnPile.size());
 
-        assertTrue(cardsOnPile.contains(c1));
-        assertTrue(cardsOnPile.contains(c2));
+        for(Card card: newCards) {
+            assertTrue(cardsOnPile.contains(card));
+        }
     }
 
     @Test

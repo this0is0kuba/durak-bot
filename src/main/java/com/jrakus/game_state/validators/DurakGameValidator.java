@@ -29,11 +29,17 @@ public class DurakGameValidator {
         }
     }
 
-    public void checkIfAttackHasCorrectAmountOfCards(DurakGamePlayer opponent, List<Card> cards) {
-        int amountOfOpponnentsCards = opponent.countCardsOnHand();
+    public void checkIfAttackHasLessCardsThanOpponentHand(DurakGamePlayer opponent, List<Card> cards) {
+        int amountOfOpponentsCards = opponent.countCardsOnHand();
 
-        if(cards.size() < 1 || cards.size() > amountOfOpponnentsCards) {
-            throw new DurakGameInvalidStateException(String.format("Count of attacking cards must be between 1 and %d", amountOfOpponnentsCards));
+        if(cards.size() > amountOfOpponentsCards) {
+            throw new DurakGameInvalidStateException(
+                    String.format(
+                            "Count of attacking cards (%s) must be less than opponent hand (%s)",
+                            cards.size(),
+                            amountOfOpponentsCards
+                    )
+            );
         }
     }
 }
