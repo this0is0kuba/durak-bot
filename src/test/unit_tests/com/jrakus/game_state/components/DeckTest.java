@@ -139,4 +139,12 @@ class DeckTest {
         assertEquals(new Card(HEARTS, NINE), cardsFromDeck.getLast());
     }
 
+    @Test
+    void shouldCreateEmptyDeck() {
+        Deck emptyDeck = new Deck(new Card(SPADES, ACE));
+
+        assertTrue(emptyDeck.isEmpty());
+        assertEquals(new Card(SPADES, ACE), emptyDeck.showTrumpCard());
+    }
+
 }

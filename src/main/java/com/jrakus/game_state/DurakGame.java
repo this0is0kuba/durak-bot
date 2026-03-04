@@ -25,13 +25,19 @@ public class DurakGame {
     DurakGameValidator durakGameValidator;
 
     public DurakGame() {
-        this(
-                new Deck(),
-                new DiscardPile(),
-                new Table(new TableValidator()),
-                new GameState(),
-                new DurakGameValidator()
-        );
+        this.deck = new Deck();
+        this.discardPile = new DiscardPile();
+        this.table = new Table();
+        this.state = new GameState();
+        this.durakGameValidator = new DurakGameValidator();
+
+        player1 = createPlayer();
+        player2 = createPlayer();
+
+        activePlayer = chooseWhoStartsTheGame();
+        startingPlayer = activePlayer;
+        currentAttackingPlayer = activePlayer;
+        currentDefendingPlayer = player1 == activePlayer ? player2 : player1;
     }
 
     public DurakGame(
@@ -39,7 +45,10 @@ public class DurakGame {
             DiscardPile discardPile,
             Table table,
             GameState gameState,
-            DurakGameValidator durakGameValidator
+            DurakGameValidator durakGameValidator,
+            DurakGamePlayer durakGamePlayer1,
+            DurakGamePlayer durakGamePlayer2,
+            DurakGamePlayer activePlayer
     ) {
         this.deck = deck;
         this.discardPile = discardPile;
@@ -47,23 +56,18 @@ public class DurakGame {
         this.state = gameState;
         this.durakGameValidator = durakGameValidator;
 
-        List<DurakGamePlayer> bothDurakGamePlayers = createBothPlayers();
+        player1 = durakGamePlayer1;
+        player2 = durakGamePlayer2;
 
-        player1 = bothDurakGamePlayers.getFirst();
-        player2 = bothDurakGamePlayers.get(1);
-
-        activePlayer = chooseWhoStartsTheGame();
+        this.activePlayer = activePlayer;
         startingPlayer = activePlayer;
+        currentAttackingPlayer = activePlayer;
+        currentDefendingPlayer = player1 == activePlayer ? player2 : player1;
     }
 
-    private List<DurakGamePlayer> createBothPlayers() {
-        List<Card> cardsOnHand1 = deck.drawCards(6);
-        List<Card> cardsOnHand2 = deck.drawCards(6);
-
-        DurakGamePlayer durakGamePlayer1 = new DurakGamePlayer(cardsOnHand1);
-        DurakGamePlayer durakGamePlayer2 = new DurakGamePlayer(cardsOnHand2);
-
-        return List.of(durakGamePlayer1, durakGamePlayer2);
+    private DurakGamePlayer createPlayer() {
+        List<Card> cardsOnHand = deck.drawCards(6);
+        return new DurakGamePlayer(cardsOnHand);
     }
 
     private DurakGamePlayer chooseWhoStartsTheGame() {
@@ -120,7 +124,6 @@ public class DurakGame {
         drawCards();
 
         changeActivePlayer();
-        switchAttackerWithDefender();
     }
 
     public GameState.GameStateEnum getGameState() {
@@ -145,6 +148,14 @@ public class DurakGame {
 
     public List<Card> showActivePlayerHand() {
         return activePlayer.showCardsOnHand();
+    }
+
+    public List<Card> showPlayer1Hand() {
+        return player1.showCardsOnHand();
+    }
+
+    public List<Card> showPlayer2Hand() {
+        return player2.showCardsOnHand();
     }
 
     public List<Card> getDiscardPile() {
@@ -203,12 +214,14 @@ public class DurakGame {
         int numberOfCardsForAttacker = Math.max(maxNumberOfCardsOnHand - numberOfCards1, 0);
         int numberOfCardsForDefender = Math.max(maxNumberOfCardsOnHand - numberOfCards2, 0);
 
-       while (numberOfCardsForAttacker < maxNumberOfCardsOnHand && !deck.isEmpty()) {
+       while (numberOfCardsForAttacker > 0 && !deck.isEmpty()) {
            currentAttackingPlayer.addCardToHand(deck.drawOneCard());
+           numberOfCardsForAttacker--;
        }
 
-       while (numberOfCardsForDefender < maxNumberOfCardsOnHand && !deck.isEmpty()) {
+       while (numberOfCardsForDefender > 0 && !deck.isEmpty()) {
            currentDefendingPlayer.addCardToHand(deck.drawOneCard());
+           numberOfCardsForDefender--;
        }
     }
 

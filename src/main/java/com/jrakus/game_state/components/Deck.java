@@ -37,6 +37,13 @@ public class Deck {
         trumpCard = cards.getFirst();
     }
 
+    public Deck(Card trumpCard) {
+        this.cards = new ArrayList<>(0);
+        this.random = new Random();
+
+        this.trumpCard = trumpCard;
+    }
+
     public void shuffle() {
         Collections.shuffle(cards, random);
     }
