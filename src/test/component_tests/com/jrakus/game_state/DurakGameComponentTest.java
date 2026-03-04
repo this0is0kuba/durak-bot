@@ -4,6 +4,7 @@ import com.jrakus.game_state.components.*;
 import com.jrakus.game_state.exceptions.DurakGameInvalidStateException;
 import com.jrakus.game_state.validators.DurakGameValidator;
 import com.jrakus.game_state.validators.TableValidator;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -11,15 +12,23 @@ import java.util.List;
 
 import static com.jrakus.game_state.components.Card.Rank.*;
 import static com.jrakus.game_state.components.Card.Suit.*;
+import static com.jrakus.game_state.components.GameState.GameStateEnum.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DurakGameComponentTest {
 
+    private DurakGame game;
+
+    @BeforeEach
+    void setUp() {
+        game = createGameWithDeterministicDeck();
+    }
+
     private DurakGame createGameWithDeterministicDeck() {
 
-        List<Card> cardsOnHand1 = new ArrayList<>();
-        List<Card> cardsOnHand2 = new ArrayList<>();
-        List<Card> cardsOnDeck = new ArrayList<>();
+        List<Card> cardsOnHand1 = new ArrayList<>(6);
+        List<Card> cardsOnHand2 = new ArrayList<>(6);
+        List<Card> cardsOnDeck = new ArrayList<>(2);
 
         // --- Player 1 (6 cards)
         cardsOnHand1.add(new Card(SPADES, JACK));
@@ -57,17 +66,44 @@ class DurakGameComponentTest {
         );
     }
 
+    private DurakGame createEndGame() {
+
+        List<Card> cardsOnHand1 = new ArrayList<>(2);
+        List<Card> cardsOnHand2 = new ArrayList<>(2);
+        Card trumpCard = new Card(HEARTS, ACE);
+
+        // --- Player 1 (6 cards)
+        cardsOnHand1.add(new Card(SPADES, JACK));
+        cardsOnHand1.add(new Card(HEARTS, JACK));
+
+        // --- Player 2 (6 cards)
+        cardsOnHand2.add(new Card(SPADES, QUEEN));
+        cardsOnHand2.add(new Card(HEARTS, ACE));
+
+        Deck deck = new Deck(trumpCard);
+        DurakGamePlayer player1 = new DurakGamePlayer(cardsOnHand1);
+        DurakGamePlayer player2 = new DurakGamePlayer(cardsOnHand2);
+
+        return new DurakGame(
+                deck,
+                new DiscardPile(),
+                new Table(new TableValidator()),
+                new GameState(),
+                new DurakGameValidator(),
+                player1,
+                player2,
+                player1
+        );
+    }
+
     @Test
     void shouldDistributeSixCardsToEachPlayer() {
-        DurakGame game = createGameWithDeterministicDeck();
-
         assertEquals(6, game.showActivePlayerHand().size());
         assertEquals(2, game.getNumberOfCardsOnDeck());
     }
 
     @Test
     void shouldExposeCorrectTrumpCard() {
-        DurakGame game = createGameWithDeterministicDeck();
 
         Card trump = game.showTrumpCard();
 
@@ -78,7 +114,6 @@ class DurakGameComponentTest {
 
     @Test
     void attackShouldMoveCardToTable() {
-        DurakGame game = createGameWithDeterministicDeck();
 
         Card attackCard = game.showActivePlayerHand().getFirst();
 
@@ -90,7 +125,6 @@ class DurakGameComponentTest {
 
     @Test
     void defendShouldAddCardToDefendingSide() {
-        DurakGame game = createGameWithDeterministicDeck();
 
         Card attackCard = new Card(HEARTS, NINE);
         game.doAttack(List.of(attackCard));
@@ -104,7 +138,6 @@ class DurakGameComponentTest {
 
     @Test
     void stopAttackShouldMoveCardsToDiscardPile() {
-        DurakGame game = createGameWithDeterministicDeck();
 
         Card attackCard = new Card(CLUBS, KING);
         game.doAttack(List.of(attackCard));
@@ -121,16 +154,15 @@ class DurakGameComponentTest {
 
     @Test
     void takeCardsShouldGiveCardsToDefender() {
-        DurakGame game = createGameWithDeterministicDeck();
 
         Card attackCard = new Card(CLUBS, KING);
         game.doAttack(List.of(attackCard));
 
-        int defenderHandBefore = game.showActivePlayerHand().size();
+        int defenderHandBefore = game.showPlayer2Hand().size();
 
         game.takeCardsFromTable();
 
-        int defenderHandAfter = game.showActivePlayerHand().size();
+        int defenderHandAfter = game.showPlayer2Hand().size();
 
         assertEquals(defenderHandBefore + 1, defenderHandAfter);
         assertEquals(0, game.showCurrentAttackingCards().size());
@@ -138,13 +170,16 @@ class DurakGameComponentTest {
 
     @Test
     void gameShouldRemainActiveAfterBasicMoves() {
-        DurakGame game = createGameWithDeterministicDeck();
+
+        Card attackCard = new Card(CLUBS, KING);
+        game.doAttack(List.of(attackCard));
 
         assertEquals(GameState.GameStateEnum.ACTIVE_GAME, game.getGameState());
     }
 
     @Test
     void afterTakingCardsAttackerShouldAttackAgain() {
+
         DurakGame game = createGameWithDeterministicDeck();
 
         Card attackCard = new Card(CLUBS, KING);
@@ -158,7 +193,6 @@ class DurakGameComponentTest {
 
     @Test
     void afterStoppingAttackDefenderShouldAttack() {
-        DurakGame game = createGameWithDeterministicDeck();
 
         Card attackCard = new Card(CLUBS, KING);
         game.doAttack(List.of(attackCard));
@@ -174,7 +208,6 @@ class DurakGameComponentTest {
 
     @Test
     void afterTakingCardsAttackerShouldTakeCardsFromDeck() {
-        DurakGame game = createGameWithDeterministicDeck();
 
         Card attackCard = new Card(HEARTS, NINE);
         game.doAttack(List.of(attackCard));
@@ -187,7 +220,6 @@ class DurakGameComponentTest {
 
     @Test
     void afterStoppingAttackBothPlayersShouldTakeCardsFromDeck() {
-        DurakGame game = createGameWithDeterministicDeck();
 
         Card attackCard = new Card(CLUBS, KING);
         game.doAttack(List.of(attackCard));
@@ -207,7 +239,6 @@ class DurakGameComponentTest {
 
     @Test
     void throwErrorWhenAttackingTwice() {
-        DurakGame game = createGameWithDeterministicDeck();
 
         Card attackCard1 = new Card(CLUBS, KING);
         game.doAttack(List.of(attackCard1));
@@ -222,7 +253,6 @@ class DurakGameComponentTest {
 
     @Test
     void throwErrorWhenDefendIsTheFirstMove() {
-        DurakGame game = createGameWithDeterministicDeck();
 
         Card defendCard = new Card(CLUBS, KING);
         assertThrows(
@@ -233,7 +263,6 @@ class DurakGameComponentTest {
 
     @Test
     void throwErrorWhenDefendingTwice() {
-        DurakGame game = createGameWithDeterministicDeck();
 
         Card attackCard = new Card(CLUBS, KING);
         game.doAttack(List.of(attackCard));
@@ -250,7 +279,6 @@ class DurakGameComponentTest {
 
     @Test
     void throwErrorWhenDefendingCardsAreWeaker() {
-        DurakGame game = createGameWithDeterministicDeck();
 
         Card attackCard1 = new Card(HEARTS, NINE);
         Card attackCard2 = new Card(DIAMONDS, NINE);
@@ -263,5 +291,39 @@ class DurakGameComponentTest {
                 DurakGameInvalidStateException.class,
                 () -> game.doDefend(List.of(defendCard1, defendCard2))
         );
+    }
+
+    @Test
+    void playerShouldWinWhenHas0Cards() {
+
+        DurakGame endGame = createEndGame();
+
+        List<Card> attackCards = List.of(
+                new Card(SPADES, JACK),
+                new Card(HEARTS, JACK)
+        );
+        endGame.doAttack(attackCards);
+        endGame.takeCardsFromTable();
+
+        assertEquals(PLAYER_1_WON, endGame.getGameState());
+    }
+
+    @Test
+    void itShouldBeDrawWhenBothPlayersHave0Cards() {
+        DurakGame endGame = createEndGame();
+
+        List<Card> attackCards = List.of(
+                new Card(SPADES, JACK),
+                new Card(HEARTS, JACK)
+        );
+        endGame.doAttack(attackCards);
+
+        List<Card> defendCards = List.of(
+                new Card(SPADES, QUEEN),
+                new Card(HEARTS, ACE)
+        );
+        endGame.doDefend(defendCards);
+
+        assertEquals(DRAW, endGame.getGameState());
     }
 }
