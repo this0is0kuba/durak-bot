@@ -5,7 +5,7 @@ import com.jrakus.playground.exceptions.DurakGameInvalidMoveException;
 import java.util.*;
 
 public class Deck {
-    private final List<Card> cards = new ArrayList<>();
+    private final List<Card> cards;
     private final Random random;
 
     private final Card trumpCard;
@@ -17,6 +17,9 @@ public class Deck {
     public Deck(Random random) {
         this.random = random;
 
+        int nCards = Card.Suit.values().length * Card.Rank.values().length;
+        this.cards = new ArrayList<>(nCards);
+
         for (Card.Suit suit : Card.Suit.values()) {
             for (Card.Rank rank : Card.Rank.values()) {
                 cards.add(new Card(suit, rank));
@@ -24,6 +27,13 @@ public class Deck {
         }
 
         shuffle();
+        trumpCard = cards.getFirst();
+    }
+
+    public Deck(List<Card> cards) {
+        this.random = new Random();
+
+        this.cards = cards;
         trumpCard = cards.getFirst();
     }
 

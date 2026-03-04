@@ -4,11 +4,12 @@ import com.jrakus.playground.exceptions.DurakGameInvalidMoveException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
+import static com.jrakus.game_state.components.Card.Rank.ACE;
+import static com.jrakus.game_state.components.Card.Rank.NINE;
+import static com.jrakus.game_state.components.Card.Suit.HEARTS;
+import static com.jrakus.game_state.components.Card.Suit.SPADES;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DeckTest {
@@ -115,6 +116,27 @@ class DeckTest {
         List<Card> cards2 = deck2.drawCards(deck2.size());
 
         assertNotEquals(cards1, cards2);
+    }
+
+    @Test
+    void shouldInitializeDeckWithDesiredCards() {
+
+        List<Card> cards = new ArrayList<>(totalStandardCards);
+
+        for (Card.Suit suit : Card.Suit.values()) {
+            for (Card.Rank rank : Card.Rank.values()) {
+
+                Card card = new Card(suit, rank);
+                cards.add(card);
+            }
+        }
+
+        Deck deckWithPreparedCards = new Deck(cards);
+        List<Card> cardsFromDeck = deckWithPreparedCards.drawCards(totalStandardCards);
+
+        assertTrue(deckWithPreparedCards.isEmpty());
+        assertEquals(new Card(SPADES, ACE), cardsFromDeck.getFirst());
+        assertEquals(new Card(HEARTS, NINE), cardsFromDeck.getLast());
     }
 
 }
