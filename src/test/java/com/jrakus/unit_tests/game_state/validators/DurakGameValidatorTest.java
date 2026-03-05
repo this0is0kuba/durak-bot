@@ -1,4 +1,4 @@
-package com.jrakus.unit_test.game_state.validators;
+package com.jrakus.unit_tests.game_state.validators;
 
 import com.jrakus.game_state.components.Card;
 import com.jrakus.game_state.components.DurakGamePlayer;

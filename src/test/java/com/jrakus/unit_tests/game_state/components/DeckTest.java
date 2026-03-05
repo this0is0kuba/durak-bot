@@ -1,4 +1,4 @@
-package com.jrakus.unit_test.game_state.components;
+package com.jrakus.unit_tests.game_state.components;
 
 import com.jrakus.game_state.components.Card;
 import com.jrakus.game_state.components.Deck;
