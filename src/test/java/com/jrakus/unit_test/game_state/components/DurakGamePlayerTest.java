@@ -1,10 +1,14 @@
-package com.jrakus.game_state.components;
+package com.jrakus.unit_test.game_state.components;
 
+import com.jrakus.game_state.components.Card;
+import com.jrakus.game_state.components.DurakGamePlayer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
+import static com.jrakus.game_state.components.Card.Suit.*;
+import static com.jrakus.game_state.components.Card.Rank.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DurakGamePlayerTest {
@@ -14,10 +18,10 @@ class DurakGamePlayerTest {
 
     @BeforeEach
     void setUp() {
-        c1 = new Card(Card.Suit.HEARTS, Card.Rank.NINE);
-        c2 = new Card(Card.Suit.SPADES, Card.Rank.JACK);
-        c3 = new Card(Card.Suit.CLUBS, Card.Rank.ACE);
-        c4 = new Card(Card.Suit.SPADES, Card.Rank.KING);
+        c1 = new Card(HEARTS, NINE);
+        c2 = new Card(SPADES, JACK);
+        c3 = new Card(CLUBS, ACE);
+        c4 = new Card(SPADES, KING);
 
         List<Card> initialHand = new ArrayList<>(List.of(c1, c2));
 

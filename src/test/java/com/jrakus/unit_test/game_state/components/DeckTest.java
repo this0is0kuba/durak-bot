@@ -1,15 +1,15 @@
-package com.jrakus.game_state.components;
+package com.jrakus.unit_test.game_state.components;
 
+import com.jrakus.game_state.components.Card;
+import com.jrakus.game_state.components.Deck;
 import com.jrakus.playground.exceptions.DurakGameInvalidMoveException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static com.jrakus.game_state.components.Card.Rank.ACE;
-import static com.jrakus.game_state.components.Card.Rank.NINE;
-import static com.jrakus.game_state.components.Card.Suit.HEARTS;
-import static com.jrakus.game_state.components.Card.Suit.SPADES;
+import static com.jrakus.game_state.components.Card.Rank.*;
+import static com.jrakus.game_state.components.Card.Suit.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DeckTest {

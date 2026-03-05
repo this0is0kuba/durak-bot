@@ -1,11 +1,16 @@
-package com.jrakus.game_state.components;
+package com.jrakus.unit_test.game_state.components;
 
+import com.jrakus.game_state.components.Card;
+import com.jrakus.game_state.components.DurakGamePlayer;
+import com.jrakus.game_state.components.GameState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.jrakus.game_state.components.Card.Suit.*;
+import static com.jrakus.game_state.components.Card.Rank.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class GameStateTest {
@@ -18,8 +23,8 @@ class GameStateTest {
     void setUp() {
         gameState = new GameState();
 
-        Card c1 = new Card(Card.Suit.HEARTS, Card.Rank.NINE);
-        Card c2 = new Card(Card.Suit.SPADES, Card.Rank.JACK);
+        Card c1 = new Card(HEARTS, NINE);
+        Card c2 = new Card(SPADES, JACK);
 
         player1 = new DurakGamePlayer(new ArrayList<>(List.of(c1)));
         player2 = new DurakGamePlayer(new ArrayList<>(List.of(c2)));

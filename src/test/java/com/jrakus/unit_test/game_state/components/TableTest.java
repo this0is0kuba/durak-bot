@@ -1,5 +1,7 @@
-package com.jrakus.game_state.components;
+package com.jrakus.unit_test.game_state.components;
 
+import com.jrakus.game_state.components.Card;
+import com.jrakus.game_state.components.Table;
 import com.jrakus.game_state.exceptions.DurakGameInvalidStateException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
