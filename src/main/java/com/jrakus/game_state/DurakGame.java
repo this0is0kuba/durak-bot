@@ -2,7 +2,6 @@ package com.jrakus.game_state;
 
 import com.jrakus.game_state.components.*;
 import com.jrakus.game_state.validators.DurakGameValidator;
-import com.jrakus.game_state.validators.TableValidator;
 
 import java.util.ArrayList;
 import java.util.List;
