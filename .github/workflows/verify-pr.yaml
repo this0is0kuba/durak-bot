@@ -1,0 +1,25 @@
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin'
+          java-version: '25'
+          cache: 'maven'
+
+      - name: Run Unit Tests
+        run: mvn test -Dtest=**/unit_tests/**
+
+      - name: Run Component Tests
+        run: mvn test -Dtest=**/component_tests/**
