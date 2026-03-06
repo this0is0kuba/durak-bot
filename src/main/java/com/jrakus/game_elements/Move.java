@@ -16,6 +16,11 @@ public class Move {
         this.cards = cards;
     }
 
+    public Move(MoveKind moveKind) {
+        this.moveKind = moveKind;
+        this.cards = List.of();
+    }
+
     public MoveKind getMoveKind() {
         return moveKind;
     }
