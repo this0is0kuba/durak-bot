@@ -8,6 +8,9 @@ import com.jrakus.game_state.components.Card;
 import com.jrakus.game_state.components.GameState;
 import com.jrakus.playground.exceptions.DurakGameInvalidMoveException;
 
+import static com.jrakus.game_elements.Move.*;
+import static com.jrakus.game_elements.Move.MoveKind.*;
+
 import java.util.List;
 
 public class GameRoom {
@@ -27,8 +30,9 @@ public class GameRoom {
 
             Player activePlayer = getActivePlayer();
             Player attackingPlayer = getAttackingPlayer();
-
             PublicState publicState = getPublicState();
+
+            updateGameStateForPlayers();
 
             if (activePlayer == attackingPlayer) {
               attackMove(activePlayer, publicState);
@@ -37,6 +41,21 @@ public class GameRoom {
                defendMove(activePlayer, publicState);
             }
         }
+    }
+
+    private void updateGameStateForPlayers() {
+
+        Player inactivePlayer = getInactivePlayer();
+        Player activePlayer = getActivePlayer();
+        Player attackingPlayer = getAttackingPlayer();
+
+        PublicState publicState = getPublicState();
+
+        MoveKind currentStateForActivePlayer = activePlayer == attackingPlayer  ? ATTACK : DEFEND;
+        MoveKind currentStateForInactivePlayer = inactivePlayer == attackingPlayer ? ATTACK : DEFEND;
+
+        inactivePlayer.displayCurrentState(publicState, currentStateForInactivePlayer, false);
+        activePlayer.displayCurrentState(publicState, currentStateForActivePlayer, true);
     }
 
     private void attackMove(Player activePlayer, PublicState publicState) {
@@ -75,6 +94,10 @@ public class GameRoom {
 
     private Player getActivePlayer() {
         return durakGame.isPlayer1Active() ? player1 : player2;
+    }
+
+    private Player getInactivePlayer() {
+        return durakGame.isPlayer1Active() ? player2 : player1;
     }
 
     private Player getAttackingPlayer() {

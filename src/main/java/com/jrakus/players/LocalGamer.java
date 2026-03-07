@@ -53,9 +53,7 @@ public class LocalGamer implements Player {
     @Override
     public Move defend(PublicState publicState) {
 
-        clearConsole();
-        displayGameInTerminal(publicState, DEFEND);
-
+        System.out.print("Enter cards that you want to play: ");
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
 
@@ -71,9 +69,7 @@ public class LocalGamer implements Player {
     @Override
     public Move attack(PublicState publicState) {
 
-        clearConsole();
-        displayGameInTerminal(publicState, ATTACK);
-
+        System.out.print("Enter cards that you want to play (e.g. 'a 1, a 4'): ");
         Scanner scanner = new Scanner(System.in);
         String input = scanner.nextLine();
 
@@ -84,6 +80,12 @@ public class LocalGamer implements Player {
         List<Card> cards = retrieveCardsFromText(input);
 
         return new Move(ATTACK, cards);
+    }
+
+    @Override
+    public void displayCurrentState(PublicState publicState, MoveKind state, boolean isYourMove) {
+        clearConsole();
+        displayGameInTerminal(publicState, state, isYourMove);
     }
 
     private List<Card> retrieveCardsFromText(String input) {
@@ -107,7 +109,9 @@ public class LocalGamer implements Player {
         return cards;
     }
 
-    private void displayGameInTerminal(PublicState publicState, MoveKind moveKind) {
+    private void displayGameInTerminal(PublicState publicState, MoveKind moveKind, boolean isYourMove) {
+
+        displayGameTitle();
 
         displayTopPartOfTable(publicState.getNumberOfCardsOnOpponentHand());
 
@@ -120,7 +124,18 @@ public class LocalGamer implements Player {
 
         displayBottomPartOfTable(publicState.getYourHand());
 
-        displayCurrentGameState(moveKind);
+        displayCurrentGameState(moveKind, isYourMove);
+    }
+
+    private static void displayGameTitle() {
+        System.out.println("██████╗ ██╗   ██╗██████╗  █████╗ ██╗  ██╗     ██████╗  █████╗ ███╗   ███╗███████╗");
+        System.out.println("██╔══██╗██║   ██║██╔══██╗██╔══██╗██║ ██╔╝    ██╔════╝ ██╔══██╗████╗ ████║██╔════╝");
+        System.out.println("██║  ██║██║   ██║██████╔╝███████║█████╔╝     ██║  ███╗███████║██╔████╔██║█████╗  ");
+        System.out.println("██║  ██║██║   ██║██╔══██╗██╔══██║██╔═██╗     ██║   ██║██╔══██║██║╚██╔╝██║██╔══╝  ");
+        System.out.println("██████╔╝╚██████╔╝██║  ██║██║  ██║██║  ██╗    ╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗");
+        System.out.println("╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝     ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝");
+        System.out.println("─────────────────────────────────────────────────────────────────────────────────");
+        System.out.println();
     }
 
     private static void displayTopPartOfTable(int numberOfCards) {
@@ -161,8 +176,13 @@ public class LocalGamer implements Player {
         }
     }
 
-    private static void displayCurrentGameState(MoveKind moveKind) {
-        System.out.println("Current state: " + moveKind);
+    private static void displayCurrentGameState(MoveKind moveKind, boolean isYourMove) {
+
+        String player = isYourMove ? "YOU" : "OPPONENT";
+
+        System.out.println("CURRENT STATE: " + player + " " + moveKind);
+        System.out.println("─────────────────────────────────────────────────────────────────────────────────");
+        System.out.println();
     }
 
     private static String[] createBattlefield(List<Card> attackingCards, List<Card> defendingCards) {
