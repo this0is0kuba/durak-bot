@@ -171,9 +171,9 @@ public class DurakGame {
 
     public int getNumberOfCardsOfInactivePlayer() {
         if(player1 == activePlayer)
-            return player1.showCardsOnHand().size();
+            return player2.showCardsOnHand().size();
 
-        return player2.showCardsOnHand().size();
+        return player1.showCardsOnHand().size();
     }
 
     public int getNumberOfCardsOnDeck() {

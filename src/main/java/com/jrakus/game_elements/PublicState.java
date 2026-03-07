@@ -119,4 +119,36 @@ public class PublicState {
             }
         }
     }
+
+    public List<Card> getAttackingCards() {
+        return attackingCards;
+    }
+
+    public List<Card> getDefendingCards() {
+        return defendingCards;
+    }
+
+    public List<Card> getYourHand() {
+        return yourHand;
+    }
+
+    public List<Card> getDiscardPile() {
+        return discardPile;
+    }
+
+    public List<Card> getCertainOpponentHand() {
+        return certainOpponentHand;
+    }
+
+    public Card getTrumpCard() {
+        return trumpCard;
+    }
+
+    public int getNumberOfCardsOnOpponentHand() {
+        return numberOfCardsOnOpponentHand;
+    }
+
+    public int getNumberOfCardsOnDeck() {
+        return numberOfCardsOnDeck;
+    }
 }
