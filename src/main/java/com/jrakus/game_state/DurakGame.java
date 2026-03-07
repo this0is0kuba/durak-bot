@@ -183,6 +183,10 @@ public class DurakGame {
         return deck.showTrumpCard();
     }
 
+    public int getNumberOfCardsOfActivePlayer() {
+        return activePlayer.showCardsOnHand().size();
+    }
+
     public int getNumberOfCardsOfInactivePlayer() {
         if(player1 == activePlayer)
             return player2.showCardsOnHand().size();

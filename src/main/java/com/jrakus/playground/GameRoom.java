@@ -112,9 +112,11 @@ public class GameRoom {
         List<Card> visibleCardsForPlayer = player == getActivePlayer() ?
                 durakGame.showVisibleCardsForActivePlayer() : durakGame.showVisibleCardsForInactivePlayer();
 
+        int numberOfCardsOnOpponentHand = player == getActivePlayer() ?
+                durakGame.getNumberOfCardsOfInactivePlayer() : durakGame.getNumberOfCardsOfActivePlayer();
+
         List<Card> discardPile = durakGame.getDiscardPile();
         Card trumpCard = durakGame.showTrumpCard();
-        int numberOfCardsOnOpponentHand = durakGame.getNumberOfCardsOfInactivePlayer();
         int numberOfCardsOnDeck = durakGame.getNumberOfCardsOnDeck();
 
         GameState.GameStateEnum gameStateEnum = durakGame.getGameState();

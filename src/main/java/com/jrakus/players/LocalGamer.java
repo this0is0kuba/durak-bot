@@ -11,7 +11,6 @@ import com.jrakus.game_state.components.GameState.*;
 import static com.jrakus.game_elements.Move.MoveKind.*;
 import static com.jrakus.game_state.components.Card.Rank.*;
 import static com.jrakus.game_state.components.Card.Suit.*;
-import static com.jrakus.game_state.components.GameState.GameStateEnum.*;
 
 import java.util.ArrayList;
 import java.util.List;
