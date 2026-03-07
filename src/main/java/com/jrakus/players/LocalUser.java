@@ -6,7 +6,6 @@ import com.jrakus.game_elements.Player;
 import com.jrakus.game_elements.PublicState;
 import com.jrakus.game_state.components.Card;
 import com.jrakus.game_state.components.Card.*;
-import com.jrakus.game_state.components.GameState.*;
 
 import static com.jrakus.game_elements.Move.MoveKind.*;
 import static com.jrakus.game_state.components.Card.Rank.*;
@@ -17,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class LocalGamer implements Player {
+public class LocalUser implements Player {
 
     private static final Map<String, Rank> abbreviationToRank = Map.of(
             "9", NINE,
