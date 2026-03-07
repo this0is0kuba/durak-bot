@@ -1,5 +1,6 @@
 package com.jrakus.players;
 
+import com.jrakus.game_elements.GameInfo;
 import com.jrakus.game_elements.Move;
 import com.jrakus.game_elements.Player;
 import com.jrakus.game_elements.PublicState;
@@ -84,9 +85,9 @@ public class LocalGamer implements Player {
     }
 
     @Override
-    public void displayCurrentState(PublicState publicState, boolean isYourMove, boolean isAttackMove) {
+    public void displayCurrentState(PublicState publicState) {
         clearConsole();
-        displayGameInTerminal(publicState, isYourMove, isAttackMove);
+        displayGameInTerminal(publicState);
     }
 
     private List<Card> retrieveCardsFromText(String input) {
@@ -110,7 +111,7 @@ public class LocalGamer implements Player {
         return cards;
     }
 
-    private void displayGameInTerminal(PublicState publicState, boolean isYourMove, boolean isAttackMove) {
+    private void displayGameInTerminal(PublicState publicState) {
 
         displayGameTitle();
 
@@ -125,7 +126,7 @@ public class LocalGamer implements Player {
 
         displayBottomPartOfTable(publicState.getYourHand());
 
-        displayCurrentGameState(publicState.getGameState(), publicState.areYouPlayer1(), isYourMove, isAttackMove);
+        displayCurrentGameState(publicState.getGameInfo());
     }
 
     private static void displayGameTitle() {
@@ -177,38 +178,9 @@ public class LocalGamer implements Player {
         }
     }
 
-    private static void displayCurrentGameState(
-            GameStateEnum gameState,
-            boolean areYouPlayer1,
-            boolean isYourMove,
-            boolean isAttackMove
-    ) {
+    private static void displayCurrentGameState(GameInfo gameInfo) {
 
-        if(gameState == ACTIVE_GAME) {
-
-            String player = isYourMove ? "You" : "Opponent";
-            String state;
-
-            if(isAttackMove) {
-                state = "Attack";
-            } else {
-                state = "Defend";
-            }
-
-            System.out.println("CURRENT STATE: " + player + " " + state);
-
-        } else if (gameState == PLAYER_1_WON) {
-            if (areYouPlayer1)
-                System.out.println("CURRENT STATE: You won");
-            else
-                System.out.println("CURRENT STATE: You lost");
-        } else {
-            if (areYouPlayer1)
-                System.out.println("CURRENT STATE: You lost");
-            else
-                System.out.println("CURRENT STATE: You won");
-        }
-
+        System.out.println("CURRENT STATE: " + gameInfo);
         System.out.println("─────────────────────────────────────────────────────────────────────────────────");
         System.out.println();
     }

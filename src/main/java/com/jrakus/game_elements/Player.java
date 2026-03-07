@@ -6,9 +6,5 @@ public interface Player {
 
     public Move attack(PublicState publicState);
 
-    public void displayCurrentState(
-            PublicState publicState,
-            boolean isYourMove,
-            boolean isAttackMove
-    );
+    public void displayCurrentState(PublicState publicState);
 }

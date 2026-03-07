@@ -18,8 +18,7 @@ public class PublicState {
     private final int numberOfCardsOnOpponentHand;
     private final int numberOfCardsOnDeck;
 
-    private final GameStateEnum gameState;
-    private final boolean areYouPlayer1;
+    private final GameInfo gameInfo;
 
     private PublicState(PublicStateBuilder builder) {
         this.attackingCards = List.copyOf(builder.attackingCards);
@@ -30,8 +29,7 @@ public class PublicState {
         this.trumpCard = builder.trumpCard;
         this.numberOfCardsOnOpponentHand = builder.numberOfCardsOnOpponentHand;
         this.numberOfCardsOnDeck = builder.numberOfCardsOnDeck;
-        this.gameState = builder.gameState;
-        this.areYouPlayer1 = builder.areYouPlayer1;
+        this.gameInfo = builder.gameInfo;
     }
 
     public static class PublicStateBuilder {
@@ -46,9 +44,8 @@ public class PublicState {
         // Use boxed types to detect "not set"
         private Integer numberOfCardsOnOpponentHand;
         private Integer numberOfCardsOnDeck;
-        private Boolean areYouPlayer1;
 
-        private GameStateEnum gameState;
+        private GameInfo gameInfo;
 
         public PublicStateBuilder attackingCards(List<Card> attackingCards) {
             this.attackingCards = Objects.requireNonNull(attackingCards, "attackingCards");
@@ -96,13 +93,8 @@ public class PublicState {
             return this;
         }
 
-        public PublicStateBuilder gameState(GameStateEnum gameState) {
-            this.gameState = Objects.requireNonNull(gameState, "gameState");
-            return this;
-        }
-
-        public PublicStateBuilder areYouPlayer1(boolean areYouPlayer1) {
-            this.areYouPlayer1 = areYouPlayer1;
+        public PublicStateBuilder gameInfo(GameInfo gameInfo) {
+            this.gameInfo = Objects.requireNonNull(gameInfo, "gameInfo");
             return this;
         }
 
@@ -136,11 +128,8 @@ public class PublicState {
             if (numberOfCardsOnDeck == null) {
                 throw new IllegalStateException("numberOfCardsOnDeck not initialized");
             }
-            if (gameState == null) {
-                throw new IllegalStateException("gameState not initialized");
-            }
-            if (areYouPlayer1 == null) {
-                throw new IllegalStateException("areYouPlayer1 not initialized");
+            if (gameInfo == null) {
+                throw new IllegalStateException("gameInfo not initialized");
             }
         }
     }
@@ -177,11 +166,7 @@ public class PublicState {
         return numberOfCardsOnDeck;
     }
 
-    public GameStateEnum getGameState() {
-        return gameState;
-    }
-
-    public boolean areYouPlayer1() {
-        return areYouPlayer1;
+    public GameInfo getGameInfo() {
+        return gameInfo;
     }
 }

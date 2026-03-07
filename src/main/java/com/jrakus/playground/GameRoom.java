@@ -1,5 +1,6 @@
 package com.jrakus.playground;
 
+import com.jrakus.game_elements.GameInfo;
 import com.jrakus.game_elements.PublicState;
 import com.jrakus.game_elements.Move;
 import com.jrakus.game_elements.Player;
@@ -46,15 +47,12 @@ public class GameRoom {
 
         Player inactivePlayer = getInactivePlayer();
         Player activePlayer = getActivePlayer();
-        Player attackingPlayer = getAttackingPlayer();
 
         PublicState publicStateForActivePlayer = getPublicState(activePlayer);
         PublicState publicStateForInactivePlayer = getPublicState(inactivePlayer);
 
-        boolean isActivePlayerAttacking = activePlayer == attackingPlayer;
-
-        inactivePlayer.displayCurrentState(publicStateForInactivePlayer, false, !isActivePlayerAttacking);
-        activePlayer.displayCurrentState(publicStateForActivePlayer, true, isActivePlayerAttacking);
+        inactivePlayer.displayCurrentState(publicStateForInactivePlayer);
+        activePlayer.displayCurrentState(publicStateForActivePlayer);
     }
 
     private void attackMove(Player activePlayer, PublicState publicState) {
@@ -118,7 +116,15 @@ public class GameRoom {
         Card trumpCard = durakGame.showTrumpCard();
         int numberOfCardsOnOpponentHand = durakGame.getNumberOfCardsOfInactivePlayer();
         int numberOfCardsOnDeck = durakGame.getNumberOfCardsOnDeck();
+
         GameState.GameStateEnum gameStateEnum = durakGame.getGameState();
+
+        GameInfo gameInfo = switch (gameStateEnum) {
+            case ACTIVE_GAME -> GameInfo.ACTIVE_GAME;
+            case PLAYER_1_WON -> player1 == player ? GameInfo.YOU_WON : GameInfo.OPPONENT_WON;
+            case PLAYER_2_WON -> player2 == player ? GameInfo.YOU_WON : GameInfo.OPPONENT_WON;
+            case DRAW -> GameInfo.DRAW;
+        };
 
         return new PublicState.PublicStateBuilder()
                 .attackingCards(attackingCards)
@@ -129,8 +135,7 @@ public class GameRoom {
                 .trumpCard(trumpCard)
                 .numberOfCardsOnOpponentHand(numberOfCardsOnOpponentHand)
                 .numberOfCardsOnDeck(numberOfCardsOnDeck)
-                .gameState(gameStateEnum)
-                .areYouPlayer1(true)
+                .gameInfo(gameInfo)
                 .build();
     }
 }
