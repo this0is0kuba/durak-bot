@@ -8,9 +8,6 @@ import com.jrakus.game_state.components.Card;
 import com.jrakus.game_state.components.GameState;
 import com.jrakus.playground.exceptions.DurakGameInvalidMoveException;
 
-import static com.jrakus.game_elements.Move.*;
-import static com.jrakus.game_elements.Move.MoveKind.*;
-
 import java.util.List;
 
 public class GameRoom {
@@ -30,7 +27,7 @@ public class GameRoom {
 
             Player activePlayer = getActivePlayer();
             Player attackingPlayer = getAttackingPlayer();
-            PublicState publicState = getPublicState();
+            PublicState publicState = getPublicState(activePlayer);
 
             updateGameStateForPlayers();
 
@@ -41,6 +38,8 @@ public class GameRoom {
                defendMove(activePlayer, publicState);
             }
         }
+
+        updateGameStateForPlayers();
     }
 
     private void updateGameStateForPlayers() {
@@ -49,13 +48,13 @@ public class GameRoom {
         Player activePlayer = getActivePlayer();
         Player attackingPlayer = getAttackingPlayer();
 
-        PublicState publicState = getPublicState();
+        PublicState publicStateForActivePlayer = getPublicState(activePlayer);
+        PublicState publicStateForInactivePlayer = getPublicState(inactivePlayer);
 
-        MoveKind currentStateForActivePlayer = activePlayer == attackingPlayer  ? ATTACK : DEFEND;
-        MoveKind currentStateForInactivePlayer = inactivePlayer == attackingPlayer ? ATTACK : DEFEND;
+        boolean isActivePlayerAttacking = activePlayer == attackingPlayer;
 
-        inactivePlayer.displayCurrentState(publicState, currentStateForInactivePlayer, false);
-        activePlayer.displayCurrentState(publicState, currentStateForActivePlayer, true);
+        inactivePlayer.displayCurrentState(publicStateForInactivePlayer, false, !isActivePlayerAttacking);
+        activePlayer.displayCurrentState(publicStateForActivePlayer, true, isActivePlayerAttacking);
     }
 
     private void attackMove(Player activePlayer, PublicState publicState) {
@@ -104,26 +103,34 @@ public class GameRoom {
         return durakGame.isPlayer1Attacking() ? player1 : player2;
     }
 
-    private PublicState getPublicState() {
+    private PublicState getPublicState(Player player) {
 
         List<Card> attackingCards = durakGame.showCurrentAttackingCards();
         List<Card> defendingCards = durakGame.showCurrentDefendingCards();
-        List<Card> activePlayerHand = durakGame.showActivePlayerHand();
+
+        List<Card> playerHand = player == getActivePlayer() ?
+                durakGame.showActivePlayerHand() : durakGame.showInactivePlayerHand();
+
+        List<Card> visibleCardsForPlayer = player == getActivePlayer() ?
+                durakGame.showVisibleCardsForActivePlayer() : durakGame.showVisibleCardsForInactivePlayer();
+
         List<Card> discardPile = durakGame.getDiscardPile();
-        List<Card> visibleCardsForActivePlayer = durakGame.showVisibleCardsForActivePlayer();
         Card trumpCard = durakGame.showTrumpCard();
         int numberOfCardsOnOpponentHand = durakGame.getNumberOfCardsOfInactivePlayer();
         int numberOfCardsOnDeck = durakGame.getNumberOfCardsOnDeck();
+        GameState.GameStateEnum gameStateEnum = durakGame.getGameState();
 
         return new PublicState.PublicStateBuilder()
                 .attackingCards(attackingCards)
                 .defendingCards(defendingCards)
-                .yourHand(activePlayerHand)
+                .yourHand(playerHand)
                 .discardPile(discardPile)
-                .certainOpponentHand(visibleCardsForActivePlayer)
+                .certainOpponentHand(visibleCardsForPlayer)
                 .trumpCard(trumpCard)
                 .numberOfCardsOnOpponentHand(numberOfCardsOnOpponentHand)
                 .numberOfCardsOnDeck(numberOfCardsOnDeck)
+                .gameState(gameStateEnum)
+                .areYouPlayer1(true)
                 .build();
     }
 }

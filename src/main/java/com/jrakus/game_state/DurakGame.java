@@ -149,6 +149,13 @@ public class DurakGame {
         return activePlayer.showCardsOnHand();
     }
 
+    public List<Card> showInactivePlayerHand() {
+        if(player1 == activePlayer)
+            return player2.showCardsOnHand();
+
+        return player1.showCardsOnHand();
+    }
+
     public List<Card> showPlayer1Hand() {
         return player1.showCardsOnHand();
     }
@@ -163,6 +170,13 @@ public class DurakGame {
 
     public List<Card> showVisibleCardsForActivePlayer() {
         return new ArrayList<>(activePlayer.getOpponentCardsVisibleToPlayer());
+    }
+
+    public List<Card> showVisibleCardsForInactivePlayer() {
+        if(player1 == activePlayer)
+            new ArrayList<>(player2.getOpponentCardsVisibleToPlayer());
+
+        return new ArrayList<>(player1.getOpponentCardsVisibleToPlayer());
     }
 
     public Card showTrumpCard() {

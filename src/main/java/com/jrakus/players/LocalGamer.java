@@ -5,11 +5,12 @@ import com.jrakus.game_elements.Player;
 import com.jrakus.game_elements.PublicState;
 import com.jrakus.game_state.components.Card;
 import com.jrakus.game_state.components.Card.*;
+import com.jrakus.game_state.components.GameState.*;
 
-import static com.jrakus.game_elements.Move.*;
 import static com.jrakus.game_elements.Move.MoveKind.*;
 import static com.jrakus.game_state.components.Card.Rank.*;
 import static com.jrakus.game_state.components.Card.Suit.*;
+import static com.jrakus.game_state.components.GameState.GameStateEnum.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,9 +84,9 @@ public class LocalGamer implements Player {
     }
 
     @Override
-    public void displayCurrentState(PublicState publicState, MoveKind state, boolean isYourMove) {
+    public void displayCurrentState(PublicState publicState, boolean isYourMove, boolean isAttackMove) {
         clearConsole();
-        displayGameInTerminal(publicState, state, isYourMove);
+        displayGameInTerminal(publicState, isYourMove, isAttackMove);
     }
 
     private List<Card> retrieveCardsFromText(String input) {
@@ -109,7 +110,7 @@ public class LocalGamer implements Player {
         return cards;
     }
 
-    private void displayGameInTerminal(PublicState publicState, MoveKind moveKind, boolean isYourMove) {
+    private void displayGameInTerminal(PublicState publicState, boolean isYourMove, boolean isAttackMove) {
 
         displayGameTitle();
 
@@ -124,7 +125,7 @@ public class LocalGamer implements Player {
 
         displayBottomPartOfTable(publicState.getYourHand());
 
-        displayCurrentGameState(moveKind, isYourMove);
+        displayCurrentGameState(publicState.getGameState(), publicState.areYouPlayer1(), isYourMove, isAttackMove);
     }
 
     private static void displayGameTitle() {
@@ -176,11 +177,38 @@ public class LocalGamer implements Player {
         }
     }
 
-    private static void displayCurrentGameState(MoveKind moveKind, boolean isYourMove) {
+    private static void displayCurrentGameState(
+            GameStateEnum gameState,
+            boolean areYouPlayer1,
+            boolean isYourMove,
+            boolean isAttackMove
+    ) {
 
-        String player = isYourMove ? "YOU" : "OPPONENT";
+        if(gameState == ACTIVE_GAME) {
 
-        System.out.println("CURRENT STATE: " + player + " " + moveKind);
+            String player = isYourMove ? "You" : "Opponent";
+            String state;
+
+            if(isAttackMove) {
+                state = "Attack";
+            } else {
+                state = "Defend";
+            }
+
+            System.out.println("CURRENT STATE: " + player + " " + state);
+
+        } else if (gameState == PLAYER_1_WON) {
+            if (areYouPlayer1)
+                System.out.println("CURRENT STATE: You won");
+            else
+                System.out.println("CURRENT STATE: You lost");
+        } else {
+            if (areYouPlayer1)
+                System.out.println("CURRENT STATE: You lost");
+            else
+                System.out.println("CURRENT STATE: You won");
+        }
+
         System.out.println("─────────────────────────────────────────────────────────────────────────────────");
         System.out.println();
     }

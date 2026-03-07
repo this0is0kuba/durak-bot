@@ -1,6 +1,7 @@
 package com.jrakus.game_elements;
 
 import com.jrakus.game_state.components.Card;
+import com.jrakus.game_state.components.GameState.*;
 
 import java.util.List;
 import java.util.Objects;
@@ -17,6 +18,9 @@ public class PublicState {
     private final int numberOfCardsOnOpponentHand;
     private final int numberOfCardsOnDeck;
 
+    private final GameStateEnum gameState;
+    private final boolean areYouPlayer1;
+
     private PublicState(PublicStateBuilder builder) {
         this.attackingCards = List.copyOf(builder.attackingCards);
         this.defendingCards = List.copyOf(builder.defendingCards);
@@ -26,6 +30,8 @@ public class PublicState {
         this.trumpCard = builder.trumpCard;
         this.numberOfCardsOnOpponentHand = builder.numberOfCardsOnOpponentHand;
         this.numberOfCardsOnDeck = builder.numberOfCardsOnDeck;
+        this.gameState = builder.gameState;
+        this.areYouPlayer1 = builder.areYouPlayer1;
     }
 
     public static class PublicStateBuilder {
@@ -40,6 +46,9 @@ public class PublicState {
         // Use boxed types to detect "not set"
         private Integer numberOfCardsOnOpponentHand;
         private Integer numberOfCardsOnDeck;
+        private Boolean areYouPlayer1;
+
+        private GameStateEnum gameState;
 
         public PublicStateBuilder attackingCards(List<Card> attackingCards) {
             this.attackingCards = Objects.requireNonNull(attackingCards, "attackingCards");
@@ -87,6 +96,16 @@ public class PublicState {
             return this;
         }
 
+        public PublicStateBuilder gameState(GameStateEnum gameState) {
+            this.gameState = Objects.requireNonNull(gameState, "gameState");
+            return this;
+        }
+
+        public PublicStateBuilder areYouPlayer1(boolean areYouPlayer1) {
+            this.areYouPlayer1 = areYouPlayer1;
+            return this;
+        }
+
         public PublicState build() {
             validateRequired();
             return new PublicState(this);
@@ -116,6 +135,12 @@ public class PublicState {
             }
             if (numberOfCardsOnDeck == null) {
                 throw new IllegalStateException("numberOfCardsOnDeck not initialized");
+            }
+            if (gameState == null) {
+                throw new IllegalStateException("gameState not initialized");
+            }
+            if (areYouPlayer1 == null) {
+                throw new IllegalStateException("areYouPlayer1 not initialized");
             }
         }
     }
@@ -150,5 +175,13 @@ public class PublicState {
 
     public int getNumberOfCardsOnDeck() {
         return numberOfCardsOnDeck;
+    }
+
+    public GameStateEnum getGameState() {
+        return gameState;
+    }
+
+    public boolean areYouPlayer1() {
+        return areYouPlayer1;
     }
 }
