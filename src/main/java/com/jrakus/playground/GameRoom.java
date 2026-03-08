@@ -58,8 +58,8 @@ public class GameRoom {
     private void attackMove(Player activePlayer, PublicState publicState) {
         Move selectedMove = activePlayer.attack(publicState);
 
-        Move.MoveKind kind = selectedMove.getMoveKind();
-        List<Card> cards = selectedMove.getCards();
+        Move.MoveKind kind = selectedMove.moveKind();
+        List<Card> cards = selectedMove.cards();
 
         switch (kind) {
 
@@ -75,8 +75,8 @@ public class GameRoom {
     private void defendMove(Player activePlayer, PublicState publicState) {
         Move selectedMove = activePlayer.defend(publicState);
 
-        Move.MoveKind kind = selectedMove.getMoveKind();
-        List<Card> cards = selectedMove.getCards();
+        Move.MoveKind kind = selectedMove.moveKind();
+        List<Card> cards = selectedMove.cards();
 
         switch (kind) {
 

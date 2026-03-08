@@ -2,7 +2,9 @@ package com.jrakus.game_state.components;
 
 import org.jetbrains.annotations.NotNull;
 
-public record Card(Suit suit, Rank rank) {
+import java.io.Serializable;
+
+public record Card(Suit suit, Rank rank) implements Serializable {
 
     public enum Suit {HEARTS, DIAMONDS, CLUBS, SPADES}
 

@@ -2,30 +2,14 @@ package com.jrakus.game_elements;
 
 import com.jrakus.game_state.components.Card;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Move {
-
-    private final MoveKind moveKind;
-    private final List<Card> cards;
+public record Move(MoveKind moveKind, List<Card> cards) implements Serializable {
 
     public enum MoveKind {ATTACK, DEFEND, STOP_ATTACK, TAKE_CARDS}
 
-    public Move(MoveKind moveKind, List<Card> cards) {
-        this.moveKind = moveKind;
-        this.cards = cards;
-    }
-
     public Move(MoveKind moveKind) {
-        this.moveKind = moveKind;
-        this.cards = List.of();
-    }
-
-    public MoveKind getMoveKind() {
-        return moveKind;
-    }
-
-    public List<Card> getCards() {
-        return cards;
+        this(moveKind, List.of());
     }
 }

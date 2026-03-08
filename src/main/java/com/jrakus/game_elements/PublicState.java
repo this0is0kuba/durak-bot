@@ -3,10 +3,11 @@ package com.jrakus.game_elements;
 import com.jrakus.game_state.components.Card;
 import com.jrakus.game_state.components.GameState.*;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
-public class PublicState {
+public class PublicState implements Serializable {
 
     private final List<Card> attackingCards;
     private final List<Card> defendingCards;
