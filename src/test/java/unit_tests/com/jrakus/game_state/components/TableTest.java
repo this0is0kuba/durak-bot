@@ -1,7 +1,5 @@
-package com.jrakus.unit_tests.game_state.components;
+package com.jrakus.game_state.components;
 
-import com.jrakus.game_state.components.Card;
-import com.jrakus.game_state.components.Table;
 import com.jrakus.game_state.exceptions.DurakGameInvalidStateException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,8 +8,9 @@ import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.List;
 
+import static com.jrakus.game_state.components.Card.Rank;
 import static com.jrakus.game_state.components.Card.Rank.*;
-import static com.jrakus.game_state.components.Card.*;
+import static com.jrakus.game_state.components.Card.Suit;
 import static com.jrakus.game_state.components.Card.Suit.*;
 import static org.junit.jupiter.api.Assertions.*;
 
