@@ -1,14 +1,12 @@
-package com.jrakus.unit_tests.game_state.components;
+package com.jrakus.game_state.components;
 
-import com.jrakus.game_state.components.Card;
-import com.jrakus.game_state.components.DurakGamePlayer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
 
-import static com.jrakus.game_state.components.Card.Suit.*;
 import static com.jrakus.game_state.components.Card.Rank.*;
+import static com.jrakus.game_state.components.Card.Suit.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DurakGamePlayerTest {

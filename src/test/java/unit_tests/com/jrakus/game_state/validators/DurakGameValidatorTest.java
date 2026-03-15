@@ -1,20 +1,22 @@
-package com.jrakus.unit_tests.game_state.validators;
+package com.jrakus.game_state.validators;
 
 import com.jrakus.game_state.components.Card;
 import com.jrakus.game_state.components.DurakGamePlayer;
 import com.jrakus.game_state.exceptions.DurakGameInvalidStateException;
-import com.jrakus.game_state.validators.DurakGameValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static com.jrakus.game_state.components.Card.Rank.*;
-import static com.jrakus.game_state.components.Card.Suit.*;
+import static com.jrakus.game_state.components.Card.Suit.HEARTS;
+import static com.jrakus.game_state.components.Card.Suit.SPADES;
 import static com.jrakus.game_state.components.GameState.GameStateEnum.ACTIVE_GAME;
 import static com.jrakus.game_state.components.GameState.GameStateEnum.PLAYER_1_WON;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class DurakGameValidatorTest {
 
