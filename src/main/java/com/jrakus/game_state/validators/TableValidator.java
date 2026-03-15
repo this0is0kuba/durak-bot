@@ -20,6 +20,7 @@ public class TableValidator {
     ) {
 
         checkIfThereIsDefendMove(isAttackMove);
+        checkIfUsedCardsAreUnique(newDefendingCards);
 
         if(newDefendingCards.size() != attackingCardsToBeat.size())
             throw new DurakGameInvalidStateException("The amount of defending cards is different than attacking cards");
@@ -41,6 +42,7 @@ public class TableValidator {
     ) {
 
         checkIfThereIsAttackMove(isAttackMove);
+        checkIfUsedCardsAreUnique(newAttackingCards);
         checkIfThereIsAtLeast1AttackingCard(newAttackingCards);
         checkIfTheLimitOfCardsHasBeenExceeded(oldAttackingCards, newAttackingCards);
 
@@ -61,6 +63,13 @@ public class TableValidator {
     private void checkIfThereIsAttackMove(boolean isAttackMove) {
         if(!isAttackMove)
             throw new DurakGameInvalidStateException("There is a defend turn now! You can't attack.");
+    }
+
+    private void checkIfUsedCardsAreUnique(List<Card> cards) {
+        Set<Card> cardSet = new HashSet<>(cards);
+
+        if (cardSet.size() != cards.size())
+            throw new DurakGameInvalidStateException("Cards that were played are not unique");
     }
 
     private void checkIfThereIsAtLeast1AttackingCard(List<Card> attackingCards) {

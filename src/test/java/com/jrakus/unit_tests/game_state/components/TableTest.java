@@ -77,6 +77,20 @@ class TableTest {
                 () -> table.addAttackingCards(List.of(anotherAttack)));
     }
 
+    @Test
+    void shouldThrow_whenAttackingTwiceWithTheSameCard() {
+        Card attackingCard = new Card(HEARTS, NINE);
+
+        assertThrows(DurakGameInvalidStateException.class,
+                () -> table.addAttackingCards(List.of(attackingCard, attackingCard)));
+    }
+
+    @Test
+    void shouldThrow_whenAttackingWith0Cards() {
+        assertThrows(DurakGameInvalidStateException.class,
+                () -> table.addAttackingCards(List.of()));
+    }
+
     // =========================
     // DEFEND TURN VALIDATION
     // =========================
@@ -138,6 +152,19 @@ class TableTest {
 
         assertThrows(DurakGameInvalidStateException.class,
                 () -> table.addDefendingCards(List.of(defend), SPADES));
+    }
+
+    @Test
+    void shouldThrow_whenDefendingWithTheSameCardTwice() {
+        Card attack1 = new Card(HEARTS, NINE);
+        Card attack2 = new Card(SPADES, NINE);
+        table.addAttackingCards(List.of(attack1, attack2));
+
+
+        Card defend = new Card(SPADES, TEN);
+        assertThrows(DurakGameInvalidStateException.class,
+                () -> table.addDefendingCards(List.of(defend, defend), SPADES)
+        );
     }
 
     // =========================
