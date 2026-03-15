@@ -1,13 +1,13 @@
 package com.jrakus.playground.remote;
 
-import com.jrakus.game_elements.GameInfo;
-import com.jrakus.game_elements.Move;
-import com.jrakus.game_elements.PublicState;
-import com.jrakus.players.LocalUser;
-import com.jrakus.players.RemoteUser;
+import com.jrakus.players.game_elements.GameInfo;
+import com.jrakus.players.game_elements.Move;
+import com.jrakus.players.game_elements.PublicState;
+import com.jrakus.players.users.LocalUser;
+import com.jrakus.players.users.RemoteUser;
 import com.jrakus.playground.displays.TerminalPrinter;
 
-import static com.jrakus.players.RemoteUser.Message.MessageKind;
+import static com.jrakus.players.users.RemoteUser.Message.MessageKind;
 
 import java.io.*;
 import java.net.*;

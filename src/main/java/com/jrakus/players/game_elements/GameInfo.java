@@ -1,4 +1,4 @@
-package com.jrakus.game_elements;
+package com.jrakus.players.game_elements;
 
 import java.io.Serializable;
 

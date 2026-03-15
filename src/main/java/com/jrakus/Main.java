@@ -1,18 +1,17 @@
 package com.jrakus;
 
-import com.jrakus.game_elements.Player;
-import com.jrakus.players.RemoteUser;
+import com.jrakus.players.Player;
+import com.jrakus.players.bots.TrivialBot;
+import com.jrakus.players.users.LocalUser;
+import com.jrakus.players.users.RemoteUser;
 import com.jrakus.playground.GameRoom;
-
-
-import java.util.List;
+import com.jrakus.playground.displays.TerminalPrinter;
 
 public class Main {
     static void main() {
 
-        List<RemoteUser> remoteUsers = RemoteUser.createTwoRemoteUsers(5000);
-        Player player1 = remoteUsers.getFirst();
-        Player player2 = remoteUsers.getLast();
+        Player player1 = new LocalUser(new TerminalPrinter());
+        Player player2 = new TrivialBot();
 
         GameRoom game = new GameRoom(player1, player2);
 

@@ -108,41 +108,11 @@ public class TableValidator {
 
     private void checkIfDefendingCardIsStronger(Card defendingCard, Card attackingCard, Suit trump) {
 
-        if(!isDefendingCardStronger(defendingCard, attackingCard, trump))
+        if(!defendingCard.isCardStrongerThan(attackingCard, trump))
             throw new DurakGameInvalidStateException(String.format(
                     "Attacking card %s is stronger than defending card %s",
                     attackingCard,
                     defendingCard
             ));
-    }
-
-    private boolean isDefendingCardStronger(Card defendingCard, Card attackingCard, Suit trump) {
-
-        int rankValueDefending = defendingCard.rank().getRankValue();
-        int rankValueAttacking = attackingCard.rank().getRankValue();
-
-        boolean isCardDefendingTrump = (defendingCard.suit() == trump);
-        boolean isCardAttackingTrump = (attackingCard.suit() == trump);
-
-        if (isCardAttackingTrump && isCardDefendingTrump) {
-            return rankValueDefending - rankValueAttacking > 0;
-        }
-
-        if (isCardDefendingTrump) {
-            return true;
-        }
-
-        if (isCardAttackingTrump) {
-            return false;
-        }
-
-        Suit suitAttacking = attackingCard.suit();
-        Suit suitDefending = defendingCard.suit();
-
-        if (suitAttacking != suitDefending) {
-            return false;
-        }
-
-        return rankValueDefending - rankValueAttacking > 0;
     }
 }

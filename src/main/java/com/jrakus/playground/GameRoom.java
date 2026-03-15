@@ -1,9 +1,9 @@
 package com.jrakus.playground;
 
-import com.jrakus.game_elements.GameInfo;
-import com.jrakus.game_elements.PublicState;
-import com.jrakus.game_elements.Move;
-import com.jrakus.game_elements.Player;
+import com.jrakus.players.game_elements.GameInfo;
+import com.jrakus.players.game_elements.PublicState;
+import com.jrakus.players.game_elements.Move;
+import com.jrakus.players.Player;
 import com.jrakus.game_state.DurakGame;
 import com.jrakus.game_state.components.Card;
 import com.jrakus.game_state.components.GameState;

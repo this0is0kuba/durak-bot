@@ -1,8 +1,8 @@
-package com.jrakus.players;
+package com.jrakus.players.users;
 
-import com.jrakus.game_elements.Move;
-import com.jrakus.game_elements.Player;
-import com.jrakus.game_elements.PublicState;
+import com.jrakus.players.game_elements.Move;
+import com.jrakus.players.Player;
+import com.jrakus.players.game_elements.PublicState;
 
 import java.io.*;
 import java.net.*;

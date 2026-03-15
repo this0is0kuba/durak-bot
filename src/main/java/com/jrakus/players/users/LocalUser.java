@@ -1,15 +1,14 @@
-package com.jrakus.players;
+package com.jrakus.players.users;
 
-import com.jrakus.game_elements.Move;
-import com.jrakus.game_elements.Player;
-import com.jrakus.game_elements.PublicState;
+import com.jrakus.players.game_elements.Move;
+import com.jrakus.players.Player;
+import com.jrakus.players.game_elements.PublicState;
 import com.jrakus.game_state.components.Card;
-import com.jrakus.game_state.components.Card.*;
 import com.jrakus.playground.displays.Display;
 
-import static com.jrakus.game_elements.Move.MoveKind.*;
 import static com.jrakus.game_state.components.Card.Rank.*;
 import static com.jrakus.game_state.components.Card.Suit.*;
+import static com.jrakus.players.game_elements.Move.MoveKind.*;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.jrakus.playground.displays;
 
-import com.jrakus.game_elements.GameInfo;
-import com.jrakus.game_elements.PublicState;
+import com.jrakus.players.game_elements.GameInfo;
+import com.jrakus.players.game_elements.PublicState;
 import com.jrakus.game_state.components.Card;
 
 import java.util.List;

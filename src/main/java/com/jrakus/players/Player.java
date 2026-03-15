@@ -1,4 +1,7 @@
-package com.jrakus.game_elements;
+package com.jrakus.players;
+
+import com.jrakus.players.game_elements.Move;
+import com.jrakus.players.game_elements.PublicState;
 
 public interface Player {
 
