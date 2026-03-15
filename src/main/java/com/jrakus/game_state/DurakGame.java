@@ -100,7 +100,7 @@ public class DurakGame {
     }
 
     public void stopAttack() {
-        validateMove(currentAttackingPlayer, List.of());
+        validateStopAttackMove(currentAttackingPlayer, List.of(), table.showAttackingCards());
 
         List<Card> discardedCards = table.clearTable();
         discardPile.addCardsToPile(discardedCards);
@@ -219,6 +219,17 @@ public class DurakGame {
     private void validateAttackMove(DurakGamePlayer playerToCheck, List<Card> cards) {
         validateMove(playerToCheck, cards);
         durakGameValidator.checkIfAttackHasLessCardsThanOpponentHand(currentDefendingPlayer, cards);
+    }
+
+    private void validateStopAttackMove(
+            DurakGamePlayer playerToCheck,
+            List<Card> cards,
+            List<Card> attackingCardsOnTable
+    ) {
+        validateMove(playerToCheck, cards);
+
+        // Player can't stop the attack without playing any cards
+        durakGameValidator.checkIfAnyCardAreOnTheTable(attackingCardsOnTable);
     }
 
     private void drawCards() {

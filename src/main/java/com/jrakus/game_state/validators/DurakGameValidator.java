@@ -42,4 +42,9 @@ public class DurakGameValidator {
             );
         }
     }
+
+    public void checkIfAnyCardAreOnTheTable(List<Card> attackingCardsOnTheTable) {
+        if(attackingCardsOnTheTable.isEmpty())
+            throw new DurakGameInvalidStateException("Player can't stop the attack without playing any cards");
+    }
 }

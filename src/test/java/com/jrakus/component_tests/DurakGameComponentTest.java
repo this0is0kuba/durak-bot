@@ -254,6 +254,14 @@ class DurakGameComponentTest {
     }
 
     @Test
+    void throwErrorWhenUserStopAttackBeforePlayingAnyCard() {
+        assertThrows(
+                DurakGameInvalidStateException.class,
+                () -> game.stopAttack()
+        );
+    }
+
+    @Test
     void throwErrorWhenDefendIsTheFirstMove() {
 
         Card defendCard = new Card(CLUBS, KING);
