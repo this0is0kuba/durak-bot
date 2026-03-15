@@ -1,6 +1,6 @@
 package com.jrakus.game_state.components;
 
-import com.jrakus.playground.exceptions.DurakGameInvalidMoveException;
+import com.jrakus.game_state.exceptions.DurakGameInvalidStateException;
 
 import java.util.*;
 
@@ -50,7 +50,7 @@ public class Deck {
 
     public Card drawOneCard() {
         if (cards.isEmpty())
-            throw new DurakGameInvalidMoveException("Deck is empty!");
+            throw new DurakGameInvalidStateException("Deck is empty!");
 
         return cards.removeLast();
     }

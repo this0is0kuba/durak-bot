@@ -1,5 +1,6 @@
 package com.jrakus.playground;
 
+import com.jrakus.game_state.exceptions.DurakGameInvalidStateException;
 import com.jrakus.players.game_elements.GameInfo;
 import com.jrakus.players.game_elements.PublicState;
 import com.jrakus.players.game_elements.Move;
@@ -7,7 +8,6 @@ import com.jrakus.players.Player;
 import com.jrakus.game_state.DurakGame;
 import com.jrakus.game_state.components.Card;
 import com.jrakus.game_state.components.GameState;
-import com.jrakus.playground.exceptions.DurakGameInvalidMoveException;
 
 import java.util.List;
 
@@ -66,7 +66,7 @@ public class GameRoom {
             case ATTACK -> durakGame.doAttack(cards);
             case STOP_ATTACK -> durakGame.stopAttack();
 
-            default -> throw new DurakGameInvalidMoveException(
+            default -> throw new DurakGameInvalidStateException(
                     String.format("Move Kind: %s is not allowed now", kind)
             );
         }
@@ -83,7 +83,7 @@ public class GameRoom {
             case DEFEND -> durakGame.doDefend(cards);
             case TAKE_CARDS -> durakGame.takeCardsFromTable();
 
-            default -> throw new DurakGameInvalidMoveException(
+            default -> throw new DurakGameInvalidStateException(
                     String.format("Move Kind: %s is not allowed now", kind)
             );
         }

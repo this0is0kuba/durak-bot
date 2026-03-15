@@ -2,7 +2,7 @@ package com.jrakus.unit_tests.game_state.components;
 
 import com.jrakus.game_state.components.Card;
 import com.jrakus.game_state.components.Deck;
-import com.jrakus.playground.exceptions.DurakGameInvalidMoveException;
+import com.jrakus.game_state.exceptions.DurakGameInvalidStateException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -72,7 +72,7 @@ class DeckTest {
             deck.drawOneCard();
         }
 
-        assertThrows(DurakGameInvalidMoveException.class, deck::drawOneCard);
+        assertThrows(DurakGameInvalidStateException.class, deck::drawOneCard);
     }
 
     @Test
