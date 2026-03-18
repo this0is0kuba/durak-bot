@@ -19,7 +19,7 @@ jobs:
           cache: 'maven'
 
       - name: Run Unit Tests
-        run: mvn test -Dtest=**/unit_tests/**
+        run: mvn test -Dtest=**/*UnitTest.java
 
       - name: Run Component Tests
-        run: mvn test -Dtest=**/component_tests/**
+        run: mvn test -Dtest=**/*ComponentTest.java

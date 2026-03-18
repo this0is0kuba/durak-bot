@@ -10,7 +10,7 @@ import com.jrakus.playground.displays.TerminalPrinter;
 public class Main {
     static void main() {
 
-        Player player1 = new LocalUser(new TerminalPrinter());
+        Player player1 = new TrivialBot();
         Player player2 = new LocalUser(new TerminalPrinter());
 
         GameRoom game = new GameRoom(player1, player2);

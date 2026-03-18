@@ -1,7 +1,6 @@
-package com.jrakus.component_tests;
+package com.jrakus.game_state;
 
 import com.jrakus.game_state.components.*;
-import com.jrakus.game_state.DurakGame;
 import com.jrakus.game_state.exceptions.DurakGameInvalidStateException;
 import com.jrakus.game_state.validators.DurakGameValidator;
 import com.jrakus.game_state.validators.TableValidator;
@@ -11,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.jrakus.game_state.components.Card.Suit.*;
 import static com.jrakus.game_state.components.Card.Rank.*;
+import static com.jrakus.game_state.components.Card.Suit.*;
 import static com.jrakus.game_state.components.GameState.GameStateEnum.DRAW;
 import static com.jrakus.game_state.components.GameState.GameStateEnum.PLAYER_1_WON;
 import static org.junit.jupiter.api.Assertions.*;
