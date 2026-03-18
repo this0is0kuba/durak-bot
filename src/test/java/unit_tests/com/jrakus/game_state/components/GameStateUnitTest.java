@@ -12,7 +12,7 @@ import static com.jrakus.game_state.components.Card.Suit.HEARTS;
 import static com.jrakus.game_state.components.Card.Suit.SPADES;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class GameStateTest {
+class GameStateUnitTest {
 
     private GameState gameState;
     private DurakGamePlayer player1;

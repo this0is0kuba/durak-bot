@@ -12,7 +12,7 @@ import static com.jrakus.game_state.components.Card.Suit.HEARTS;
 import static com.jrakus.game_state.components.Card.Suit.SPADES;
 import static org.junit.jupiter.api.Assertions.*;
 
-class DeckTest {
+class DeckUnitTest {
 
     private Deck deck;
     private final int totalStandardCards = Card.Suit.values().length * Card.Rank.values().length;

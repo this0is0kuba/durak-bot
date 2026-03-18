@@ -14,7 +14,7 @@ import static com.jrakus.game_state.components.Card.Suit.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class DiscardPileTest {
+class DiscardPileUnitTest {
 
     private DiscardPile discardPile;
 

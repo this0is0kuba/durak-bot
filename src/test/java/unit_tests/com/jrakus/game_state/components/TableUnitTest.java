@@ -14,7 +14,7 @@ import static com.jrakus.game_state.components.Card.Suit;
 import static com.jrakus.game_state.components.Card.Suit.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class TableTest {
+class TableUnitTest {
 
     private Table table;
 

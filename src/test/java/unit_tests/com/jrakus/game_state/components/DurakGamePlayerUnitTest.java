@@ -9,7 +9,7 @@ import static com.jrakus.game_state.components.Card.Rank.*;
 import static com.jrakus.game_state.components.Card.Suit.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class DurakGamePlayerTest {
+class DurakGamePlayerUnitTest {
 
     private DurakGamePlayer player;
     private Card c1, c2, c3, c4;
