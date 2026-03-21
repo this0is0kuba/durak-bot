@@ -2,6 +2,7 @@ package com.jrakus.players.bots;
 
 import com.jrakus.game_state.components.Card;
 import com.jrakus.players.Player;
+import com.jrakus.players.bots.cardSelector.CardSelector;
 import com.jrakus.players.game_elements.Move;
 import com.jrakus.players.game_elements.PublicState;
 
@@ -11,6 +12,8 @@ import static com.jrakus.players.game_elements.Move.MoveKind.*;
 
 public class TrivialBot implements Player {
 
+    private final CardSelector cardSelector = new CardSelector();
+
     @Override
     public Move defend(PublicState publicState) {
 
@@ -19,22 +22,10 @@ public class TrivialBot implements Player {
                 publicState.getDefendingCards()
         );
 
-        List<Card> cardsToDefend = new ArrayList<>(newAttackingCards.size());
+        List<Card> cardsToDefend = findCardsToDefend(newAttackingCards, publicState);
 
-        for(Card card: newAttackingCards) {
-
-            Optional<Card> defendingCard = findTheWeakestCardToDefend(
-                    card,
-                    publicState.getTrumpCard().suit(),
-                    publicState.getYourHand(),
-                    cardsToDefend
-            );
-
-            if (defendingCard.isPresent()) {
-                cardsToDefend.add(card);
-            } else {
-                return new Move(TAKE_CARDS);
-            }
+        if(cardsToDefend.isEmpty()) {
+            return new Move(TAKE_CARDS);
         }
 
         return new Move(DEFEND, cardsToDefend);
@@ -43,30 +34,7 @@ public class TrivialBot implements Player {
     @Override
     public Move attack(PublicState publicState) {
 
-        List<Card> cardsToAttack = new ArrayList<>();
-        boolean isFirstAttack = publicState.getAttackingCards().isEmpty();
-
-        if (isFirstAttack) {
-            cardsToAttack.addAll(
-                    findTheWeakestCardsToAttack(
-                            publicState.getYourHand(),
-                            publicState.getNumberOfCardsOnOpponentHand(),
-                            publicState.getTrumpCard().suit()
-                    )
-            );
-
-        } else {
-            cardsToAttack.addAll(
-                    findPossibleCardsToAttack(
-                            publicState.getYourHand(),
-                            publicState.getNumberOfCardsOnOpponentHand(),
-                            publicState.getAttackingCards(),
-                            publicState.getDefendingCards(),
-                            publicState.getTrumpCard().suit(),
-                            publicState.getNumberOfCardsOnDeck()
-                    )
-            );
-        }
+        List<Card> cardsToAttack = findCardsToAttack(publicState);
 
         if (cardsToAttack.isEmpty()) {
             return new Move(STOP_ATTACK);
@@ -76,6 +44,7 @@ public class TrivialBot implements Player {
 
     }
 
+    // Bot does not need to see the game after moves
     @Override
     public void displayCurrentState(PublicState publicState) {}
 
@@ -90,136 +59,61 @@ public class TrivialBot implements Player {
         return newAttackingCards;
     }
 
-    private Optional<Card> findTheWeakestCardToDefend(
-            Card attackingCard,
-            Card.Suit trump,
-            List<Card> yourCards,
-            List<Card> alreadyUsedCards
-    ) {
-        List<Card> cardsToDefend = new ArrayList<>();
+    private List<Card> findCardsToDefend(List<Card> newAttackingCards, PublicState publicState) {
+        List<Card> cardsToDefend = new ArrayList<>(newAttackingCards.size());
 
-        for (Card card: yourCards) {
+        for(Card card: newAttackingCards) {
 
-            boolean isCardNotUsed = !alreadyUsedCards.contains(card);
-            boolean isCardStronger = card.isCardStrongerThan(attackingCard, trump);
+            List<Card> unusedCards = publicState.getYourHand().stream().filter(
+                    yourCard -> !cardsToDefend.contains(yourCard)
+            ).toList();
 
-            if(isCardNotUsed && isCardStronger) {
+            Optional<Card> defendingCard = cardSelector.findTheWeakestCardToDefend(
+                    card,
+                    publicState.getTrumpCard().suit(),
+                    unusedCards
+            );
+
+            if (defendingCard.isPresent()) {
                 cardsToDefend.add(card);
+            } else {
+                return List.of();
             }
         }
 
-        if(cardsToDefend.isEmpty()) {
-            return Optional.empty();
-        }
+        return cardsToDefend;
+    }
 
-        List<Card> trumpCardsToDefend = new ArrayList<>(cardsToDefend.stream().filter(
-                card -> card.suit() == trump
-        ).toList());
+    private List<Card> findCardsToAttack(PublicState publicState) {
 
-        List<Card> normalCardsToDefend = new ArrayList<>(cardsToDefend.stream().filter(
-                card -> card.suit() != trump
-        ).toList());
+        boolean isFirstAttack = publicState.getAttackingCards().isEmpty();
 
-        trumpCardsToDefend.sort(Comparator.comparingInt(c -> c.rank().getRankValue()));
-        normalCardsToDefend.sort(Comparator.comparingInt(c -> c.rank().getRankValue()));
+        if (isFirstAttack) {
+            return findCardsForFirstAttack(publicState);
 
-        if(normalCardsToDefend.isEmpty()) {
-            return Optional.of(trumpCardsToDefend.getFirst());
         } else {
-            return Optional.of(normalCardsToDefend.getFirst());
+            return findCardsForNextAttack(publicState);
         }
     }
 
-    private List<Card> findTheWeakestCardsToAttack(
-            List<Card> yourCards,
-            int numberOfCardsOnOpponentHand,
-            Card.Suit trump
-    ) {
+    private List<Card> findCardsForFirstAttack(PublicState publicState) {
 
-        List<Card> trumpCards = new ArrayList<>(yourCards.stream().filter(
-                card -> card.suit() == trump
-        ).toList());
-
-        List<Card> normalCards = new ArrayList<>(yourCards.stream().filter(
-                card -> card.suit() != trump
-        ).toList());
-
-        trumpCards.sort(Comparator.comparingInt(c -> c.rank().getRankValue()));
-        normalCards.sort(Comparator.comparingInt(c -> c.rank().getRankValue()));
-
-        Card firstAttackingCard;
-
-        if (!normalCards.isEmpty()) {
-            firstAttackingCard = normalCards.getFirst();
-        } else {
-            firstAttackingCard = trumpCards.getFirst();
-        }
-
-        // If there are more cards with the same rank that are not trump, we use it
-        List<Card> cardsToAttack = normalCards.stream().filter(
-                c -> c.rank() == firstAttackingCard.rank()
-        ).toList();
-
-        if(cardsToAttack.size() > numberOfCardsOnOpponentHand) {
-            cardsToAttack = cardsToAttack.subList(0, numberOfCardsOnOpponentHand);
-        }
-
-        return cardsToAttack;
+        return cardSelector.findTheWeakestCardsToAttack(
+                publicState.getYourHand(),
+                publicState.getNumberOfCardsOnOpponentHand(),
+                publicState.getTrumpCard().suit()
+        );
     }
 
-    private List<Card> findPossibleCardsToAttack(
-            List<Card> yourCards,
-            int numberOfCardsOnOpponentHand,
-            List<Card> attackingCards,
-            List<Card> defendingCards,
-            Card.Suit trump,
-            int numberOfCardsOnDeck
-    ) {
+    private List<Card> findCardsForNextAttack(PublicState publicState) {
 
-        List<Card.Rank> ranksThatAreOnTable = new ArrayList<>(
-                attackingCards.stream().map(Card::rank).toList()
+        return cardSelector.findPossibleCardsToAttack(
+                publicState.getYourHand(),
+                publicState.getNumberOfCardsOnOpponentHand(),
+                publicState.getAttackingCards(),
+                publicState.getDefendingCards(),
+                publicState.getTrumpCard().suit(),
+                publicState.getNumberOfCardsOnDeck()
         );
-
-        ranksThatAreOnTable.addAll(
-                defendingCards.stream().map(Card::rank).toList()
-        );
-
-        List<Card> trumpCards = new ArrayList<>(yourCards.stream().filter(
-                card -> card.suit() == trump
-        ).toList());
-
-        List<Card> normalCards = new ArrayList<>(yourCards.stream().filter(
-                card -> card.suit() != trump
-        ).toList());
-
-        trumpCards.sort(Comparator.comparingInt(c -> c.rank().getRankValue()));
-        normalCards.sort(Comparator.comparingInt(c -> c.rank().getRankValue()));
-
-        List<Card> trumpCardsPossibleToPlay = trumpCards.stream().filter(
-                c -> ranksThatAreOnTable.contains(c.rank())
-        ).toList();
-
-        List<Card> normalCardsPossibleToPlay = trumpCards.stream().filter(
-                c -> ranksThatAreOnTable.contains(c.rank())
-        ).toList();
-
-        List<Card> cardsToAttack = new ArrayList<>(normalCardsPossibleToPlay);
-
-        // Play trump cards only if there are less than 3 cards in Deck
-        if (numberOfCardsOnDeck < 3) {
-            cardsToAttack.addAll(trumpCardsPossibleToPlay);
-        }
-
-        int maxNumberOfCardsOnTable = 5 - attackingCards.size();
-
-        int maxNumberOfNewCards = Math.min(
-                Math.min(
-                    maxNumberOfCardsOnTable,
-                    numberOfCardsOnOpponentHand
-                ),
-                cardsToAttack.size()
-        );
-
-        return cardsToAttack.subList(0, maxNumberOfNewCards);
     }
 }
