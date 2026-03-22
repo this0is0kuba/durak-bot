@@ -190,7 +190,7 @@ public class CardSelector {
     private int getSmallerNumber(int number1, int number2, int number3) {
         return Math.min(
                 number1,
-                getSmallerNumber(2, 3)
+                getSmallerNumber(number2, number3)
         );
     }
 
