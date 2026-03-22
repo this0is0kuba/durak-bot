@@ -12,7 +12,15 @@ import static com.jrakus.players.game_elements.Move.MoveKind.*;
 
 public class TrivialBot implements Player {
 
-    private final CardSelector cardSelector = new CardSelector();
+    private final CardSelector cardSelector;
+
+    public TrivialBot() {
+        this(new CardSelector());
+    }
+
+    public TrivialBot(CardSelector cardSelector) {
+        this.cardSelector = cardSelector;
+    }
 
     @Override
     public Move defend(PublicState publicState) {
@@ -75,7 +83,7 @@ public class TrivialBot implements Player {
             );
 
             if (defendingCard.isPresent()) {
-                cardsToDefend.add(card);
+                cardsToDefend.add(defendingCard.get());
             } else {
                 return List.of();
             }
