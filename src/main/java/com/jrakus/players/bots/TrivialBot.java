@@ -5,12 +5,15 @@ import com.jrakus.players.Player;
 import com.jrakus.players.bots.cardSelector.CardSelector;
 import com.jrakus.players.game_elements.Move;
 import com.jrakus.players.game_elements.PublicState;
+import com.jrakus.playground.displays.Display;
 
 import java.util.*;
 
 import static com.jrakus.players.game_elements.Move.MoveKind.*;
 
 public class TrivialBot implements Player {
+
+    private Display display = null;
 
     private final CardSelector cardSelector;
 
@@ -20,6 +23,11 @@ public class TrivialBot implements Player {
 
     public TrivialBot(CardSelector cardSelector) {
         this.cardSelector = cardSelector;
+    }
+
+    public TrivialBot(CardSelector cardSelector, Display display) {
+        this.cardSelector = cardSelector;
+        this.display = display;
     }
 
     @Override
@@ -52,9 +60,13 @@ public class TrivialBot implements Player {
 
     }
 
-    // Bot does not need to see the game after moves
+    // Bot does not need to see the game after moves, but we can display it for ourselves.
     @Override
-    public void displayCurrentState(PublicState publicState) {}
+    public void displayCurrentState(PublicState publicState) {
+        if(display != null) {
+            display.display(publicState);
+        }
+    }
 
     private List<Card> getNewAttackingCards(List<Card> attackingCards, List<Card> defendingCards) {
 
