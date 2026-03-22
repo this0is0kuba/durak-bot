@@ -120,6 +120,15 @@ class GameStateUnitTest {
     }
 
     @Test
+    void checkGameStateAfterDefend_DefendingPlayerEmpty_Player2Wins() {
+        player1.playCards(List.of()); // simulate attack
+        player2.playCards(player2.showCardsOnHand()); // defend
+        gameState.checkGameStateAfterDefend(player2, player1, player1);
+
+        assertEquals(GameState.GameStateEnum.PLAYER_2_WON, gameState.getInternalState());
+    }
+
+    @Test
     void checkGameStateAfterDefend_NoEmptyHands_StateRemainsActive() {
         gameState.checkGameStateAfterDefend(player1, player2, player1);
 

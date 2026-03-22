@@ -52,11 +52,13 @@ public class GameState {
         }
         else if(attackingPlayerHasNoCards) {
             chooseWinner(currentAttackingPlayer, player1);
+        } else if(defendingPlayerHasNoCards) {
+            chooseWinner(currentDefendingPlayer, player1);
         }
     }
 
-    private void chooseWinner(DurakGamePlayer currentAttackingPlayer, DurakGamePlayer player1) {
-        if (currentAttackingPlayer == player1) {
+    private void chooseWinner(DurakGamePlayer winner, DurakGamePlayer player1) {
+        if (winner == player1) {
             state = GameStateEnum.PLAYER_1_WON;
         } else {
             state = GameStateEnum.PLAYER_2_WON;

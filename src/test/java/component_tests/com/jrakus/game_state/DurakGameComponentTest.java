@@ -12,8 +12,7 @@ import java.util.List;
 
 import static com.jrakus.game_state.components.Card.Rank.*;
 import static com.jrakus.game_state.components.Card.Suit.*;
-import static com.jrakus.game_state.components.GameState.GameStateEnum.DRAW;
-import static com.jrakus.game_state.components.GameState.GameStateEnum.PLAYER_1_WON;
+import static com.jrakus.game_state.components.GameState.GameStateEnum.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class DurakGameComponentTest {
@@ -80,6 +79,35 @@ class DurakGameComponentTest {
         // --- Player 2 (6 cards)
         cardsOnHand2.add(new Card(SPADES, QUEEN));
         cardsOnHand2.add(new Card(HEARTS, ACE));
+
+        Deck deck = new Deck(trumpCard);
+        DurakGamePlayer player1 = new DurakGamePlayer(cardsOnHand1);
+        DurakGamePlayer player2 = new DurakGamePlayer(cardsOnHand2);
+
+        return new DurakGame(
+                deck,
+                new DiscardPile(),
+                new Table(new TableValidator()),
+                new GameState(),
+                new DurakGameValidator(),
+                player1,
+                player2,
+                player1
+        );
+    }
+
+    private DurakGame createEndGame2() {
+
+        List<Card> cardsOnHand1 = new ArrayList<>(2);
+        List<Card> cardsOnHand2 = new ArrayList<>(2);
+        Card trumpCard = new Card(HEARTS, ACE);
+
+        // --- Player 1 (6 cards)
+        cardsOnHand1.add(new Card(SPADES, JACK));
+        cardsOnHand1.add(new Card(HEARTS, JACK));
+
+        // --- Player 2 (6 cards)
+        cardsOnHand2.add(new Card(SPADES, QUEEN));
 
         Deck deck = new Deck(trumpCard);
         DurakGamePlayer player1 = new DurakGamePlayer(cardsOnHand1);
@@ -303,7 +331,7 @@ class DurakGameComponentTest {
     }
 
     @Test
-    void playerShouldWinWhenHas0Cards() {
+    void playerShouldWinWhenHas0CardsAfterAttack() {
 
         DurakGame endGame = createEndGame();
 
@@ -315,6 +343,24 @@ class DurakGameComponentTest {
         endGame.takeCardsFromTable();
 
         assertEquals(PLAYER_1_WON, endGame.getGameState());
+    }
+
+    @Test
+    void playerShouldWinWhenHas0CardsAfterDefend() {
+
+        DurakGame endGame = createEndGame2();
+
+        List<Card> attackCards = List.of(
+                new Card(SPADES, JACK)
+        );
+        endGame.doAttack(attackCards);
+
+        List<Card> defendCards = List.of(
+                new Card(SPADES, QUEEN)
+        );
+        endGame.doDefend(defendCards);
+
+        assertEquals(PLAYER_2_WON, endGame.getGameState());
     }
 
     @Test
