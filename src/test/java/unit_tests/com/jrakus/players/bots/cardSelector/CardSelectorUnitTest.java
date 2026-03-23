@@ -142,8 +142,19 @@ public class CardSelectorUnitTest {
                 yourCards5, numberOfOpponentCards5, trump5, expectedCards5
         );
 
+        List<Card> yourCards6 = List.of(
+                new Card(DIAMONDS, KING)
+        );
+        int numberOfOpponentCards6 = 10;
+        Card.Suit trump6 = DIAMONDS;
+        List<Card> expectedCards6 = List.of(new Card(DIAMONDS, KING));
+
+        Arguments arguments6 = Arguments.of(
+                yourCards6, numberOfOpponentCards6, trump6, expectedCards6
+        );
+
         return Stream.of(
-                arguments1, arguments2, arguments3, arguments4, arguments5
+                arguments1, arguments2, arguments3, arguments4, arguments5, arguments6
         );
     }
 

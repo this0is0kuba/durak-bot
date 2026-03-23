@@ -46,8 +46,14 @@ public class CardSelector {
             firstAttackingCard = trumpCards.getFirst();
         }
 
-        // If there are more cards with the same rank that are not trump, we use it
-        List<Card> cardsToAttack = getAllCardsWithTheSameRank(firstAttackingCard.rank(), normalCards);
+        List<Card> cardsToAttack;
+
+        if (firstAttackingCard.suit() == trump) {
+            cardsToAttack = List.of(firstAttackingCard);
+        } else {
+            // If there are more cards with the same rank that are not trump, we use it
+            cardsToAttack = getAllCardsWithTheSameRank(firstAttackingCard.rank(), normalCards);
+        }
 
         int numberOfCardsPossibleToPlay = getSmallerNumber(cardsToAttack.size(), numberOfCardsOnOpponentHand);
         return cardsToAttack.subList(0, numberOfCardsPossibleToPlay);
