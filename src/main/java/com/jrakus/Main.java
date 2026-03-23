@@ -12,7 +12,7 @@ public class Main {
     static void main() {
 
         Player player1 = new TrivialBot(new CardSelector(), new TerminalPrinter());
-        Player player2 = new TrivialBot(new CardSelector(), new TerminalPrinter());
+        Player player2 = new TrivialBot();
 
         GameRoom game = new GameRoom(player1, player2);
 

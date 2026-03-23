@@ -161,13 +161,18 @@ public class TerminalPrinter implements Display {
         int overlap = 3;
 
         for (int i = 0; i < 5; i++) {
+
             StringBuilder lineToPrint = new StringBuilder();
 
             String line = cardBack[i];
-            lineToPrint.append("     ").append(line);
+            lineToPrint.append("     ");
 
-            for (int j = 1; j < numberOfCards; j++) {
-                lineToPrint.append(line.substring(overlap));
+            if (numberOfCards > 0) {
+                lineToPrint.append(line);
+
+                for (int j = 1; j < numberOfCards; j++) {
+                    lineToPrint.append(line.substring(overlap));
+                }
             }
 
             allLinesToPrint[i] = lineToPrint.toString();
