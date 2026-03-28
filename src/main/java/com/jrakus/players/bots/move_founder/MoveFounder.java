@@ -1,11 +1,11 @@
-package com.jrakus.players.bots.cardSelector;
+package com.jrakus.players.bots.move_founder;
 
 import com.jrakus.game_state.components.Card;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class CardHelper {
+public class MoveFounder {
 
     public record Action(List<Card> cardsToPlay) {}
 

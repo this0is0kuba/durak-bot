@@ -1,4 +1,4 @@
-package com.jrakus.players.bots.cardSelector;
+package com.jrakus.players.bots.card_selector;
 
 import com.jrakus.game_state.components.Card;
 

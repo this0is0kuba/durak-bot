@@ -2,7 +2,7 @@ package com.jrakus.players.bots;
 
 import com.jrakus.game_state.components.Card;
 import com.jrakus.players.Player;
-import com.jrakus.players.bots.cardSelector.CardSelector;
+import com.jrakus.players.bots.card_selector.CardSelector;
 import com.jrakus.players.game_elements.Move;
 import com.jrakus.players.game_elements.PublicState;
 import com.jrakus.playground.displays.Display;
