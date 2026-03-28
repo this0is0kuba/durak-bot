@@ -1,7 +1,6 @@
 package com.jrakus.players.bots.cardSelector;
 
 import com.jrakus.game_state.components.Card;
-import com.jrakus.players.game_elements.PublicState;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -10,47 +9,57 @@ public class CardHelper {
 
     public record Action(List<Card> cardsToPlay) {}
 
-    public List<Action> getAllPossibleAttacks(PublicState publicState) {
+    public List<Action> getAllPossibleAttacks(
+            List<Card> attackingCards,
+            List<Card> defendingCards,
+            List<Card> yourHand,
+            int numberOfCardsOnOpponentHand
+    ) {
 
-        boolean isFirstAttack = !publicState.getAttackingCards().isEmpty();
+        boolean isFirstAttack = attackingCards.isEmpty();
 
         if (isFirstAttack) {
             return getAllPossibleAttacksForFirstAttack(
-                    publicState.getYourHand(),
-                    publicState.getNumberOfCardsOnOpponentHand()
+                    yourHand,
+                    numberOfCardsOnOpponentHand
             );
         } else {
 
             Set<Card.Rank> ranksThatAreOnTable = new HashSet<>();
 
             ranksThatAreOnTable.addAll(
-                    publicState.getAttackingCards().stream().map(Card::rank).collect(Collectors.toSet())
+                    attackingCards.stream().map(Card::rank).collect(Collectors.toSet())
             );
             ranksThatAreOnTable.addAll(
-                    publicState.getDefendingCards().stream().map(Card::rank).collect(Collectors.toSet())
+                    defendingCards.stream().map(Card::rank).collect(Collectors.toSet())
             );
 
             return getAllPossibleAttacksForNextAttack(
-                    publicState.getYourHand(),
-                    publicState.getNumberOfCardsOnOpponentHand(),
-                    publicState.getAttackingCards().size(),
+                    yourHand,
+                    numberOfCardsOnOpponentHand,
+                    attackingCards.size(),
                     ranksThatAreOnTable
             );
         }
     }
 
-    public List<Action> getAllPossibleDefends(PublicState publicState) {
+    public List<Action> getAllPossibleDefends(
+            List<Card> attackingCards,
+            List<Card> defendingCards,
+            List<Card> yourHand,
+            Card.Suit trump
+    ) {
 
         Map<Card, List<Card>> mapAttackingCardToPossibleDefendingCards = new HashMap<>();
 
-        List<Card> newAttackingCards = publicState.getAttackingCards().subList(
-                publicState.getDefendingCards().size(), publicState.getAttackingCards().size()
+        List<Card> newAttackingCards = attackingCards.subList(
+                defendingCards.size(), attackingCards.size()
         );
 
         for(Card card: newAttackingCards) {
             mapAttackingCardToPossibleDefendingCards.put(
                     card,
-                    getAllDefendsForSpecificCard(card, publicState.getYourHand(), publicState.getTrumpCard().suit())
+                    getAllDefendsForSpecificCard(card, yourHand, trump)
             );
         }
 
