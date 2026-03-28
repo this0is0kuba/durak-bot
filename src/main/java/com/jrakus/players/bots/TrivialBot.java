@@ -118,7 +118,7 @@ public class TrivialBot implements Player {
 
     private List<Card> findCardsForFirstAttack(PublicState publicState) {
 
-        return cardSelector.findTheWeakestCardsToAttack(
+        return cardSelector.findTheWeakestCardsForFirstAttack(
                 publicState.getYourHand(),
                 publicState.getNumberOfCardsOnOpponentHand(),
                 publicState.getTrumpCard().suit()
@@ -127,7 +127,7 @@ public class TrivialBot implements Player {
 
     private List<Card> findCardsForNextAttack(PublicState publicState) {
 
-        return cardSelector.findPossibleCardsToAttack(
+        return cardSelector.findOptimalCardsForSecondAndNextAttack(
                 publicState.getYourHand(),
                 publicState.getNumberOfCardsOnOpponentHand(),
                 publicState.getAttackingCards(),

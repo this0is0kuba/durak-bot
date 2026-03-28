@@ -28,7 +28,7 @@ public class CardSelector {
         return getWeakestTrumpCard(cardsToDefend, trump);
     }
 
-    public List<Card> findTheWeakestCardsToAttack(
+    public List<Card> findTheWeakestCardsForFirstAttack(
             List<Card> yourCards,
             int numberOfCardsOnOpponentHand,
             Card.Suit trump
@@ -59,7 +59,7 @@ public class CardSelector {
         return cardsToAttack.subList(0, numberOfCardsPossibleToPlay);
     }
 
-    public List<Card> findPossibleCardsToAttack(
+    public List<Card> findOptimalCardsForSecondAndNextAttack(
             List<Card> yourCards,
             int numberOfCardsOnOpponentHand,
             List<Card> attackingCards,

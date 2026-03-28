@@ -166,7 +166,7 @@ public class CardSelectorUnitTest {
             Card.Suit trump,
             List<Card> expectedCards
     ) {
-        List<Card> card = cardSelector.findTheWeakestCardsToAttack(
+        List<Card> card = cardSelector.findTheWeakestCardsForFirstAttack(
                 yourCards,
                 numberOfOpponentCards,
                 trump
@@ -276,7 +276,7 @@ public class CardSelectorUnitTest {
             int numberOfCardsOnDeck,
             List<Card> expectedCards
     ) {
-        List<Card> card = cardSelector.findPossibleCardsToAttack(
+        List<Card> card = cardSelector.findOptimalCardsForSecondAndNextAttack(
                 yourCards, numberOfCardsOnOpponentHand,
                 attackingCards,
                 defendingCards, trump,
