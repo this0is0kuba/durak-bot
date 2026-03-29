@@ -73,7 +73,10 @@ public class MoveFounder {
             );
         }
 
-        return defendingMoveFounder.findAllCombinationsOfDefendingCards(mapAttackingCardToPossibleDefendingCards);
+        return defendingMoveFounder.getAllCombinationsOfCards(
+                mapAttackingCardToPossibleDefendingCards,
+                newAttackingCards
+        );
     }
 
     private List<Card> getAllDefendsForSpecificCard(Card attackingCard, List<Card> yourHand, Card.Suit trump) {

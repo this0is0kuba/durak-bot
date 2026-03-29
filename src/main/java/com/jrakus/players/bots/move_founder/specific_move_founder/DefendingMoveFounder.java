@@ -4,22 +4,24 @@ import com.jrakus.game_state.components.Card;
 import com.jrakus.players.bots.move_founder.MoveFounder;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 public class DefendingMoveFounder {
 
-    public List<MoveFounder.Action> findAllCombinationsOfDefendingCards(
-            Map<Card, List<Card>> attackingCardToDefendingCards
+    public List<MoveFounder.Action> getAllCombinationsOfCards(
+            Map<Card, List<Card>> attackingCardToDefendingCards,
+            List<Card> attackingCardList
     ) {
 
         int numberOfAttackingCards = attackingCardToDefendingCards.size();
-        List<Card> attackingCardList = new ArrayList<>(attackingCardToDefendingCards.keySet());
 
         List<MoveFounder.Action> allFoundActions = new ArrayList<>();
+        List<Card> chosenDefendingCards = new ArrayList<>(Collections.nCopies(numberOfAttackingCards, null));
 
         findAllDefendingCombinationsRecursively(
-                attackingCardToDefendingCards, attackingCardList, new ArrayList<>(),
+                attackingCardToDefendingCards, attackingCardList, chosenDefendingCards,
                 allFoundActions, 0, numberOfAttackingCards
         );
 
@@ -35,18 +37,20 @@ public class DefendingMoveFounder {
             int numberOfAttackingCards
     ) {
 
-        Card attackingCard = allAttackingCards.get(currentAttackingCardIndex);
-        List<Card> defendingCardList = attackingCardToDefendingCards.get(attackingCard);
-
         if (currentAttackingCardIndex < numberOfAttackingCards) {
+
+            Card attackingCard = allAttackingCards.get(currentAttackingCardIndex);
+            List<Card> defendingCardList = attackingCardToDefendingCards.get(attackingCard);
+
             for (Card defendingCard: defendingCardList) {
                 if (!chosenDefendingCards.subList(0, currentAttackingCardIndex).contains(defendingCard)) {
 
                     chosenDefendingCards.set(currentAttackingCardIndex, defendingCard);
+                    int newCurrentAttackingCardIndex = currentAttackingCardIndex + 1;
 
                     findAllDefendingCombinationsRecursively(
                             attackingCardToDefendingCards, allAttackingCards, chosenDefendingCards,
-                            allFoundActions, ++currentAttackingCardIndex, numberOfAttackingCards
+                            allFoundActions, newCurrentAttackingCardIndex, numberOfAttackingCards
                     );
                 }
             }
