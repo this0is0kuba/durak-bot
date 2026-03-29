@@ -9,29 +9,41 @@ import java.util.List;
 public class AttackingMoveFounder {
 
     public List<MoveFounder.Action> getAllCombinationsOfCards(
-            int numberOfCardsInAction,
-            List<Card> yourHand
+            int numberOfCardsInCombination,
+            List<Card> cards
     ) {
-        List<MoveFounder.Action> allActions = new ArrayList<>();
+
         List<Integer> indicators = new ArrayList<>();
 
-        for(int i = 0; i < numberOfCardsInAction; i++) {
+        for(int i = 0; i < numberOfCardsInCombination; i++) {
             indicators.add(i);
         }
 
         int indexReachedByFirstIndicator = indicators.getFirst();
-        int maxIndexThatCanBeReachedByFirstIndicator = yourHand.size() - numberOfCardsInAction;
+        int maxIndexThatCanBeReachedByFirstIndicator = cards.size() - numberOfCardsInCombination;
 
+        if (indexReachedByFirstIndicator == maxIndexThatCanBeReachedByFirstIndicator)  {
+            return List.of(new MoveFounder.Action(
+                    new ArrayList<>(cards)
+            ));
+        }
+
+        List<MoveFounder.Action> allActions = new ArrayList<>();
 
         while (indexReachedByFirstIndicator < maxIndexThatCanBeReachedByFirstIndicator) {
-            List<Card> possibleCardsToPlay = indicators.stream().map(yourHand::get).toList();
 
+            List<Card> possibleCardsToPlay = indicators.stream().map(cards::get).toList();
             MoveFounder.Action possibleAction = new MoveFounder.Action(possibleCardsToPlay);
             allActions.add(possibleAction);
 
-            updateIndicators(indicators, yourHand.size());
+            updateIndicators(indicators, cards.size());
             indexReachedByFirstIndicator = indicators.getFirst();
         }
+
+        // Add last case where indicators stopped
+        List<Card> possibleCardsToPlay = indicators.stream().map(cards::get).toList();
+        MoveFounder.Action possibleAction = new MoveFounder.Action(possibleCardsToPlay);
+        allActions.add(possibleAction);
 
         return allActions;
     }
@@ -41,7 +53,7 @@ public class AttackingMoveFounder {
         // We start from the last indicator
         int indicatorIndex = indicators.size() - 1;
         int indexReachedByIndicator = indicators.get(indicatorIndex);
-        int maxIndexIndicatorCanReach = max - (indicators.size() - indicatorIndex - 1);
+        int maxIndexIndicatorCanReach = max - (indicators.size() - indicatorIndex);
 
         boolean didIndicatorReachEnd = indexReachedByIndicator == maxIndexIndicatorCanReach;
 
@@ -59,6 +71,7 @@ public class AttackingMoveFounder {
 
         // update all indicators with higher index than updated indicator
         int indicatorToUpdate = indicatorIndex + 1;
+        newIndexForIndicator++;
         while (indicatorToUpdate < indicators.size()) {
 
             indicators.set(indicatorToUpdate, newIndexForIndicator);
