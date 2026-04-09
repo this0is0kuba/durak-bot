@@ -10,6 +10,7 @@ import com.jrakus.game_state.components.Card;
 import com.jrakus.game_state.components.GameState;
 
 import java.util.List;
+import java.util.Optional;
 
 public class GameRoom {
     private final Player player1;
@@ -22,7 +23,7 @@ public class GameRoom {
         this.player2 = player2;
     }
 
-    public void startGame() {
+    public Optional<Player> startGame() {
 
         while(durakGame.getGameState() == GameState.GameStateEnum.ACTIVE_GAME) {
 
@@ -41,6 +42,8 @@ public class GameRoom {
         }
 
         updateGameStateForPlayers();
+
+        return getWinner();
     }
 
     private void updateGameStateForPlayers() {
@@ -99,6 +102,16 @@ public class GameRoom {
 
     private Player getAttackingPlayer() {
         return durakGame.isPlayer1Attacking() ? player1 : player2;
+    }
+
+    private Optional<Player> getWinner() {
+        GameState.GameStateEnum gameStateEnum = durakGame.getGameState();
+
+        return switch (gameStateEnum) {
+            case ACTIVE_GAME, DRAW -> Optional.empty();
+            case PLAYER_1_WON -> Optional.of(player1);
+            case PLAYER_2_WON -> Optional.of(player2);
+        };
     }
 
     private PublicState getPublicState(Player player) {
