@@ -14,6 +14,10 @@ public class MoveFounder {
     private final AttackingMoveFounder attackingMoveFounder;
     private final DefendingMoveFounder defendingMoveFounder;
 
+    public MoveFounder() {
+        this(new AttackingMoveFounder(), new DefendingMoveFounder());
+    }
+
     public MoveFounder(AttackingMoveFounder attackingMoveFounder, DefendingMoveFounder defendingMoveFounder) {
         this.attackingMoveFounder = attackingMoveFounder;
         this.defendingMoveFounder = defendingMoveFounder;
@@ -73,10 +77,15 @@ public class MoveFounder {
             );
         }
 
-        return defendingMoveFounder.getAllCombinationsOfCards(
+        List<Action> allPossibleDefends = defendingMoveFounder.getAllCombinationsOfCards(
                 mapAttackingCardToPossibleDefendingCards,
                 newAttackingCards
         );
+
+        // Empty list means that user should take all cards instead of defending
+        allPossibleDefends.add(new Action(List.of()));
+
+        return allPossibleDefends;
     }
 
     private List<Card> getAllDefendsForSpecificCard(Card attackingCard, List<Card> yourHand, Card.Suit trump) {
