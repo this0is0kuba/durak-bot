@@ -4,9 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DiscardPile {
-    private final List<Card> discardedCards = new ArrayList<>();
+    private final List<Card> discardedCards;
 
-    public DiscardPile() {}
+    public DiscardPile() {
+        this(new ArrayList<>());
+    }
+
+    public DiscardPile(List<Card> discardedCards) {
+        this.discardedCards = discardedCards;
+    }
 
     public void addCardsToPile(List<Card> newDiscardedCards) {
         discardedCards.addAll(newDiscardedCards);

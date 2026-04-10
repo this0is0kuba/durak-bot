@@ -44,7 +44,6 @@ public class DurakGame {
             DiscardPile discardPile,
             Table table,
             GameState gameState,
-            DurakGameValidator durakGameValidator,
             DurakGamePlayer durakGamePlayer1,
             DurakGamePlayer durakGamePlayer2,
             DurakGamePlayer activePlayer
@@ -53,7 +52,7 @@ public class DurakGame {
         this.discardPile = discardPile;
         this.table = table;
         this.state = gameState;
-        this.durakGameValidator = durakGameValidator;
+        this.durakGameValidator = new DurakGameValidator();
 
         player1 = durakGamePlayer1;
         player2 = durakGamePlayer2;

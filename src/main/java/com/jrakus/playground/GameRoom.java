@@ -16,11 +16,16 @@ public class GameRoom {
     private final Player player1;
     private final Player player2;
 
-    private final DurakGame durakGame = new DurakGame();
+    private final DurakGame durakGame;
 
     public GameRoom(Player player1, Player player2) {
+        this(player1, player2, new DurakGame());
+    }
+
+    public GameRoom(Player player1, Player player2, DurakGame durakGame) {
         this.player1 = player1;
         this.player2 = player2;
+        this.durakGame = durakGame;
     }
 
     public Optional<Player> startGame() {
@@ -151,6 +156,7 @@ public class GameRoom {
                 .numberOfCardsOnOpponentHand(numberOfCardsOnOpponentHand)
                 .numberOfCardsOnDeck(numberOfCardsOnDeck)
                 .gameInfo(gameInfo)
+                .areYouPlayer1(player1 == player)
                 .build();
     }
 }

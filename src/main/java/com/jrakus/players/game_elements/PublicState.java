@@ -19,6 +19,7 @@ public class PublicState implements Serializable {
     private final int numberOfCardsOnDeck;
 
     private final GameInfo gameInfo;
+    private final Boolean areYouPlayer1;
 
     private PublicState(PublicStateBuilder builder) {
         this.attackingCards = List.copyOf(builder.attackingCards);
@@ -30,6 +31,7 @@ public class PublicState implements Serializable {
         this.numberOfCardsOnOpponentHand = builder.numberOfCardsOnOpponentHand;
         this.numberOfCardsOnDeck = builder.numberOfCardsOnDeck;
         this.gameInfo = builder.gameInfo;
+        this.areYouPlayer1 = builder.areYouPlayer1;
     }
 
     public static class PublicStateBuilder {
@@ -46,6 +48,7 @@ public class PublicState implements Serializable {
         private Integer numberOfCardsOnDeck;
 
         private GameInfo gameInfo;
+        private Boolean areYouPlayer1;
 
         public PublicStateBuilder attackingCards(List<Card> attackingCards) {
             this.attackingCards = Objects.requireNonNull(attackingCards, "attackingCards");
@@ -98,6 +101,11 @@ public class PublicState implements Serializable {
             return this;
         }
 
+        public PublicStateBuilder areYouPlayer1(Boolean areYouPlayer1) {
+            this.areYouPlayer1 = Objects.requireNonNull(areYouPlayer1, "areYouPlayer1");
+            return this;
+        }
+
         public PublicState build() {
             validateRequired();
             return new PublicState(this);
@@ -130,6 +138,9 @@ public class PublicState implements Serializable {
             }
             if (gameInfo == null) {
                 throw new IllegalStateException("gameInfo not initialized");
+            }
+            if (areYouPlayer1 == null) {
+                throw new IllegalStateException("areYouPlayer1 not initialized");
             }
         }
     }
@@ -168,5 +179,9 @@ public class PublicState implements Serializable {
 
     public GameInfo getGameInfo() {
         return gameInfo;
+    }
+
+    public Boolean areYouPlayer1() {
+        return areYouPlayer1;
     }
 }

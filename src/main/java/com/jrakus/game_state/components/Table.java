@@ -6,19 +6,26 @@ import java.util.*;
 
 public class Table {
 
-    private final List<Card> attackingCards = new ArrayList<>();
-    private final List<Card> defendingCards = new ArrayList<>();
-
-    private boolean isAttackMove = true;
+    private final List<Card> attackingCards;
+    private final List<Card> defendingCards;
+    private boolean isAttackMove;
 
     private final TableValidator tableValidator;
 
-    public Table(TableValidator tableValidator) {
-        this.tableValidator = tableValidator;
+    public Table() {
+        this(new ArrayList<>(),  new ArrayList<>());
     }
 
-    public Table() {
-        this(new TableValidator());
+    public Table(
+            List<Card> attackingCards,
+            List<Card> defendingCards
+    ) {
+        this.tableValidator = new TableValidator();
+        this.attackingCards = attackingCards;
+        this.defendingCards = defendingCards;
+
+        // TODO: add validation
+        this.isAttackMove = attackingCards.size() == defendingCards.size();
     }
 
     public void addAttackingCards(List<Card> newAttackingCards) {

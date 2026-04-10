@@ -37,6 +37,7 @@ public class TrivialBotResourceProvider {
                     .numberOfCardsOnOpponentHand(numberOfCardsOnOpponentHand)
                     .numberOfCardsOnDeck(numberOfCardsOnDeck)
                     .gameInfo(gameInfo)
+                    .areYouPlayer1(false)
                     .build();
 
             Move expectedMove = new Move(

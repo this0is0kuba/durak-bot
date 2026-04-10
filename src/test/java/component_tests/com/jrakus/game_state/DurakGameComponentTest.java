@@ -57,9 +57,8 @@ class DurakGameComponentTest {
         return new DurakGame(
                 deck,
                 new DiscardPile(),
-                new Table(new TableValidator()),
+                new Table(),
                 new GameState(),
-                new DurakGameValidator(),
                 player1,
                 player2,
                 player1
@@ -87,9 +86,8 @@ class DurakGameComponentTest {
         return new DurakGame(
                 deck,
                 new DiscardPile(),
-                new Table(new TableValidator()),
+                new Table(),
                 new GameState(),
-                new DurakGameValidator(),
                 player1,
                 player2,
                 player1
@@ -116,9 +114,8 @@ class DurakGameComponentTest {
         return new DurakGame(
                 deck,
                 new DiscardPile(),
-                new Table(new TableValidator()),
+                new Table(),
                 new GameState(),
-                new DurakGameValidator(),
                 player1,
                 player2,
                 player1

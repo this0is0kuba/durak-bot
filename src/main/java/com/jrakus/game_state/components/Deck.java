@@ -17,16 +17,9 @@ public class Deck {
     public Deck(Random random) {
         this.random = random;
 
-        int nCards = Card.Suit.values().length * Card.Rank.values().length;
-        this.cards = new ArrayList<>(nCards);
-
-        for (Card.Suit suit : Card.Suit.values()) {
-            for (Card.Rank rank : Card.Rank.values()) {
-                cards.add(new Card(suit, rank));
-            }
-        }
-
+        cards = getFullDeck();
         shuffle();
+
         trumpCard = cards.getFirst();
     }
 
@@ -74,6 +67,32 @@ public class Deck {
 
     public Card showTrumpCard() {
         return trumpCard;
+    }
+
+    public static List<Card> getFullDeck() {
+        int nCards = Card.Suit.values().length * Card.Rank.values().length;
+        List<Card> cards = new ArrayList<>(nCards);
+
+        for (Card.Suit suit : Card.Suit.values()) {
+            for (Card.Rank rank : Card.Rank.values()) {
+                cards.add(new Card(suit, rank));
+            }
+        }
+
+        return cards;
+    }
+
+    public static Set<Card> getFullDeckAsSet() {
+        int nCards = Card.Suit.values().length * Card.Rank.values().length;
+        Set<Card> cards = new HashSet<>(nCards);
+
+        for (Card.Suit suit : Card.Suit.values()) {
+            for (Card.Rank rank : Card.Rank.values()) {
+                cards.add(new Card(suit, rank));
+            }
+        }
+
+        return cards;
     }
 
     @Override
