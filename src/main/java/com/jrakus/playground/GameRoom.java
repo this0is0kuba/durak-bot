@@ -9,8 +9,10 @@ import com.jrakus.game_state.DurakGame;
 import com.jrakus.game_state.components.Card;
 import com.jrakus.game_state.components.GameState;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class GameRoom {
     private final Player player1;
@@ -146,6 +148,8 @@ public class GameRoom {
             case DRAW -> GameInfo.DRAW;
         };
 
+        Boolean didPlayer1StartGame = durakGame.didPlayer1StartGame();
+
         return new PublicState.PublicStateBuilder()
                 .attackingCards(attackingCards)
                 .defendingCards(defendingCards)
@@ -157,6 +161,7 @@ public class GameRoom {
                 .numberOfCardsOnDeck(numberOfCardsOnDeck)
                 .gameInfo(gameInfo)
                 .areYouPlayer1(player1 == player)
+                .didPlayer1StartGame(didPlayer1StartGame)
                 .build();
     }
 }

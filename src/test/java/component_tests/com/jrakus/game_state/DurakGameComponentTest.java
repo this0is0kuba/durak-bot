@@ -61,7 +61,10 @@ class DurakGameComponentTest {
                 new GameState(),
                 player1,
                 player2,
-                player1
+                player1,
+                player1,
+                player1,
+                player2
         );
     }
 
@@ -90,7 +93,10 @@ class DurakGameComponentTest {
                 new GameState(),
                 player1,
                 player2,
-                player1
+                player1,
+                player1,
+                player1,
+                player2
         );
     }
 
@@ -118,7 +124,10 @@ class DurakGameComponentTest {
                 new GameState(),
                 player1,
                 player2,
-                player1
+                player1,
+                player1,
+                player1,
+                player2
         );
     }
 

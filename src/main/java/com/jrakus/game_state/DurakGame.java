@@ -46,7 +46,10 @@ public class DurakGame {
             GameState gameState,
             DurakGamePlayer durakGamePlayer1,
             DurakGamePlayer durakGamePlayer2,
-            DurakGamePlayer activePlayer
+            DurakGamePlayer activePlayer,
+            DurakGamePlayer startingPlayer,
+            DurakGamePlayer currentAttackingPlayer,
+            DurakGamePlayer currentDefendingPlayer
     ) {
         this.deck = deck;
         this.discardPile = discardPile;
@@ -58,9 +61,9 @@ public class DurakGame {
         player2 = durakGamePlayer2;
 
         this.activePlayer = activePlayer;
-        startingPlayer = activePlayer;
-        currentAttackingPlayer = activePlayer;
-        currentDefendingPlayer = player1 == activePlayer ? player2 : player1;
+        this.startingPlayer = startingPlayer;
+        this.currentAttackingPlayer = currentAttackingPlayer;
+        this.currentDefendingPlayer = currentDefendingPlayer;
     }
 
     private DurakGamePlayer createPlayer() {
@@ -197,6 +200,10 @@ public class DurakGame {
         return deck.size();
     }
 
+    public Boolean didPlayer1StartGame() {
+        return startingPlayer == player1;
+    }
+
     private void changeVisibleCardsAfterAttack(List<Card> cards) {
         currentDefendingPlayer.removeOpponentVisibleCards(cards);
     }
@@ -206,7 +213,7 @@ public class DurakGame {
     }
 
     private void changeVisibleCardsAfterTakingCards(List<Card> cards) {
-        currentDefendingPlayer.addOpponentVisibleCards(cards);
+        currentAttackingPlayer.addOpponentVisibleCards(cards);
     }
 
     private void validateMove(DurakGamePlayer playerToCheck, List<Card> cards) {
@@ -242,12 +249,30 @@ public class DurakGame {
         int numberOfCardsForDefender = Math.max(maxNumberOfCardsOnHand - numberOfCards2, 0);
 
        while (numberOfCardsForAttacker > 0 && !deck.isEmpty()) {
-           currentAttackingPlayer.addCardToHand(deck.drawOneCard());
+
+           Card card = deck.drawOneCard();
+           currentAttackingPlayer.addCardToHand(card);
+
+           if (deck.isEmpty()) {
+               // If we reached this point it means that trump cards has just been taken, so we should add it to
+               // the opponent visible cards
+               currentDefendingPlayer.addOpponentVisibleCard(card);
+           }
+
            numberOfCardsForAttacker--;
        }
 
        while (numberOfCardsForDefender > 0 && !deck.isEmpty()) {
-           currentDefendingPlayer.addCardToHand(deck.drawOneCard());
+
+           Card card = deck.drawOneCard();
+           currentDefendingPlayer.addCardToHand(card);
+
+           if (deck.isEmpty()) {
+               // If we reached this point it means that trump cards has just been taken, so we should add it to
+               // the opponent visible cards
+               currentAttackingPlayer.addOpponentVisibleCard(card);
+           }
+
            numberOfCardsForDefender--;
        }
     }

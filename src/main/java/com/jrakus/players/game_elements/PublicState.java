@@ -20,6 +20,7 @@ public class PublicState implements Serializable {
 
     private final GameInfo gameInfo;
     private final Boolean areYouPlayer1;
+    private final Boolean didPlayer1StartGame;
 
     private PublicState(PublicStateBuilder builder) {
         this.attackingCards = List.copyOf(builder.attackingCards);
@@ -32,6 +33,7 @@ public class PublicState implements Serializable {
         this.numberOfCardsOnDeck = builder.numberOfCardsOnDeck;
         this.gameInfo = builder.gameInfo;
         this.areYouPlayer1 = builder.areYouPlayer1;
+        this.didPlayer1StartGame = builder.didPlayer1StartGame;
     }
 
     public static class PublicStateBuilder {
@@ -49,6 +51,7 @@ public class PublicState implements Serializable {
 
         private GameInfo gameInfo;
         private Boolean areYouPlayer1;
+        private Boolean didPlayer1StartGame;
 
         public PublicStateBuilder attackingCards(List<Card> attackingCards) {
             this.attackingCards = Objects.requireNonNull(attackingCards, "attackingCards");
@@ -106,6 +109,11 @@ public class PublicState implements Serializable {
             return this;
         }
 
+        public PublicStateBuilder didPlayer1StartGame(Boolean didPlayer1StartGame) {
+            this.didPlayer1StartGame = Objects.requireNonNull(didPlayer1StartGame, "didPlayer1StartGame");
+            return this;
+        }
+
         public PublicState build() {
             validateRequired();
             return new PublicState(this);
@@ -141,6 +149,9 @@ public class PublicState implements Serializable {
             }
             if (areYouPlayer1 == null) {
                 throw new IllegalStateException("areYouPlayer1 not initialized");
+            }
+            if (didPlayer1StartGame == null) {
+                throw new IllegalStateException("didPlayer1StartGame not initialized");
             }
         }
     }
@@ -183,5 +194,9 @@ public class PublicState implements Serializable {
 
     public Boolean areYouPlayer1() {
         return areYouPlayer1;
+    }
+
+    public Boolean didPlayer1StartGame() {
+        return didPlayer1StartGame;
     }
 }

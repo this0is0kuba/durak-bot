@@ -60,7 +60,6 @@ public class TrivialBot implements Player {
 
     }
 
-    // Bot does not need to see the game after moves, but we can display it for ourselves.
     @Override
     public void displayCurrentState(PublicState publicState) {
         if(display != null) {

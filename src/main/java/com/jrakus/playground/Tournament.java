@@ -13,6 +13,7 @@ public class Tournament {
     public void playTournament(Player player1, Player player2, int numberOfGames) {
 
         for (int i = 0; i < numberOfGames; i++) {
+            System.out.println("The game nr.: " + i + " has been started");
             GameRoom game = new GameRoom(player1, player2);
 
             Optional<Player> optionalWinner = game.startGame();
@@ -26,6 +27,8 @@ public class Tournament {
             } else {
                 numberOfDraws++;
             }
+
+            displayStatistics();
         }
     }
 

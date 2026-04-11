@@ -1,12 +1,16 @@
 package com.jrakus.players.bots;
 
+import com.jrakus.game_state.components.Card;
+import com.jrakus.game_state.exceptions.DurakGameInvalidStateException;
 import com.jrakus.players.Player;
 import com.jrakus.players.bots.move_founder.MoveFounder;
 import com.jrakus.players.game_elements.Move;
 import com.jrakus.players.game_elements.PublicState;
 import com.jrakus.playground.displays.Display;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static com.jrakus.players.game_elements.Move.MoveKind.*;
@@ -66,7 +70,6 @@ public class RandomBot implements Player {
         return new Move(ATTACK, randomAttack.cardsToPlay());
     }
 
-    // Bot does not need to see the game after moves, but we can display it for ourselves.
     @Override
     public void displayCurrentState(PublicState publicState) {
         if(display != null) {
