@@ -1,16 +1,12 @@
 package com.jrakus.players.bots;
 
-import com.jrakus.game_state.components.Card;
-import com.jrakus.game_state.exceptions.DurakGameInvalidStateException;
 import com.jrakus.players.Player;
 import com.jrakus.players.bots.move_founder.MoveFounder;
 import com.jrakus.players.game_elements.Move;
 import com.jrakus.players.game_elements.PublicState;
 import com.jrakus.playground.displays.Display;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 import static com.jrakus.players.game_elements.Move.MoveKind.*;
