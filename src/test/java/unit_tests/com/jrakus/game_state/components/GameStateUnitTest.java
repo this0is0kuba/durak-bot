@@ -25,8 +25,8 @@ class GameStateUnitTest {
         Card c1 = new Card(HEARTS, NINE);
         Card c2 = new Card(SPADES, JACK);
 
-        player1 = new DurakGamePlayer(new ArrayList<>(List.of(c1)));
-        player2 = new DurakGamePlayer(new ArrayList<>(List.of(c2)));
+        player1 = new DurakGamePlayer(new ArrayList<>(List.of(c1)), 1);
+        player2 = new DurakGamePlayer(new ArrayList<>(List.of(c2)), 2);
     }
 
     @Test

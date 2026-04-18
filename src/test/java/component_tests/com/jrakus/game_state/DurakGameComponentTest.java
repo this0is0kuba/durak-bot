@@ -51,8 +51,8 @@ class DurakGameComponentTest {
         cardsOnDeck.add(new Card(CLUBS, NINE));
 
         Deck deck = new Deck(cardsOnDeck);
-        DurakGamePlayer player1 = new DurakGamePlayer(cardsOnHand1);
-        DurakGamePlayer player2 = new DurakGamePlayer(cardsOnHand2);
+        DurakGamePlayer player1 = new DurakGamePlayer(cardsOnHand1, 1);
+        DurakGamePlayer player2 = new DurakGamePlayer(cardsOnHand2, 2);
 
         return new DurakGame(
                 deck,
@@ -83,8 +83,8 @@ class DurakGameComponentTest {
         cardsOnHand2.add(new Card(HEARTS, ACE));
 
         Deck deck = new Deck(trumpCard);
-        DurakGamePlayer player1 = new DurakGamePlayer(cardsOnHand1);
-        DurakGamePlayer player2 = new DurakGamePlayer(cardsOnHand2);
+        DurakGamePlayer player1 = new DurakGamePlayer(cardsOnHand1, 1);
+        DurakGamePlayer player2 = new DurakGamePlayer(cardsOnHand2, 2);
 
         return new DurakGame(
                 deck,
@@ -114,8 +114,8 @@ class DurakGameComponentTest {
         cardsOnHand2.add(new Card(SPADES, QUEEN));
 
         Deck deck = new Deck(trumpCard);
-        DurakGamePlayer player1 = new DurakGamePlayer(cardsOnHand1);
-        DurakGamePlayer player2 = new DurakGamePlayer(cardsOnHand2);
+        DurakGamePlayer player1 = new DurakGamePlayer(cardsOnHand1, 1);
+        DurakGamePlayer player2 = new DurakGamePlayer(cardsOnHand2, 2);
 
         return new DurakGame(
                 deck,

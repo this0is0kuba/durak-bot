@@ -16,6 +16,13 @@ public class Table {
         this(new ArrayList<>(),  new ArrayList<>());
     }
 
+    public Table(Table table) {
+        this.attackingCards = new ArrayList<>(table.attackingCards);
+        this.defendingCards = new ArrayList<>(table.defendingCards);
+        this.isAttackMove = table.isAttackMove;
+        this.tableValidator = table.tableValidator;
+    }
+
     public Table(
             List<Card> attackingCards,
             List<Card> defendingCards
@@ -66,6 +73,9 @@ public class Table {
         return defendingCards;
     }
 
+    public boolean isAttackMove() {
+        return isAttackMove;
+    }
 
     private List<Card> getUndefendedCards() {
         int indexOfFirstUndefendedCard = defendingCards.size();

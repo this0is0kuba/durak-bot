@@ -53,8 +53,8 @@ public class DurakGameCreator {
                 new ArrayList<>(publicState.getAttackingCards()), new ArrayList<>(publicState.getDefendingCards())
         );
 
-        DurakGamePlayer player = new DurakGamePlayer(new ArrayList<>(publicState.getYourHand()));
-        DurakGamePlayer opponent = new DurakGamePlayer(opponentHand);
+        DurakGamePlayer player = new DurakGamePlayer(new ArrayList<>(publicState.getYourHand()), 1);
+        DurakGamePlayer opponent = new DurakGamePlayer(opponentHand, 2);
 
         DurakGamePlayer player1 = publicState.areYouPlayer1() ? player : opponent;
         DurakGamePlayer player2 = publicState.areYouPlayer1() ? opponent : player;

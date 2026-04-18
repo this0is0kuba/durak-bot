@@ -14,6 +14,10 @@ public class DiscardPile {
         this.discardedCards = discardedCards;
     }
 
+    public DiscardPile(DiscardPile discardPile) {
+        this.discardedCards = new ArrayList<>(discardPile.discardedCards);
+    }
+
     public void addCardsToPile(List<Card> newDiscardedCards) {
         discardedCards.addAll(newDiscardedCards);
     }

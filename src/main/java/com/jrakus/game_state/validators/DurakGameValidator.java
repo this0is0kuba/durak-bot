@@ -17,7 +17,7 @@ public class DurakGameValidator {
     }
 
     public void checkIfPlayerCanPlay(DurakGamePlayer playerToCheck, DurakGamePlayer activePlayer) {
-        if(playerToCheck != activePlayer)
+        if(playerToCheck.getPlayerNumber() != activePlayer.getPlayerNumber())
             throw new DurakGameInvalidStateException(String.format("This is not turn for player: %s", playerToCheck));
     }
 

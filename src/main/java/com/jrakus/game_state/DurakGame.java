@@ -30,8 +30,8 @@ public class DurakGame {
         this.state = new GameState();
         this.durakGameValidator = new DurakGameValidator();
 
-        player1 = createPlayer();
-        player2 = createPlayer();
+        player1 = createPlayer(1);
+        player2 = createPlayer(2);
 
         activePlayer = chooseWhoStartsTheGame();
         startingPlayer = activePlayer;
@@ -66,9 +66,23 @@ public class DurakGame {
         this.currentDefendingPlayer = currentDefendingPlayer;
     }
 
-    private DurakGamePlayer createPlayer() {
+    public DurakGame(DurakGame durakGame) {
+        this.durakGameValidator = durakGame.durakGameValidator;
+        this.state = durakGame.state;
+        this.currentDefendingPlayer = new DurakGamePlayer(durakGame.currentDefendingPlayer);
+        this.currentAttackingPlayer = new DurakGamePlayer(durakGame.currentAttackingPlayer);
+        this.activePlayer = new DurakGamePlayer(durakGame.activePlayer);
+        this.startingPlayer = new DurakGamePlayer(durakGame.startingPlayer);
+        this.player2 = new DurakGamePlayer(durakGame.player2);
+        this.player1 = new DurakGamePlayer(durakGame.player1);
+        this.table = new Table(durakGame.table);
+        this.discardPile = new DiscardPile(durakGame.discardPile);
+        this.deck = new Deck(durakGame.deck);
+    }
+
+    private DurakGamePlayer createPlayer(int playerNumber) {
         List<Card> cardsOnHand = deck.drawCards(6);
-        return new DurakGamePlayer(cardsOnHand);
+        return new DurakGamePlayer(cardsOnHand, playerNumber);
     }
 
     private DurakGamePlayer chooseWhoStartsTheGame() {
@@ -147,10 +161,12 @@ public class DurakGame {
         return table.showDefendingCards();
     }
 
+    // TODO: remove
     public List<Card> showActivePlayerHand() {
         return activePlayer.showCardsOnHand();
     }
 
+    // TODO: remove
     public List<Card> showInactivePlayerHand() {
         if(player1 == activePlayer)
             return player2.showCardsOnHand();
@@ -170,10 +186,12 @@ public class DurakGame {
         return discardPile.showCardsOnPile();
     }
 
+    // TODO: remove
     public List<Card> showVisibleCardsForActivePlayer() {
         return new ArrayList<>(activePlayer.getOpponentCardsVisibleToPlayer());
     }
 
+    // TODO: remove
     public List<Card> showVisibleCardsForInactivePlayer() {
         if(player1 == activePlayer)
             new ArrayList<>(player2.getOpponentCardsVisibleToPlayer());
@@ -181,19 +199,37 @@ public class DurakGame {
         return new ArrayList<>(player1.getOpponentCardsVisibleToPlayer());
     }
 
+    public List<Card> showVisibleCardsForPlayer1() {
+        return new ArrayList<>(player1.getOpponentCardsVisibleToPlayer());
+    }
+
+    public List<Card> showVisibleCardsForPlayer2() {
+        return new ArrayList<>(player2.getOpponentCardsVisibleToPlayer());
+    }
+
     public Card showTrumpCard() {
         return deck.showTrumpCard();
     }
 
+    // TODO: remove
     public int getNumberOfCardsOfActivePlayer() {
         return activePlayer.showCardsOnHand().size();
     }
 
+    // TODO: remove
     public int getNumberOfCardsOfInactivePlayer() {
         if(player1 == activePlayer)
             return player2.showCardsOnHand().size();
 
         return player1.showCardsOnHand().size();
+    }
+
+    public int getNumberOfCardsOfPlayer1() {
+        return player1.showCardsOnHand().size();
+    }
+
+    public int getNumberOfCardsOfPlayer2() {
+        return player2.showCardsOnHand().size();
     }
 
     public int getNumberOfCardsOnDeck() {
@@ -202,6 +238,10 @@ public class DurakGame {
 
     public Boolean didPlayer1StartGame() {
         return startingPlayer == player1;
+    }
+
+    public Boolean isAttackMoveNow() {
+        return table.isAttackMove();
     }
 
     private void changeVisibleCardsAfterAttack(List<Card> cards) {

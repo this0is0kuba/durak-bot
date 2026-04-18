@@ -1,6 +1,7 @@
 package com.jrakus;
 
 import com.jrakus.players.Player;
+import com.jrakus.players.bots.MonteCarloWithMinMaxBot;
 import com.jrakus.players.bots.RandomBot;
 import com.jrakus.players.bots.SimpleMonteCarloBot;
 import com.jrakus.players.bots.TrivialBot;
@@ -16,15 +17,15 @@ public class Main {
     static void main() {
 
         Player player1 = new SimpleMonteCarloBot();
-        Player player2 = new TrivialBot();
+        Player player2 = new MonteCarloWithMinMaxBot();
 
-        ConcurrentTournament tournament = new ConcurrentTournament();
-        tournament.playTournament(player1, player2, 100 , 4);
-        tournament.displayStatistics();
-
-//        Tournament tournament = new Tournament();
-//        tournament.playTournament(player1, player2, 100);
+//        ConcurrentTournament tournament = new ConcurrentTournament();
+//        tournament.playTournament(player1, player2, 100 , 4);
 //        tournament.displayStatistics();
+
+        Tournament tournament = new Tournament();
+        tournament.playTournament(player1, player2, 100);
+        tournament.displayStatistics();
 
 //        GameRoom game = new GameRoom(player1, player2);
 //        game.startGame();
