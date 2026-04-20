@@ -106,7 +106,7 @@ public class MonteCarloWithMinMaxBot implements Player {
 
         MinMaxAlgorithm.ActionWithScore actionWithScore = minMaxAlgorithm.miniMax(
                 durakGame,
-                8,
+                5,
                 publicState.areYouPlayer1(),
                 null
         );
@@ -121,7 +121,7 @@ public class MonteCarloWithMinMaxBot implements Player {
 
         MinMaxAlgorithm.ActionWithScore actionWithScore = minMaxAlgorithm.miniMax(
                 durakGame,
-                10,
+                5,
                 publicState.areYouPlayer1(),
                 null
         );

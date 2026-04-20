@@ -24,7 +24,7 @@ public class SimpleMonteCarloBot implements Player {
     private final int numberOfIterations;
 
     public SimpleMonteCarloBot() {
-        this(new MoveFounder(), new GameSimulator(), new DurakGameCreator(), 1000);
+        this(new MoveFounder(), new GameSimulator(), new DurakGameCreator(), 100);
     }
 
     public SimpleMonteCarloBot(

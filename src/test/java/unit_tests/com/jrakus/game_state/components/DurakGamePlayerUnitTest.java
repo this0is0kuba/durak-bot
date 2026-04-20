@@ -23,7 +23,7 @@ class DurakGamePlayerUnitTest {
 
         List<Card> initialHand = new ArrayList<>(List.of(c1, c2));
 
-        player = new DurakGamePlayer(initialHand, 1);
+        player = new DurakGamePlayer(initialHand);
     }
 
     // ============================

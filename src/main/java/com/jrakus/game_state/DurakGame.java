@@ -30,8 +30,8 @@ public class DurakGame {
         this.state = new GameState();
         this.durakGameValidator = new DurakGameValidator();
 
-        player1 = createPlayer(1);
-        player2 = createPlayer(2);
+        player1 = createPlayer();
+        player2 = createPlayer();
 
         activePlayer = chooseWhoStartsTheGame();
         startingPlayer = activePlayer;
@@ -68,21 +68,25 @@ public class DurakGame {
 
     public DurakGame(DurakGame durakGame) {
         this.durakGameValidator = durakGame.durakGameValidator;
-        this.state = durakGame.state;
-        this.currentDefendingPlayer = new DurakGamePlayer(durakGame.currentDefendingPlayer);
-        this.currentAttackingPlayer = new DurakGamePlayer(durakGame.currentAttackingPlayer);
-        this.activePlayer = new DurakGamePlayer(durakGame.activePlayer);
-        this.startingPlayer = new DurakGamePlayer(durakGame.startingPlayer);
-        this.player2 = new DurakGamePlayer(durakGame.player2);
+        this.state = new GameState(durakGame.state.getInternalState());
+
         this.player1 = new DurakGamePlayer(durakGame.player1);
+        this.player2 = new DurakGamePlayer(durakGame.player2);
+
+        this.currentDefendingPlayer = durakGame.currentDefendingPlayer == durakGame.player1 ? player1 : player2;
+        this.currentAttackingPlayer = durakGame.currentAttackingPlayer == durakGame.player1 ? player1 : player2;
+
+        this.activePlayer = durakGame.activePlayer == durakGame.player1 ? player1 : player2;
+        this.startingPlayer = durakGame.startingPlayer == durakGame.player1 ? player1 : player2;
+
         this.table = new Table(durakGame.table);
         this.discardPile = new DiscardPile(durakGame.discardPile);
         this.deck = new Deck(durakGame.deck);
     }
 
-    private DurakGamePlayer createPlayer(int playerNumber) {
+    private DurakGamePlayer createPlayer() {
         List<Card> cardsOnHand = deck.drawCards(6);
-        return new DurakGamePlayer(cardsOnHand, playerNumber);
+        return new DurakGamePlayer(cardsOnHand);
     }
 
     private DurakGamePlayer chooseWhoStartsTheGame() {

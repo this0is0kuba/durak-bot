@@ -2,13 +2,21 @@ package com.jrakus.game_state.components;
 
 public class GameState {
 
-    private GameStateEnum state = GameStateEnum.ACTIVE_GAME;
+    private GameStateEnum state;
 
     public enum GameStateEnum {
         ACTIVE_GAME,
         PLAYER_1_WON,
         PLAYER_2_WON,
         DRAW
+    }
+
+    public GameState() {
+        this.state = GameStateEnum.ACTIVE_GAME;
+    }
+
+    public GameState(GameStateEnum internalState) {
+        this.state = internalState;
     }
 
     public GameStateEnum getInternalState() {

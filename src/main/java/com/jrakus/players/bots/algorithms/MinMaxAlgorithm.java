@@ -41,14 +41,17 @@ public class MinMaxAlgorithm {
 
         List<MoveFounder.Action> possibleActions = getPossibleActions(durakGame.isAttackMoveNow(), publicState);
 
-        MoveFounder.Action theBestAction = null;
-        int maxEval = Integer.MIN_VALUE;
-
         if ((isPlayer1Active && isPlayer1Maximized) || (!isPlayer1Active && !isPlayer1Maximized)) {
 
+            MoveFounder.Action theBestAction = null;
+            int maxEval = Integer.MIN_VALUE;
+
             for (MoveFounder.Action possibleAction: possibleActions) {
+
                 DurakGame newDurakGame = move(new DurakGame(durakGame), possibleAction);
-                ActionWithScore actionWithScore = miniMax(newDurakGame, --depth, isPlayer1Maximized, possibleAction);
+                int newDepth = depth - 1;
+
+                ActionWithScore actionWithScore = miniMax(newDurakGame, newDepth, isPlayer1Maximized, possibleAction);
 
                 if (actionWithScore.score > maxEval) {
                     maxEval = actionWithScore.score;
@@ -56,13 +59,19 @@ public class MinMaxAlgorithm {
                 }
             }
 
+            return new ActionWithScore(theBestAction, maxEval);
+
         } else {
 
+            MoveFounder.Action theBestAction = null;
             int minEval = Integer.MAX_VALUE;
 
             for (MoveFounder.Action possibleAction: possibleActions) {
-                DurakGame newDurakGame = move(new DurakGame(durakGame), action);
-                ActionWithScore actionWithScore = miniMax(newDurakGame, --depth, isPlayer1Maximized, possibleAction);
+
+                DurakGame newDurakGame = move(new DurakGame(durakGame), possibleAction);
+                int newDepth = depth - 1;
+
+                ActionWithScore actionWithScore = miniMax(newDurakGame, newDepth, isPlayer1Maximized, possibleAction);
 
                 if (actionWithScore.score < minEval) {
                     minEval = actionWithScore.score;
@@ -70,9 +79,8 @@ public class MinMaxAlgorithm {
                 }
             }
 
+            return new ActionWithScore(theBestAction, minEval);
         }
-
-        return new ActionWithScore(theBestAction, maxEval);
     }
 
     private int simpleGoalFunction(GameState.GameStateEnum gameState, boolean isPlayerNumber1) {

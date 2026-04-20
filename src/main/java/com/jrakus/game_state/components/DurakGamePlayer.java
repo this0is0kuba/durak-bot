@@ -6,23 +6,18 @@ public class DurakGamePlayer {
     private final List<Card> cardsOnHand;
     private final Set<Card> visibleCardsOnOpponentHand;
 
-    // Internal identifier
-    private final int playerNumber;
-
-    public DurakGamePlayer(List<Card> hand, int playerNumber) {
-        this(hand, new HashSet<>(), playerNumber);
+    public DurakGamePlayer(List<Card> hand) {
+        this(hand, new HashSet<>());
     }
 
-    public DurakGamePlayer(List<Card> hand, Set<Card> visibleCardsOnOpponentHand, int playerNumber) {
+    public DurakGamePlayer(List<Card> hand, Set<Card> visibleCardsOnOpponentHand) {
         this.cardsOnHand = hand;
         this.visibleCardsOnOpponentHand = visibleCardsOnOpponentHand;
-        this.playerNumber = playerNumber;
     }
 
     public DurakGamePlayer(DurakGamePlayer durakGamePlayer) {
         this.cardsOnHand = new ArrayList<>(durakGamePlayer.cardsOnHand);
         this.visibleCardsOnOpponentHand = new HashSet<>(durakGamePlayer.visibleCardsOnOpponentHand);
-        this.playerNumber = durakGamePlayer.playerNumber;
     }
 
     public List<Card> showCardsOnHand() {
@@ -68,10 +63,6 @@ public class DurakGamePlayer {
 
     public Set<Card> getOpponentCardsVisibleToPlayer() {
         return visibleCardsOnOpponentHand;
-    }
-
-    public int getPlayerNumber() {
-        return playerNumber;
     }
 
     @Override
