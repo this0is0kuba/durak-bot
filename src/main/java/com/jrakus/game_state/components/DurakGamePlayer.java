@@ -3,11 +3,21 @@ package com.jrakus.game_state.components;
 import java.util.*;
 
 public class DurakGamePlayer {
-    private final Set<Card> visibleCardsOnOpponentHand = new HashSet<>();
     private final List<Card> cardsOnHand;
+    private final Set<Card> visibleCardsOnOpponentHand;
 
     public DurakGamePlayer(List<Card> hand) {
+        this(hand, new HashSet<>());
+    }
+
+    public DurakGamePlayer(List<Card> hand, Set<Card> visibleCardsOnOpponentHand) {
         this.cardsOnHand = hand;
+        this.visibleCardsOnOpponentHand = visibleCardsOnOpponentHand;
+    }
+
+    public DurakGamePlayer(DurakGamePlayer durakGamePlayer) {
+        this.cardsOnHand = new ArrayList<>(durakGamePlayer.cardsOnHand);
+        this.visibleCardsOnOpponentHand = new HashSet<>(durakGamePlayer.visibleCardsOnOpponentHand);
     }
 
     public List<Card> showCardsOnHand() {

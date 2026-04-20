@@ -8,6 +8,7 @@ import com.jrakus.players.Player;
 import com.jrakus.game_state.DurakGame;
 import com.jrakus.game_state.components.Card;
 import com.jrakus.game_state.components.GameState;
+import com.jrakus.players.game_elements.utils.PublicStateExtractor;
 
 import java.util.HashSet;
 import java.util.List;
@@ -19,15 +20,24 @@ public class GameRoom {
     private final Player player2;
 
     private final DurakGame durakGame;
+    private final PublicStateExtractor publicStateExtractor;
 
     public GameRoom(Player player1, Player player2) {
-        this(player1, player2, new DurakGame());
+        this(player1, player2, new DurakGame(), new PublicStateExtractor());
     }
 
     public GameRoom(Player player1, Player player2, DurakGame durakGame) {
         this.player1 = player1;
         this.player2 = player2;
         this.durakGame = durakGame;
+        this.publicStateExtractor = new PublicStateExtractor();
+    }
+
+    public GameRoom(Player player1, Player player2, DurakGame durakGame, PublicStateExtractor publicStateExtractor) {
+        this.player1 = player1;
+        this.player2 = player2;
+        this.durakGame = durakGame;
+        this.publicStateExtractor = publicStateExtractor;
     }
 
     public Optional<Player> startGame() {
@@ -122,46 +132,6 @@ public class GameRoom {
     }
 
     private PublicState getPublicState(Player player) {
-
-        List<Card> attackingCards = durakGame.showCurrentAttackingCards();
-        List<Card> defendingCards = durakGame.showCurrentDefendingCards();
-
-        List<Card> playerHand = player == getActivePlayer() ?
-                durakGame.showActivePlayerHand() : durakGame.showInactivePlayerHand();
-
-        List<Card> visibleCardsForPlayer = player == getActivePlayer() ?
-                durakGame.showVisibleCardsForActivePlayer() : durakGame.showVisibleCardsForInactivePlayer();
-
-        int numberOfCardsOnOpponentHand = player == getActivePlayer() ?
-                durakGame.getNumberOfCardsOfInactivePlayer() : durakGame.getNumberOfCardsOfActivePlayer();
-
-        List<Card> discardPile = durakGame.getDiscardPile();
-        Card trumpCard = durakGame.showTrumpCard();
-        int numberOfCardsOnDeck = durakGame.getNumberOfCardsOnDeck();
-
-        GameState.GameStateEnum gameStateEnum = durakGame.getGameState();
-
-        GameInfo gameInfo = switch (gameStateEnum) {
-            case ACTIVE_GAME -> GameInfo.ACTIVE_GAME;
-            case PLAYER_1_WON -> player1 == player ? GameInfo.YOU_WON : GameInfo.OPPONENT_WON;
-            case PLAYER_2_WON -> player2 == player ? GameInfo.YOU_WON : GameInfo.OPPONENT_WON;
-            case DRAW -> GameInfo.DRAW;
-        };
-
-        Boolean didPlayer1StartGame = durakGame.didPlayer1StartGame();
-
-        return new PublicState.PublicStateBuilder()
-                .attackingCards(attackingCards)
-                .defendingCards(defendingCards)
-                .yourHand(playerHand)
-                .discardPile(discardPile)
-                .certainOpponentHand(visibleCardsForPlayer)
-                .trumpCard(trumpCard)
-                .numberOfCardsOnOpponentHand(numberOfCardsOnOpponentHand)
-                .numberOfCardsOnDeck(numberOfCardsOnDeck)
-                .gameInfo(gameInfo)
-                .areYouPlayer1(player1 == player)
-                .didPlayer1StartGame(didPlayer1StartGame)
-                .build();
+        return publicStateExtractor.extractPublicState(durakGame, player1 == player);
     }
 }

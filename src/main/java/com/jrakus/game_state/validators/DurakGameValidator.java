@@ -25,7 +25,9 @@ public class DurakGameValidator {
         List<Card> cardsOnHand = durakGamePlayer.showCardsOnHand();
 
         if(!new HashSet<>(cardsOnHand).containsAll(cards)) {
-            throw new DurakGameInvalidStateException(String.format("Player %s does not have cards that he wants to play", durakGamePlayer));
+            throw new DurakGameInvalidStateException(
+                    String.format("Player %s does not have cards %s that he wants to play", durakGamePlayer, cards)
+            );
         }
     }
 
